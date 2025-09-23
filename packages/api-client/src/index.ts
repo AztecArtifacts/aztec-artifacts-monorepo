@@ -4,20 +4,18 @@ export type { Fr } from '@aztec/foundation/fields';
 export type { AztecAddress } from '@aztec/stdlib/aztec-address';
 export type { PublicKeys } from '@aztec/stdlib/keys';
 export type {
+  ApiContractArtifact as ContractArtifact,
+  ApiContractInstance as ContractInstance,
+  ApiToken as Token,
   ClientConfig,
-  ContractArtifact,
-  ContractInstance,
   ContractInstancesResponse,
   ErrorResponse,
   PaginationParams,
-  Token,
   TokensResponse,
 } from './client.js';
 export {
-  createMainnetClient,
-  createSandboxClient,
-  createTestnetClient,
-  TurnstileApiClient,
+  AztecArtifactsApiClient,
+  createDefaultClient,
 } from './client.js';
 export * from './constants.js';
 // Re-export generated types for advanced use cases

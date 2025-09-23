@@ -1,4 +1,4 @@
-import { MAINNET_BASE_URL, SANDBOX_BASE_URL, TESTNET_BASE_URL } from './constants.js';
+import { BASE_URL } from './constants.js';
 import type { paths } from './types.js';
 import {
   type DeserializedContractArtifact,
@@ -9,9 +9,10 @@ import {
 import { serializeContractArtifact, serializeContractInstance } from './utils/serializers.js';
 
 export type TokensResponse = paths['/tokens']['get']['responses']['200']['content']['application/json'];
-export type Token = paths['/tokens/{address}']['get']['responses']['200']['content']['application/json'];
-export type ContractInstance = paths['/contracts/{address}']['get']['responses']['200']['content']['application/json'];
-export type ContractArtifact =
+export type ApiToken = paths['/tokens/{address}']['get']['responses']['200']['content']['application/json'];
+export type ApiContractInstance =
+  paths['/contracts/{address}']['get']['responses']['200']['content']['application/json'];
+export type ApiContractArtifact =
   paths['/artifacts/{identifier}']['get']['responses']['200']['content']['application/json'];
 export type ContractInstancesResponse =
   paths['/contracts/by-class/{contractClassId}/addresses']['get']['responses']['200']['content']['application/json'];
@@ -34,19 +35,11 @@ export interface ApiClientOptions {
   cache?: RequestCache; // 'default' | 'no-store' | 'reload' | 'no-cache' | 'force-cache' | 'only-if-cached'
 }
 
-export function createSandboxClient(config?: Omit<ClientConfig, 'baseUrl'>) {
-  return new TurnstileApiClient({ baseUrl: SANDBOX_BASE_URL, ...config });
+export function createDefaultClient(config?: Omit<ClientConfig, 'baseUrl'>) {
+  return new AztecArtifactsApiClient({ baseUrl: BASE_URL, ...config });
 }
 
-export function createTestnetClient(config?: Omit<ClientConfig, 'baseUrl'>) {
-  return new TurnstileApiClient({ baseUrl: TESTNET_BASE_URL, ...config });
-}
-
-export function createMainnetClient(config?: Omit<ClientConfig, 'baseUrl'>) {
-  return new TurnstileApiClient({ baseUrl: MAINNET_BASE_URL, ...config });
-}
-
-export class TurnstileApiClient {
+export class AztecArtifactsApiClient {
   private readonly baseUrl: string;
   private readonly headers: Record<string, string>;
   private readonly fetchFn: typeof fetch;
@@ -109,8 +102,8 @@ export class TurnstileApiClient {
   /**
    * Get a token by its address
    */
-  async getTokenByAddress(address: string, options?: { cache?: RequestCache }): Promise<Token> {
-    return this.request<Token>(`/tokens/${address}`, options);
+  async getTokenByAddress(address: string, options?: { cache?: RequestCache }): Promise<ApiToken> {
+    return this.request<ApiToken>(`/tokens/${address}`, options);
   }
 
   /**
@@ -123,7 +116,7 @@ export class TurnstileApiClient {
     options?: { cache?: RequestCache },
   ): Promise<DeserializedContractInstance> {
     const queryString = this.buildQueryString(includeArtifact ? { includeArtifact: 'true' } : {});
-    const rawResponse = await this.request<ContractInstance>(`/contracts/${address}${queryString}`, options);
+    const rawResponse = await this.request<ApiContractInstance>(`/contracts/${address}${queryString}`, options);
     return deserializeContractInstance(rawResponse);
   }
 
@@ -132,7 +125,7 @@ export class TurnstileApiClient {
    * Returns deserialized Aztec types (Fr fields and properly typed ContractArtifact)
    */
   async getArtifact(identifier: string, options?: { cache?: RequestCache }): Promise<DeserializedContractArtifact> {
-    const rawResponse = await this.request<ContractArtifact>(`/artifacts/${identifier}`, options);
+    const rawResponse = await this.request<ApiContractArtifact>(`/artifacts/${identifier}`, options);
     return deserializeContractArtifact(rawResponse);
   }
 
@@ -144,17 +137,17 @@ export class TurnstileApiClient {
     address: string,
     includeArtifact?: boolean,
     options?: { cache?: RequestCache },
-  ): Promise<ContractInstance> {
+  ): Promise<ApiContractInstance> {
     const queryString = this.buildQueryString(includeArtifact ? { includeArtifact: 'true' } : {});
-    return this.request<ContractInstance>(`/contracts/${address}${queryString}`, options);
+    return this.request<ApiContractInstance>(`/contracts/${address}${queryString}`, options);
   }
 
   /**
    * Get a contract artifact by contract class ID or artifact hash (raw response without deserialization)
    * Use this if you need the raw hex strings instead of Aztec types
    */
-  async getArtifactRaw(identifier: string, options?: { cache?: RequestCache }): Promise<ContractArtifact> {
-    return this.request<ContractArtifact>(`/artifacts/${identifier}`, options);
+  async getArtifactRaw(identifier: string, options?: { cache?: RequestCache }): Promise<ApiContractArtifact> {
+    return this.request<ApiContractArtifact>(`/artifacts/${identifier}`, options);
   }
 
   /**
@@ -203,8 +196,8 @@ export class TurnstileApiClient {
    * Fetch all tokens (auto-paginated)
    * @param options - Options including limit, cursor, and cache settings
    */
-  async getAllTokens(options?: ApiClientOptions): Promise<Token[]> {
-    const tokens: Token[] = [];
+  async getAllTokens(options?: ApiClientOptions): Promise<ApiToken[]> {
+    const tokens: ApiToken[] = [];
     for await (const token of this.getAllPages((params, options) => this.getTokens(params, options), options)) {
       tokens.push(token);
     }

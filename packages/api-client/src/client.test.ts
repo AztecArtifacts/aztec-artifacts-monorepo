@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: tests */
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { type Token, TurnstileApiClient } from './client.js';
+import { type ApiToken, AztecArtifactsApiClient } from './client.js';
 import { deserializeContractArtifact, deserializeContractInstance } from './utils/deserializers.js';
 import { serializeContractArtifact, serializeContractInstance } from './utils/serializers.js';
 
@@ -17,7 +17,7 @@ vi.mock('./utils/serializers.js', () => ({
 
 describe('TurnstileApiClient', () => {
   const mockFetch = vi.fn();
-  const client = new TurnstileApiClient({
+  const client = new AztecArtifactsApiClient({
     baseUrl: 'http://localhost:8080',
     fetch: mockFetch as unknown as typeof fetch,
   });
@@ -187,7 +187,7 @@ describe('TurnstileApiClient', () => {
         .mockResolvedValueOnce({ ok: true, json: async () => page1 })
         .mockResolvedValueOnce({ ok: true, json: async () => page2 });
 
-      const tokens: Token[] = [];
+      const tokens: ApiToken[] = [];
       for await (const token of client.getAllPages((params) => client.getTokens(params), { limit: 1 })) {
         tokens.push(token);
       }
@@ -312,7 +312,7 @@ describe('TurnstileApiClient', () => {
         .mockResolvedValueOnce({ ok: true, json: async () => page1 })
         .mockResolvedValueOnce({ ok: true, json: async () => page2 });
 
-      const tokens: Token[] = [];
+      const tokens: ApiToken[] = [];
       for await (const token of client.getAllPages((params) => client.getTokens(params), { limit: 1, cursor: 10 })) {
         tokens.push(token);
       }

@@ -1,10 +1,10 @@
 {
   "name": "@aztec-artifacts/api-client",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Type-safe API client for Aztec Artifacts API",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aztecartifacts/aztec-artifacts-monorepo"
+    "url": "https://github.com/AztecArtifacts/aztec-artifacts-monorepo"
   },
   "private": false,
   "type": "module",
