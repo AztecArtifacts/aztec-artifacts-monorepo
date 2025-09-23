@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: aztec-artifacts
+      POSTGRES_PASSWORD: aztec-artifacts
+      POSTGRES_DB: aztec-artifacts
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U aztec-artifacts -d aztec-artifacts' ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE: '@aztec-artifacts/api-common'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://aztec-artifacts:aztec-artifacts@postgres:5432/aztec-artifacts
+    command: [ 'pnpm', 'migrate' ]
+    restart: 'no'
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE: '@aztec-artifacts/api-service'
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+    ports:
+      - '8080:8080'
+    environment:
+      DATABASE_URL: postgres://aztec-artifacts:aztec-artifacts@postgres:5432/aztec-artifacts
+      PORT: 8080
+    restart: unless-stopped
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:8080/health' ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  postgres_data:

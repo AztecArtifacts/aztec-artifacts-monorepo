@@ -1,0 +1,65 @@
+{
+  "name": "Aztec Artifacts",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "mounts": [
+    {
+      "target": "/home/vscode/.pnpm-store",
+      "type": "volume"
+    },
+    {
+      "target": "${containerWorkspaceFolder}/node_modules",
+      "type": "volume"
+    },
+    {
+      "source": "${localEnv:HOME}/.claude/",
+      "target": "/home/vscode/.claude",
+      "type": "bind"
+    },
+    {
+      "source": "${localEnv:HOME}/.claude.json",
+      "target": "/home/vscode/.claude.json",
+      "type": "bind"
+    },
+    {
+      "source": "${localEnv:HOME}/.codex",
+      "target": "/home/vscode/.codex",
+      "type": "bind"
+    }
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22",
+      "nodeGypDependencies": "true"
+    }
+  },
+  "containerEnv": {
+    "npm_config_store_dir": "/home/vscode/.pnpm-store",
+    "NODE_NO_WARNINGS": "1"
+  },
+  "onCreateCommand": {
+    "mount_permissions": "mount | egrep '.pnpm-store|node_modules' | awk '{print $3}' | sudo xargs chown `id -u`:`id -g`"
+  },
+  "initializeCommand": {
+    "ensure_claude_mounts": "mkdir -p ${localEnv:HOME}/.claude && touch ${localEnv:HOME}/.claude.json",
+    "ensure_codex_mounts": "mkdir -p ${localEnv:HOME}/.codex"
+  },
+  "postCreateCommand": {
+    "vscode_shell_integration": "echo 'source `code --locate-shell-integration-path bash`' >> ~/.bashrc",
+    "agents": "npm i -g @openai/codex @anthropic-ai/claude-code"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "biomejs.biome",
+        "bierner.markdown-mermaid",
+        "saoudrizwan.claude-dev",
+        "anthropic.claude-code",
+        "openai.chatgpt"
+      ],
+      "dev.containers.mountWaylandSocket": false
+    }
+  }
+}
