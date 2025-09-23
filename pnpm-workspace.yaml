@@ -1,0 +1,15 @@
+packages:
+  - packages/*
+
+ignoredBuiltDependencies:
+  - esbuild
+  - leveldown
+  - msgpackr-extract
+  - protobufjs
+
+linkWorkspacePackages: true
+
+onlyBuiltDependencies:
+  - c-kzg
+
+preferWorkspacePackages: true
