@@ -1,0 +1,67 @@
+{
+  "name": "@aztec-artifacts/schema",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Database schema and Drizzle utilities for Aztec Artifacts API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "generate": "NODE_OPTIONS='--import tsx' drizzle-kit generate --config drizzle.config.ts",
+    "migrate": "NODE_OPTIONS='--import tsx' drizzle-kit migrate --config drizzle.config.ts",
+    "start": "pnpm run migrate",
+    "studio": "NODE_OPTIONS='--import tsx' drizzle-kit studio --config drizzle.config.ts",
+    "test": "vitest --run",
+    "coverage": "vitest --run --coverage",
+    "check": "biome check --fix",
+    "format": "biome format --fix",
+    "lint": "biome lint --fix",
+    "clean": "rm -rf ./dist ./node_modules"
+  },
+  "files": [
+    "dist",
+    "migrations",
+    "drizzle.config.ts",
+    "src",
+    "tsconfig.json"
+  ],
+  "dependencies": {
+    "@aztec-artifacts/common": "workspace:^",
+    "@aztec/aztec.js": "^2.0.3",
+    "@aztec/foundation": "^2.0.3",
+    "@aztec/stdlib": "^2.0.3",
+    "@electric-sql/pglite": "^0.3.9",
+    "drizzle-kit": "^0.31.4",
+    "drizzle-orm": "^0.44.5",
+    "drizzle-zod": "^0.8.3",
+    "pg": "^8.16.3",
+    "tslib": "^2.8.1",
+    "zod": "^4.1.11",
+    "tsx": "^4.20.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "@types/pg": "^8.15.5",
+    "vitest": "^3.2.4"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema.d.ts",
+      "default": "./dist/schema.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./dist/client.js"
+    }
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AztecArtifacts/aztec-artifacts-monorepo"
+  }
+}

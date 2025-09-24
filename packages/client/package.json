@@ -1,0 +1,57 @@
+{
+  "name": "@aztec-artifacts/client",
+  "version": "0.0.1",
+  "description": "Type-safe API client for Aztec Artifacts API",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AztecArtifacts/aztec-artifacts-monorepo"
+  },
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "generate:api": "cd ../service && pnpm generate",
+    "generate:types": "openapi-typescript ../service/openapi.generated.json -o ./src/types.ts",
+    "generate": "pnpm generate:api && pnpm generate:types",
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "lint": "biome lint --write",
+    "format": "biome format --write",
+    "check": "biome check --write",
+    "clean": "rm -rf ./dist ./node_modules"
+  },
+  "dependencies": {
+    "@aztec-artifacts/common": "workspace:^",
+    "@aztec/aztec.js": "^2.0.3",
+    "@aztec/foundation": "^2.0.3",
+    "@aztec/stdlib": "^2.0.3",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.4",
+    "@types/node": "^24.5.2",
+    "@vitest/coverage-v8": "^3.2.4",
+    "openapi-typescript": "^7.9.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "Apache-2.0"
+}
