@@ -343,8 +343,8 @@ describe('AztecArtifactsApiClient', () => {
         initializationHash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
         publicKeys: publicKeys.toString(),
         initializationData: {
-          constructorArtifact: 'test',
-          constructorArgs: [42],
+          constructorName: 'test',
+          encodedArgs: ['0x0000000000000000000000000000000000000000000000000000000000000042'],
         },
       };
 
@@ -568,7 +568,7 @@ describe('AztecArtifactsApiClient', () => {
         json: async () => mockRawResponse,
       });
 
-      const result = await client.uploadContractInstance(mockInstance);
+      const result = await client.uploadContractInstance({ instance: mockInstance });
 
       // Note: serializeContractInstance is called internally by rawClient
       expect(mockFetch).toHaveBeenCalledWith(
@@ -603,7 +603,7 @@ describe('AztecArtifactsApiClient', () => {
         json: async () => mockRawResponse,
       });
 
-      const result = await client.uploadContractInstance(mockInstance, mockArtifact);
+      const result = await client.uploadContractInstance({ instance: mockInstance, artifact: mockArtifact });
 
       // Note: serialization is handled internally by rawClient
       expect(mockFetch).toHaveBeenCalledWith(
@@ -625,7 +625,9 @@ describe('AztecArtifactsApiClient', () => {
         json: async () => ({ error: 'Contract instance already exists' }),
       });
 
-      await expect(client.uploadContractInstance(mockInstance)).rejects.toThrow('Contract instance already exists');
+      await expect(client.uploadContractInstance({ instance: mockInstance })).rejects.toThrow(
+        'Contract instance already exists',
+      );
     });
   });
 });

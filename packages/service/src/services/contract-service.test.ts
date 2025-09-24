@@ -72,7 +72,7 @@ describe('ContractService.createContractInstance', () => {
         publicKeys: publicKeys.toString(),
         initializationData: null,
       },
-      artifact: 'artifact-payload',
+      artifact: `0x${Buffer.from(JSON.stringify(randomContractArtifact())).toString('hex')}`,
     };
 
     const result = await service.createContractInstance(payload);

@@ -4,3 +4,4 @@ export * from './contract-instance.js';
 export * from './convert.js';
 export * from './errors.js';
 export * from './types.js';
+export * from './utils.js';

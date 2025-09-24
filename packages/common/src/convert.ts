@@ -1,18 +1,25 @@
 import { AztecAddress, Fr, PublicKeys } from '@aztec/aztec.js';
 import { DeserializationError } from './errors.js';
+import type { Hex } from './types.js';
 
 /**
- * Convert AztecAddress to hex string representation.
+ * Converts an AztecAddress to its hex string representation.
+ *
+ * @param address - The AztecAddress to convert
+ * @returns The hex string representation of the address
  */
-export function aztecAddressToHexString(address: AztecAddress): string {
+export function aztecAddressToHexString(address: AztecAddress): Hex {
   return address.toString();
 }
 
 /**
- * Convert hex string to AztecAddress.
- * @throws {DeserializationError} if hex string is invalid.
+ * Converts a hex string to an AztecAddress.
+ *
+ * @param hex - The hex string to convert to an AztecAddress
+ * @returns The AztecAddress created from the hex string
+ * @throws {DeserializationError} When the hex string is invalid or cannot be converted
  */
-export function hexStringToAztecAddress(hex: string): AztecAddress {
+export function hexStringToAztecAddress(hex: Hex): AztecAddress {
   try {
     return AztecAddress.fromString(hex);
   } catch (error) {
@@ -24,17 +31,23 @@ export function hexStringToAztecAddress(hex: string): AztecAddress {
 }
 
 /**
- * Convert Fr to hex string representation.
+ * Converts an Fr field element to its hex string representation.
+ *
+ * @param fr - The Fr field element to convert
+ * @returns The hex string representation of the field element
  */
-export function frToHexString(fr: Fr): string {
+export function frToHexString(fr: Fr): Hex {
   return fr.toString();
 }
 
 /**
- * Convert hex string to Fr.
- * @throws {DeserializationError} if hex string is invalid.
+ * Converts a hex string to an Fr field element.
+ *
+ * @param hex - The hex string to convert to an Fr field element
+ * @returns The Fr field element created from the hex string
+ * @throws {DeserializationError} When the hex string is invalid or cannot be converted
  */
-export function hexStringToFr(hex: string): Fr {
+export function hexStringToFr(hex: Hex): Fr {
   try {
     return Fr.fromHexString(hex);
   } catch (error) {
@@ -46,18 +59,24 @@ export function hexStringToFr(hex: string): Fr {
 }
 
 /**
- * Convert PublicKeys to hex string representation.
+ * Converts PublicKeys to their hex string representation.
+ *
+ * @param publicKeys - The PublicKeys to convert
+ * @returns The hex string representation of the public keys
  */
-export function publicKeysToHexString(publicKeys: PublicKeys): string {
+export function publicKeysToHexString(publicKeys: PublicKeys): Hex {
   return publicKeys.toString();
 }
 
 /**
- * Convert hex string to PublicKeys.
- * Accepts either JSON stringified representation or raw hex string.
- * @throws {DeserializationError} if conversion fails.
+ * Converts a hex string to PublicKeys.
+ * Accepts either JSON stringified representation or raw hex string format.
+ *
+ * @param hex - The hex string to convert to PublicKeys (JSON or raw hex format)
+ * @returns The PublicKeys created from the hex string
+ * @throws {DeserializationError} When the input cannot be converted to PublicKeys
  */
-export function hexStringToPublicKeys(hex: string): PublicKeys {
+export function hexStringToPublicKeys(hex: Hex): PublicKeys {
   try {
     const parsed = JSON.parse(hex);
     return PublicKeys.schema.parse(parsed);

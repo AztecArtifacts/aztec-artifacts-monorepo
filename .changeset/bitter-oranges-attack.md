@@ -5,4 +5,6 @@
 "@aztec-artifacts/schema": minor
 ---
 
+
+major refactor.
 api client now takes/returns aztec.js objects

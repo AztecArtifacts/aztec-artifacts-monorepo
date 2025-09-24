@@ -1,24 +1,35 @@
 import type { AztecAddress, ContractArtifact, Fr, PublicKeys } from '@aztec/aztec.js';
 
+export type Hex = `0x${string}`;
+
+/**
+ * Data required for contract initialization during deployment.
+ * Contains optional constructor artifact and encoded arguments for contract setup.
+ */
 export type InitializationData = {
-  constructorArtifact?: string;
-  constructorArgs?: unknown[];
+  constructorName: string;
+  encodedArgs?: Fr[];
+};
+
+export type SerializedInitializationData = {
+  constructorName: string;
+  encodedArgs?: Hex[];
 };
 
 /**
  * Serialized contract instance payload as consumed/produced by the API.
  */
 export interface SerializedContractInstance {
-  address: string;
+  address: Hex;
   version: number;
-  salt: string;
-  deployer: string;
-  currentContractClassId: string;
-  originalContractClassId: string;
-  initializationHash: string;
-  publicKeys: string;
-  initializationData?: InitializationData;
-  artifact?: string;
+  salt: Hex;
+  deployer: Hex;
+  currentContractClassId: Hex;
+  originalContractClassId: Hex;
+  initializationHash: Hex;
+  publicKeys: Hex;
+  initializationData?: SerializedInitializationData;
+  artifact?: Hex;
   isToken?: boolean;
 }
 
@@ -27,9 +38,9 @@ export interface SerializedContractInstance {
  */
 export interface SerializedContractArtifact {
   id?: number;
-  artifactHash: string;
-  contractClassId: string;
-  artifact: string;
+  artifactHash: Hex;
+  contractClassId: Hex;
+  artifact: Hex;
   isToken?: boolean;
 }
 

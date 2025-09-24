@@ -1,4 +1,7 @@
 // Export main client
+
+// Re-export useful types from common
+export type { InitializationData } from '@aztec-artifacts/common';
 export { AztecArtifactsApiClient, createDefaultClient } from './client.js';
 // Export constants
 export * from './constants.js';

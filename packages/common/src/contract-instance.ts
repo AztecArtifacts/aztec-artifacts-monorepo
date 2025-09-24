@@ -1,15 +1,21 @@
 import type { AztecAddress, ContractInstanceWithAddress, Fr, PublicKeys } from '@aztec/aztec.js';
 import { aztecAddressCodec, contractArtifactCodec, frCodec, publicKeysCodec } from './codec.js';
 import { SerializationError } from './errors.js';
-import type { DeserializedContractInstance, InitializationData } from './types.js';
+import type { DeserializedContractInstance, InitializationData, SerializedContractInstance } from './types.js';
 
 /**
- * Serialize a contract instance into the API representation.
+ * Serializes a contract instance into the API representation.
+ * Converts Aztec types into string representations suitable for API transport.
+ *
+ * @param instance - The contract instance with address containing native Aztec types
+ * @param serializedInitializationData - Optional serialized initialization data for the contract
+ * @returns The serialized contract instance with string representations of Aztec types
+ * @throws {SerializationError} When serialization of the contract instance fails
  */
 export function serializeContractInstance(
   instance: ContractInstanceWithAddress,
   initializationData?: InitializationData,
-) {
+): SerializedContractInstance {
   try {
     return {
       address: aztecAddressCodec.encode(instance.address),
@@ -20,7 +26,12 @@ export function serializeContractInstance(
       originalContractClassId: frCodec.encode(instance.originalContractClassId),
       initializationHash: frCodec.encode(instance.initializationHash),
       publicKeys: publicKeysCodec.encode(instance.publicKeys),
-      initializationData: initializationData,
+      initializationData: initializationData
+        ? {
+            constructorName: initializationData.constructorName,
+            encodedArgs: initializationData.encodedArgs?.map(frCodec.encode),
+          }
+        : undefined,
     };
   } catch (error) {
     throw new SerializationError(
@@ -31,20 +42,13 @@ export function serializeContractInstance(
 }
 
 /**
- * Deserialize API payload into contract instance components.
+ * Deserializes API payload into contract instance components.
+ * Converts string representations back into native Aztec types.
+ *
+ * @param payload - The serialized contract instance payload from the API
+ * @returns The deserialized contract instance with native Aztec types
  */
-export function deserializeContractInstance(payload: {
-  address: string;
-  version: number;
-  salt: string;
-  deployer: string;
-  currentContractClassId: string;
-  originalContractClassId: string;
-  initializationHash: string;
-  publicKeys: string;
-  initializationData?: InitializationData;
-  artifact?: string;
-}): DeserializedContractInstance {
+export function deserializeContractInstance(payload: SerializedContractInstance): DeserializedContractInstance {
   return {
     address: aztecAddressCodec.decode(payload.address),
     version: payload.version,
@@ -54,13 +58,22 @@ export function deserializeContractInstance(payload: {
     originalContractClassId: frCodec.decode(payload.originalContractClassId),
     initializationHash: frCodec.decode(payload.initializationHash),
     publicKeys: publicKeysCodec.decode(payload.publicKeys),
-    initializationData: payload.initializationData,
+    initializationData: payload.initializationData
+      ? {
+          constructorName: payload.initializationData.constructorName,
+          encodedArgs: payload.initializationData.encodedArgs?.map(frCodec.decode),
+        }
+      : undefined,
     artifact: payload.artifact ? contractArtifactCodec.decode(payload.artifact) : undefined,
   };
 }
 
 /**
- * Create a new deserialized contract instance.
+ * Creates a new deserialized contract instance with proper default values.
+ * Provides default values for optional contract class IDs when not specified.
+ *
+ * @param input - The input parameters for creating the contract instance
+ * @returns A new deserialized contract instance with all required fields populated
  */
 export function createDeserializedContractInstance(input: {
   address: AztecAddress;

@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
     "generate": "DATABASE_URL=foo GENERATE_OPENAPI=true tsx src/index.ts",

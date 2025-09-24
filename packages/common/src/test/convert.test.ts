@@ -27,7 +27,7 @@ describe('convert helpers', () => {
   });
 
   it('throws descriptive error for invalid PublicKeys input', () => {
-    expectError(() => hexStringToPublicKeys('not-a-valid-key'), /Failed to convert input to PublicKeys/);
+    expectError(() => hexStringToPublicKeys('0x1234'), /Failed to convert input to PublicKeys/);
   });
 
   it('throws descriptive error for invalid AztecAddress hex', () => {

@@ -4,13 +4,20 @@ import { jsonParseWithSchema, jsonStringify } from '@aztec/foundation/json-rpc';
 import { ContractArtifactSchema } from '@aztec/stdlib/abi';
 import { customType } from 'drizzle-orm/pg-core';
 
-export type InitializationData = {
-  constructorArtifact?: string | null;
-  constructorArgs?: unknown[] | null;
+type Hex = `0x${string}`;
+
+type InitializationData = {
+  constructorName: string;
+  encodedArgs?: Fr[] | null;
+};
+
+type SerializedInitializationData = {
+  constructorName: string;
+  encodedArgs?: string[] | null;
 };
 
 // Custom type for Fr field
-export const frField = customType<{ data: Fr; driverData: string }>({
+export const frField = customType<{ data: Fr; driverData: Hex }>({
   dataType() {
     return 'text';
   },
@@ -20,13 +27,13 @@ export const frField = customType<{ data: Fr; driverData: string }>({
     }
     return Fr.fromHexString(value); // Note: NOT Fr.fromString() which expects bigint string
   },
-  toDriver(value: Fr): string {
-    return value.toString().toLowerCase(); // Normalize to lower case
+  toDriver(value: Fr): Hex {
+    return value.toString();
   },
 });
 
 // Custom type for AztecAddress field
-export const aztecAddressField = customType<{ data: AztecAddress; driverData: string }>({
+export const aztecAddressField = customType<{ data: AztecAddress; driverData: Hex }>({
   dataType() {
     return 'text';
   },
@@ -36,8 +43,8 @@ export const aztecAddressField = customType<{ data: AztecAddress; driverData: st
     }
     return AztecAddress.fromString(value);
   },
-  toDriver(value: AztecAddress): string {
-    return value.toString().toLowerCase(); // Normalize to lower case
+  toDriver(value: AztecAddress): Hex {
+    return value.toString(); // Normalize to lower case
   },
 });
 
@@ -85,12 +92,25 @@ export const initializationDataJsonb = customType<{ data: InitializationData; dr
     return 'jsonb';
   },
   fromDriver(value: string): InitializationData {
-    if (typeof value === 'string') {
-      return JSON.parse(value) as InitializationData;
+    const parsed: SerializedInitializationData = JSON.parse(value);
+
+    // Convert encodedArgs from hex strings back to Fr objects
+    if (parsed?.encodedArgs) {
+      return {
+        constructorName: parsed.constructorName,
+        encodedArgs: parsed.encodedArgs.map((arg: string) => Fr.fromHexString(arg)),
+      };
     }
-    return value as InitializationData;
+
+    return parsed as InitializationData;
   },
   toDriver(value: InitializationData): string {
-    return JSON.stringify(value);
+    // Convert Fr objects to hex strings for storage
+    const serializable: SerializedInitializationData = { constructorName: value.constructorName };
+    if (value.encodedArgs) {
+      serializable.encodedArgs = value.encodedArgs.map((fr) => fr.toString().toLowerCase());
+    }
+
+    return JSON.stringify(serializable);
   },
 });

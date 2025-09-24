@@ -37,13 +37,16 @@
   ],
   "scripts": {
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "dev": "tsc --watch",
     "test": "vitest --run",
     "coverage": "vitest --run --coverage",
     "lint": "biome lint --fix",
     "format": "biome format --fix",
     "check": "biome check --fix",
-    "clean": "rm -rf ./dist ./node_modules"
+    "clean": "rm -rf ./dist ./node_modules",
+    "version": "pnpm run build && pnpm run docs",
+    "docs": "typedoc"
   },
   "dependencies": {
     "@aztec/aztec.js": "^2.0.3",
@@ -54,6 +57,8 @@
   },
   "devDependencies": {
     "@types/node": "^24.5.2",
+    "typedoc": "^0.28.13",
+    "typedoc-plugin-markdown": "^4.9.0",
     "vitest": "^3.2.4"
   },
   "repository": {

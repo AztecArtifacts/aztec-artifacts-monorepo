@@ -1,4 +1,4 @@
-import { hexStringToAztecAddress } from '@aztec-artifacts/common';
+import { type Hex, hexStringToAztecAddress, isHex } from '@aztec-artifacts/common';
 import type { FastifyReply } from 'fastify';
 
 export const CacheControl = {
@@ -23,8 +23,14 @@ export function normalizeAddress(address: string): string {
     throw new Error('Invalid address format: must start with 0x');
   }
 
+  if (!isHex(address)) {
+    throw new Error(`Invalid address: ${address} is not a valid hex string`);
+  }
+
   try {
-    return hexStringToAztecAddress(address).toString().toLowerCase();
+    return hexStringToAztecAddress(address as Hex)
+      .toString()
+      .toLowerCase();
   } catch (error) {
     throw new Error('Invalid address format', { cause: error instanceof Error ? error : undefined });
   }

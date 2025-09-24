@@ -1,4 +1,5 @@
 import { expect } from 'vitest';
+import type { Hex } from '../types.js';
 
 /**
  * Test utility for round-trip encoding and decoding
@@ -6,8 +7,8 @@ import { expect } from 'vitest';
 export function testRoundTrip<T>(
   _name: string,
   value: T,
-  encode: (value: T) => unknown,
-  decode: (encoded: unknown) => T,
+  encode: (value: T) => Hex,
+  decode: (encoded: Hex) => T,
   equals?: (a: T, b: T) => boolean,
 ): void {
   const encoded = encode(value);
@@ -35,8 +36,8 @@ export function testRoundTrip<T>(
 export function testHexRoundTrip<T>(
   _name: string,
   value: T,
-  toHex: (value: T) => string,
-  fromHex: (hex: string) => T,
+  toHex: (value: T) => Hex,
+  fromHex: (hex: Hex) => T,
   equals?: (a: T, b: T) => boolean,
 ): void {
   const hex = toHex(value);

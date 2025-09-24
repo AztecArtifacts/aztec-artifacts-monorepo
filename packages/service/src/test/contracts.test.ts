@@ -21,7 +21,13 @@ const makeDbInstance = (): DbContractInstance => ({
   publicKeys: {
     toString: () => `0x${'0'.repeat(512)}`, // 2048-bit hex string for PublicKeys
   } as unknown as PublicKeys,
-  initializationData: { constructorArtifact: 'test', constructorArgs: ['param1', 'param2'] },
+  initializationData: {
+    constructorName: 'test',
+    encodedArgs: [
+      Fr.fromString('0x0000000000000000000000000000000000000000000000000000000000000001'),
+      Fr.fromString('0x0000000000000000000000000000000000000000000000000000000000000002'),
+    ],
+  },
   createdAt: new Date(),
   updatedAt: new Date(),
 });

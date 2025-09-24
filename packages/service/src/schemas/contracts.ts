@@ -27,21 +27,23 @@ const hex256 = /^0x[a-fA-F0-9]{64}$/;
 // 2048-bit hex string regex (0x + 8 * 64 hex chars)
 const hex2048 = /^0x[a-fA-F0-9]{512}$/;
 
+const hex = /^0x[a-fA-F0-9]+$/;
+
 // Simplified Initialization Data Schema
 export const initializationDataSchema = z
   .object({
-    constructorArtifact: z.string().nullable().optional(),
-    constructorArgs: z.array(z.unknown()).nullable().optional(),
+    constructorName: z.string(),
+    encodedArgs: z.array(z.string().regex(hex256)).optional(),
   })
-  .nullable()
-  .optional();
+  .optional()
+  .nullable();
 
 const publicKeysInputSchema = z
   .string()
   .regex(hex2048)
   .describe('Public keys as hex string (use PublicKeys.toString() for serialization)');
 
-const uploadArtifactInputSchema = z.string();
+const uploadArtifactInputSchema = z.string().regex(hex).describe('Serialized ContractArtifact as hex string');
 
 const uploadContractInstancePayloadSchema = z.object({
   address: z.string().regex(hex256).describe('Aztec address as hex string'),
@@ -165,6 +167,7 @@ export const uploadContractInstanceSchema = z.object({
 export const uploadContractArtifactSchema = z.object({
   artifact: z
     .string()
+    .regex(hex)
     .describe('Serialized ContractArtifact as hex string.  Use contractArtifactToBuffer, then hex encode'),
 });
 

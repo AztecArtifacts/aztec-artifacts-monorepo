@@ -1,6 +1,13 @@
 import { AztecAddress, Fr, type PublicKeys } from '@aztec/aztec.js';
 import { getContractClassFromArtifact } from '@aztec/stdlib/contract';
-import { aztecAddressCodec, contractArtifactCodec, frCodec, publicKeysCodec } from '@aztec-artifacts/common';
+import {
+  aztecAddressCodec,
+  contractArtifactCodec,
+  frCodec,
+  type Hex,
+  isHex,
+  publicKeysCodec,
+} from '@aztec-artifacts/common';
 import {
   contractArtifacts,
   contractInstances,
@@ -36,9 +43,12 @@ export enum ContractInstanceError {
 
 function parsePublicKeysInput(input: UploadContractInstancePayload['publicKeys']): PublicKeys {
   try {
+    if (!isHex(input)) {
+      throw new Error('Public keys must be a hex string');
+    }
     return publicKeysCodec.decode(input);
   } catch (error) {
-    throw new Error('Invalid public keys hex string format', { cause: error });
+    throw new Error('Failed to deserialize public keys', { cause: error });
   }
 }
 
@@ -57,13 +67,12 @@ export function convertDbContractInstanceToApi(
     originalContractClassId: frCodec.encode(dbInstance.originalContractClassId),
     initializationHash: frCodec.encode(dbInstance.initializationHash),
     publicKeys: publicKeysCodec.encode(dbInstance.publicKeys),
-    initializationData: dbInstance.initializationData as
-      | {
-          constructorArtifact?: string | null;
-          constructorArgs?: unknown[] | null;
+    initializationData: dbInstance.initializationData
+      ? {
+          constructorName: dbInstance.initializationData.constructorName,
+          encodedArgs: dbInstance.initializationData.encodedArgs?.map(frCodec.encode),
         }
-      | null
-      | undefined,
+      : undefined,
     artifact: includeArtifact && artifact ? contractArtifactCodec.encode(artifact.artifact) : undefined,
     isToken: artifact?.isToken ?? false,
   };
@@ -265,6 +274,9 @@ export class ContractService {
 
     if (artifact !== undefined) {
       // If the artifact is provided, we should ensure it matches one of the contract class IDs.
+      if (!isHex(artifact)) {
+        throw new Error('Artifact must be a valid hex string');
+      }
       artifactForResponse = await this.createContractArtifact(artifact);
 
       if (
@@ -292,6 +304,26 @@ export class ContractService {
     // At this point we have a valid artifact for the current contract class ID
 
     const publicKeys = parsePublicKeysInput(instance.publicKeys);
+
+    // Convert encodedArgs from hex strings to Fr objects for storage
+    const initData = instance.initializationData
+      ? {
+          constructorName: instance.initializationData.constructorName,
+          encodedArgs: instance.initializationData.encodedArgs?.map((hex) => Fr.fromHexString(hex)) ?? null,
+        }
+      : null;
+
+    // Validate hex strings before decoding
+    if (!isHex(instance.salt)) {
+      throw new Error('Salt must be a valid hex string');
+    }
+    if (!isHex(instance.deployer)) {
+      throw new Error('Deployer must be a valid hex string');
+    }
+    if (!isHex(instance.initializationHash)) {
+      throw new Error('Initialization hash must be a valid hex string');
+    }
+
     const [createdInstance] = await this.db
       .insert(contractInstances)
       .values({
@@ -303,7 +335,7 @@ export class ContractService {
         originalContractClassId,
         initializationHash: frCodec.decode(instance.initializationHash),
         publicKeys,
-        initializationData: instance.initializationData ?? null,
+        initializationData: initData,
       })
       .returning();
 
@@ -318,7 +350,7 @@ export class ContractService {
     };
   }
 
-  async createContractArtifact(hex: string): Promise<DbContractArtifact> {
+  async createContractArtifact(hex: Hex): Promise<DbContractArtifact> {
     const artifact = contractArtifactCodec.decode(hex);
 
     // Extract contract class information

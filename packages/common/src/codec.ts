@@ -8,12 +8,13 @@ import {
   hexStringToPublicKeys,
   publicKeysToHexString,
 } from './convert.js';
+import type { Hex } from './types.js';
 
 /**
  * A generic interface for encoding and decoding data types between their in-memory representation
  * and a serialized format.
  * @template T - The in-memory type (e.g., AztecAddress).
- * @template S - The serialized type (e.g., string).
+ * @template S - The serialized type (e.g., Hex).
  */
 export interface Codec<T, S> {
   /**
@@ -35,7 +36,7 @@ export interface Codec<T, S> {
  * A codec for encoding and decoding AztecAddress objects.
  * Encodes to and from a hex string representation.
  */
-export const aztecAddressCodec: Codec<AztecAddress, string> = {
+export const aztecAddressCodec: Codec<AztecAddress, Hex> = {
   encode: aztecAddressToHexString,
   decode: hexStringToAztecAddress,
 };
@@ -44,7 +45,7 @@ export const aztecAddressCodec: Codec<AztecAddress, string> = {
  * A codec for encoding and decoding Fr objects.
  * Encodes to and from a hex string representation.
  */
-export const frCodec: Codec<Fr, string> = {
+export const frCodec: Codec<Fr, Hex> = {
   encode: frToHexString,
   decode: hexStringToFr,
 };
@@ -53,7 +54,7 @@ export const frCodec: Codec<Fr, string> = {
  * A codec for encoding and decoding PublicKeys objects.
  * Encodes to and from a hex string representation.
  */
-export const publicKeysCodec: Codec<PublicKeys, string> = {
+export const publicKeysCodec: Codec<PublicKeys, Hex> = {
   encode: publicKeysToHexString,
   decode: hexStringToPublicKeys,
 };
@@ -62,7 +63,7 @@ export const publicKeysCodec: Codec<PublicKeys, string> = {
  * A codec for encoding and decoding ContractArtifact objects.
  * Encodes to and from a JSON string, which is then hex-encoded.
  */
-export const contractArtifactCodec: Codec<ContractArtifact, string> = {
+export const contractArtifactCodec: Codec<ContractArtifact, Hex> = {
   encode: (artifact: ContractArtifact) => `0x${contractArtifactToBuffer(artifact).toString('hex')}`,
-  decode: (hex: string) => contractArtifactFromBuffer(Buffer.from(hex.replace(/^0x/, ''), 'hex')),
+  decode: (hex: Hex) => contractArtifactFromBuffer(Buffer.from(hex.replace(/^0x/, ''), 'hex')),
 };

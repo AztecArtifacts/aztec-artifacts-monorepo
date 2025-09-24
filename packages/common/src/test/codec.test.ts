@@ -10,7 +10,7 @@ describe('Codecs', () => {
       'AztecAddress',
       address,
       (v) => aztecAddressCodec.encode(v),
-      (v) => aztecAddressCodec.decode(v as string),
+      (v) => aztecAddressCodec.decode(v),
     );
   });
 
@@ -20,7 +20,7 @@ describe('Codecs', () => {
       'Fr',
       field,
       (v) => frCodec.encode(v),
-      (v) => frCodec.decode(v as string),
+      (v) => frCodec.decode(v),
     );
   });
 
@@ -30,7 +30,7 @@ describe('Codecs', () => {
       'PublicKeys',
       keys,
       (v) => publicKeysCodec.encode(v),
-      (v) => publicKeysCodec.decode(v as string),
+      (v) => publicKeysCodec.decode(v),
     );
   });
 
@@ -50,7 +50,7 @@ describe('Codecs', () => {
       'ContractArtifact',
       artifact,
       (v) => contractArtifactCodec.encode(v),
-      (v) => contractArtifactCodec.decode(v as string),
+      (v) => contractArtifactCodec.decode(v),
     );
   });
 });

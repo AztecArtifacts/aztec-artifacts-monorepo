@@ -325,16 +325,20 @@
                       "nullable": true,
                       "type": "object",
                       "properties": {
-                        "constructorArtifact": {
-                          "nullable": true,
+                        "constructorName": {
                           "type": "string"
                         },
-                        "constructorArgs": {
-                          "nullable": true,
+                        "encodedArgs": {
                           "type": "array",
-                          "items": {}
+                          "items": {
+                            "type": "string",
+                            "pattern": "^0x[a-fA-F0-9]{64}$"
+                          }
                         }
                       },
+                      "required": [
+                        "constructorName"
+                      ],
                       "additionalProperties": false
                     },
                     "artifact": {
@@ -824,16 +828,20 @@
                         "nullable": true,
                         "type": "object",
                         "properties": {
-                          "constructorArtifact": {
-                            "nullable": true,
+                          "constructorName": {
                             "type": "string"
                           },
-                          "constructorArgs": {
-                            "nullable": true,
+                          "encodedArgs": {
                             "type": "array",
-                            "items": {}
+                            "items": {
+                              "type": "string",
+                              "pattern": "^0x[a-fA-F0-9]{64}$"
+                            }
                           }
                         },
+                        "required": [
+                          "constructorName"
+                        ],
                         "additionalProperties": false
                       }
                     },

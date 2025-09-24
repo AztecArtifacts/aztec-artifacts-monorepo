@@ -203,8 +203,8 @@ export interface paths {
               /** @description Public keys as concatenated hex string (use PublicKeys.toString() / fromString() for conversion) */
               publicKeys: string;
               initializationData?: {
-                constructorArtifact?: string | null;
-                constructorArgs?: unknown[] | null;
+                constructorName: string;
+                encodedArgs?: string[];
               } | null;
               /** @description Serialized ContractArtifact as hex string */
               artifact?: string;
@@ -522,8 +522,8 @@ export interface paths {
               /** @description Public keys as hex string (use PublicKeys.toString() for serialization) */
               publicKeys: string;
               initializationData?: {
-                constructorArtifact?: string | null;
-                constructorArgs?: unknown[] | null;
+                constructorName: string;
+                encodedArgs?: string[];
               } | null;
             };
             artifact?: string;

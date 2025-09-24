@@ -1,4 +1,4 @@
-import { aztecAddressToHexString, hexStringToAztecAddress } from '@aztec-artifacts/common';
+import { aztecAddressToHexString, type Hex, hexStringToAztecAddress, isHex } from '@aztec-artifacts/common';
 import { type DbClient, tokens } from '@aztec-artifacts/schema';
 import type { Span } from '@opentelemetry/api';
 import { and, asc, eq, gt } from 'drizzle-orm';
@@ -218,7 +218,10 @@ export class TokenService {
             },
           },
           () => {
-            const aztecAddress = hexStringToAztecAddress(address);
+            if (!isHex(address)) {
+              throw new Error(`Invalid address: ${address} is not a valid hex string`);
+            }
+            const aztecAddress = hexStringToAztecAddress(address as Hex);
             return this.db.select().from(tokens).where(eq(tokens.address, aztecAddress));
           },
           span,

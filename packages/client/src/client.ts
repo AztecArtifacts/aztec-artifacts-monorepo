@@ -1,4 +1,5 @@
 import type { ContractArtifact, ContractInstanceWithAddress } from '@aztec/aztec.js';
+import { contractArtifactCodec, type InitializationData, serializeContractInstance } from '@aztec-artifacts/common';
 import { BASE_URL } from './constants.js';
 import { apiResponseToArtifact, apiResponseToContract } from './converters.js';
 import {
@@ -114,23 +115,42 @@ export class AztecArtifactsApiClient {
     artifact: ContractArtifact,
     options?: { cache?: RequestCache },
   ): Promise<{ contractClassId: string }> {
-    return this.rawClient.uploadContractArtifactRaw(artifact, options);
+    return this.rawClient.uploadContractArtifactRaw(contractArtifactCodec.encode(artifact), options);
   }
 
   /**
-   * Uploads a contract instance along with an optional artifact.
+   * Uploads a contract instance along with optional initialization data and artifact.
    *
-   * @param instance - Contract instance to upload.
-   * @param artifact - Optional artifact to store alongside the instance.
+   * @param params - Object containing:
+   *   - instance: Contract instance to upload.
+   *   - initializationData: Optional initialization data for the contract.
+   *   - artifact: Optional artifact to store alongside the instance.
    * @param options - Request options such as fetch cache behaviour.
    * @returns The deployed address plus current contract class ID.
    */
   async uploadContractInstance(
-    instance: ContractInstanceWithAddress,
-    artifact?: ContractArtifact,
+    {
+      instance,
+      initializationData,
+      artifact,
+    }: {
+      instance: ContractInstanceWithAddress;
+      initializationData?: InitializationData;
+      artifact?: ContractArtifact;
+    },
     options?: { cache?: RequestCache },
   ): Promise<{ address: string; currentContractClassId: string }> {
-    return this.rawClient.uploadContractInstanceRaw(instance, artifact, options);
+    const serializedInstance = serializeContractInstance(instance, initializationData);
+
+    //todo
+
+    return this.rawClient.uploadContractInstanceRaw(
+      {
+        instance: serializedInstance,
+        artifact: artifact ? contractArtifactCodec.encode(artifact) : undefined,
+      },
+      options,
+    );
   }
 
   // Contract address methods

@@ -108,10 +108,23 @@ const client = createDefaultClient();
 try {
   // Upload the instance & artifact together
   // The artifact is required if it doesn't already exist in the repository
-  await client.uploadContractInstance(myInstance, myArtifact);
+  await client.uploadContractInstance({
+    instance: myInstance,
+    artifact: myArtifact
+  });
 
   // Upload just the contract instance (associated artifact must already exist)
-  await client.uploadContractInstance(myInstance);
+  await client.uploadContractInstance({ instance: myInstance });
+
+  // Upload with initialization data
+  await client.uploadContractInstance({
+    instance: myInstance,
+    initializationData: {
+      constructorName: 'my_constructor', // Constructor function name
+      encodedArgs: [frArg1, frArg2] // Constructor arguments encoded as Fr[]
+    },
+    artifact: myArtifact
+  });
 } catch (error) {
   console.error('Upload failed:', error);
 }
@@ -270,7 +283,10 @@ async function uploadWithErrorHandling() {
   const client = createDefaultClient();
 
   try {
-    await client.uploadContractInstance(instance, artifact);
+    await client.uploadContractInstance({
+      instance: instance,
+      artifact: artifact
+    });
     console.log('Upload successful');
   } catch (error) {
     if (error instanceof ConflictError) {

@@ -1,6 +1,5 @@
-import type { ContractArtifact, ContractInstanceWithAddress } from '@aztec/aztec.js';
+import type { Hex, SerializedContractInstance, SerializedInitializationData } from '@aztec-artifacts/common';
 import { BASE_URL } from './constants.js';
-import { artifactToApiRequest, contractToApiRequest } from './converters.js';
 import { BadRequestError, ConflictError, NotFoundError, ServerError, UnexpectedStatusError } from './errors.js';
 import type { paths } from './types.js';
 
@@ -333,34 +332,44 @@ export class RawApiClient {
    * @throws Error if upload fails or the artifact payload is invalid.
    */
   async uploadContractArtifactRaw(
-    artifact: ContractArtifact,
+    artifact: Hex,
     options?: { cache?: RequestCache },
   ): Promise<{ contractClassId: string }> {
-    const requestBody = artifactToApiRequest(artifact);
-
     return this.request<paths['/artifacts']['post']['responses']['201']['content']['application/json']>('/artifacts', {
       method: 'POST',
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify({ artifact }),
       ...options,
     });
   }
 
   /**
-   * Uploads a contract instance (and optional artifact) without deserialization.
+   * Uploads a contract instance with optional initialization data and artifact without deserialization.
    *
-   * @param instance - The `ContractInstanceWithAddress` to upload.
-   * @param artifact - Optional `ContractArtifact` to upload with the instance.
+   * @param params - Object containing:
+   *   - instance: The `ContractInstanceWithAddress` to upload.
+   *   - initializationData: Optional initialization data for the contract.
+   *   - artifact: Optional `ContractArtifact` to upload with the instance.
    * @param options - Options including cache settings.
    * @returns Address and current contract class ID of the uploaded instance.
    * @throws Error if upload fails or the instance/artifact payload is invalid.
    */
   async uploadContractInstanceRaw(
-    instance: ContractInstanceWithAddress,
-    artifact?: ContractArtifact,
+    {
+      instance,
+      initializationData,
+      artifact,
+    }: {
+      instance: SerializedContractInstance;
+      initializationData?: SerializedInitializationData;
+      artifact?: Hex;
+    },
     options?: { cache?: RequestCache },
   ): Promise<{ address: string; currentContractClassId: string }> {
-    const requestBody = contractToApiRequest(instance, artifact);
-
+    const requestBody = {
+      instance,
+      artifact,
+      initializationData,
+    };
     return this.request<paths['/contracts']['post']['responses']['201']['content']['application/json']>('/contracts', {
       method: 'POST',
       body: JSON.stringify(requestBody),

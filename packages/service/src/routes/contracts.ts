@@ -1,3 +1,4 @@
+import type { Hex } from '@aztec-artifacts/common';
 import type { FastifyInstance } from 'fastify';
 import { ZodError } from 'zod';
 import {
@@ -452,7 +453,7 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
         const { artifact } = uploadContractArtifactSchema.parse(request.body);
 
         // Validate and create the contract artifact
-        const dbArtifact = await contractService.createContractArtifact(artifact);
+        const dbArtifact = await contractService.createContractArtifact(artifact as Hex);
 
         // Return only the contract class ID
         const response = {
