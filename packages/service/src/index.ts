@@ -90,8 +90,8 @@ async function createServer() {
         openapi: {
           openapi: '3.0.0',
           info: {
-            title: 'Turnstile API',
-            description: 'Token bridge system for Ethereum L1 and Aztec L2 networks',
+            title: 'Aztec Artifacts API',
+            description: 'ContractArtifact and ContractInstance data service for Aztec',
             version: '1.0.0',
           },
           servers: [
@@ -130,7 +130,7 @@ async function createServer() {
   );
 
   // Register unprefixed routes
-  await registerHealthRoutes(fastify, tokenService);
+  await registerHealthRoutes(fastify, db);
 
   // Generate OpenAPI spec file if requested
   if (process.env.GENERATE_OPENAPI === 'true') {

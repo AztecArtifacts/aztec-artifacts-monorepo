@@ -232,46 +232,4 @@ export class TokenService {
     );
   }
 
-  async testConnection(): Promise<TokenRow[]> {
-    return this.executeDbOperation<TokenRow[]>(
-      {
-        spanName: 'db.query.tokens.testConnection',
-        operation: 'select',
-        table: DatabaseTable.TOKENS,
-        statement: 'SELECT * FROM tokens LIMIT 1',
-        logParams: { limit: 1 },
-        onSuccess: (results, duration) => {
-          if (this.logger) {
-            logServiceOperation(
-              this.logger,
-              'TokenService',
-              'testConnection',
-              {},
-              {
-                success: true,
-                count: results.length,
-              },
-            );
-            this.logger.debug({ duration }, 'Database connection test completed');
-          }
-        },
-        onError: (errorMessage, duration, error) => {
-          if (this.logger) {
-            logServiceOperation(
-              this.logger,
-              'TokenService',
-              'testConnection',
-              {},
-              {
-                success: false,
-                error: errorMessage,
-              },
-            );
-            this.logger.error({ error: errorMessage, duration, cause: error }, 'Database connection test failed');
-          }
-        },
-      },
-      () => this.db.select().from(tokens).limit(1),
-    );
-  }
 }
