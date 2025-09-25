@@ -14,6 +14,25 @@ import { ContractService } from './services/contract-service.js';
 import { TokenService } from './services/token-service.js';
 import { createMetrics } from './utils/metrics.js';
 
+const DEFAULT_BODY_LIMIT_MB = 32;
+const BYTES_PER_MEGABYTE = 1024 * 1024;
+
+function resolveBodyLimitBytes(rawValue: string | undefined): number {
+  if (!rawValue) {
+    return DEFAULT_BODY_LIMIT_MB * BYTES_PER_MEGABYTE;
+  }
+
+  const parsed = Number.parseInt(rawValue, 10);
+  if (Number.isNaN(parsed) || parsed <= 0) {
+    console.warn(
+      `Invalid BODY_LIMIT_MB value "${rawValue}". Falling back to default ${DEFAULT_BODY_LIMIT_MB}MB.`,
+    );
+    return DEFAULT_BODY_LIMIT_MB * BYTES_PER_MEGABYTE;
+  }
+
+  return parsed * BYTES_PER_MEGABYTE;
+}
+
 function normalizePrefix(input?: string): string {
   if (!input) return '';
   const withLeading = input.startsWith('/') ? input : `/${input}`;
@@ -28,10 +47,13 @@ async function createServer() {
   const logLevel = process.env.LOG_LEVEL || (process.env.NODE_ENV === 'production' ? 'info' : 'debug');
   const logPretty = process.env.LOG_PRETTY === 'true' || process.env.NODE_ENV !== 'production';
 
+  const bodyLimit = resolveBodyLimitBytes(process.env.BODY_LIMIT_MB);
+
   const fastify = Fastify({
     logger: createLoggerConfig(logLevel, logPretty),
     disableRequestLogging: false, // Enable automatic request/response logging
     requestIdLogLabel: 'reqId',
+    bodyLimit,
   });
 
   // Register plugins
@@ -45,6 +67,7 @@ async function createServer() {
         API_ROUTE_PREFIX: { type: 'string', default: '' },
         LOG_LEVEL: { type: 'string', default: 'info' },
         LOG_PRETTY: { type: 'string', default: 'false' },
+        BODY_LIMIT_MB: { type: 'string', default: String(DEFAULT_BODY_LIMIT_MB) },
       },
     },
   });
