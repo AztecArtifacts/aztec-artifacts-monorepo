@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.2**](../README.md)
+[**@aztec-artifacts/client v0.1.3**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **ErrorResponse** = `object`
 
-Defined in: [packages/client/src/raw-client.ts:43](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/319f9c2bfc464cded897116c492df05792d1db75/packages/client/src/raw-client.ts#L43)
+Defined in: [packages/client/src/raw-client.ts:43](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/client/src/raw-client.ts#L43)
 
 Standard error envelope returned by the API on failure.
 
@@ -18,4 +18,4 @@ Standard error envelope returned by the API on failure.
 
 > **error**: `string`
 
-Defined in: [packages/client/src/raw-client.ts:43](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/319f9c2bfc464cded897116c492df05792d1db75/packages/client/src/raw-client.ts#L43)
+Defined in: [packages/client/src/raw-client.ts:43](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/client/src/raw-client.ts#L43)

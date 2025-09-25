@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.2**](../README.md)
+[**@aztec-artifacts/common v0.1.3**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **aztecAddressToHexString**(`address`): `` `0x${string}` ``
 
-Defined in: [packages/common/src/convert.ts:11](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/319f9c2bfc464cded897116c492df05792d1db75/packages/common/src/convert.ts#L11)
+Defined in: [packages/common/src/convert.ts:11](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/common/src/convert.ts#L11)
 
 Converts an AztecAddress to its hex string representation.
 
