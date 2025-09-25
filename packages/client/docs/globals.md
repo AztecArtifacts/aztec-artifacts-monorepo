@@ -1,8 +1,8 @@
-[**@aztec-artifacts/client v0.1.1**](README.md)
+[**@aztec-artifacts/client v0.1.2**](README.md)
 
 ***
 
-# @aztec-artifacts/client v0.1.1
+# @aztec-artifacts/client v0.1.2
 
 ## Classes
 
@@ -46,3 +46,4 @@
 - [contractToApiRequest](functions/contractToApiRequest.md)
 - [createDefaultClient](functions/createDefaultClient.md)
 - [createDefaultRawClient](functions/createDefaultRawClient.md)
+- [getFunctionAbi](functions/getFunctionAbi.md)
