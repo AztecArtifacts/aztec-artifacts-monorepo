@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Turnstile API",
-    "description": "Token bridge system for Ethereum L1 and Aztec L2 networks",
+    "title": "Aztec Artifacts API",
+    "description": "ContractArtifact and ContractInstance data service for Aztec",
     "version": "1.0.0"
   },
   "components": {

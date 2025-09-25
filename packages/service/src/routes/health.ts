@@ -1,3 +1,4 @@
+import type { DbClient } from '@aztec-artifacts/schema';
 import type { FastifyInstance } from 'fastify';
 import {
   healthResponseSchema,
@@ -5,13 +6,13 @@ import {
   unavailableResponseSchema,
   zodToJsonSchema,
 } from '../schemas/index.js';
-import type { TokenService } from '../services/token-service.js';
 import { CacheControl, sendJsonResponse } from '../utils/response.js';
 
-export async function registerHealthRoutes(fastify: FastifyInstance, tokenService: TokenService) {
+export async function registerHealthRoutes(fastify: FastifyInstance, db: DbClient) {
   fastify.get(
     '/health',
     {
+      logLevel: 'silent', // Disable logging for health check
       schema: {
         tags: ['Health'],
         summary: 'Health check',
@@ -29,6 +30,7 @@ export async function registerHealthRoutes(fastify: FastifyInstance, tokenServic
   fastify.get(
     '/ready',
     {
+      logLevel: 'silent', // Disable logging for readiness check
       schema: {
         tags: ['Health'],
         summary: 'Readiness check',
@@ -41,7 +43,7 @@ export async function registerHealthRoutes(fastify: FastifyInstance, tokenServic
     },
     async (_request, reply) => {
       try {
-        await tokenService.testConnection();
+        await db.execute('SELECT 1');
         sendJsonResponse(reply, { status: 'ready' }, CacheControl.NO_CACHE);
       } catch (error) {
         fastify.log.error({ error }, 'Database connection failed');
