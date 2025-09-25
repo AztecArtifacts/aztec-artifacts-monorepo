@@ -20,7 +20,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        SERVICE: '@aztec-artifacts/api-common'
+        SERVICE: '@aztec-artifacts/schema'
     depends_on:
       postgres:
         condition: service_healthy
@@ -34,7 +34,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        SERVICE: '@aztec-artifacts/api-service'
+        SERVICE: '@aztec-artifacts/service'
     depends_on:
       migrations:
         condition: service_completed_successfully
