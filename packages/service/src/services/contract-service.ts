@@ -259,6 +259,9 @@ export class ContractService {
     artifact: DbContractArtifact | null;
     created: boolean;
   }> {
+    // TODO: Validate that the contract address provided matches the address from computeContractAddressFromInstance()
+    // TODO: Validate initializationData is correct by manually computing the hash with `computeInitializationHash` and comparing to the provided initializationHash
+
     const { instance, artifact } = payload;
     const address = AztecAddress.fromString(instance.address);
     const existingInstance = await this.getContractInstance(address);
@@ -351,6 +354,8 @@ export class ContractService {
   }
 
   async createContractArtifact(hex: Hex): Promise<DbContractArtifact> {
+    // TODO: We should extract the constructor function ABIs and store them separately to enable using it for initialization data encoding/decoding
+
     const artifact = contractArtifactCodec.decode(hex);
 
     // Extract contract class information

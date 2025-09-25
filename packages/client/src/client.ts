@@ -12,7 +12,6 @@ import {
   RawApiClient,
   type TokensResponse,
 } from './raw-client.js';
-
 /**
  * Creates an `AztecArtifactsApiClient` preconfigured with the default service URL.
  *

@@ -82,9 +82,10 @@ try {
 
 ```typescript
 import { createDefaultClient } from '@aztec-artifacts/client';
+import type { ContractArtifact } from '@aztec/aztec.js';
 import { randomContractArtifact } from '@aztec/stdlib/testing';
 
-const artifact = randomContractArtifact();
+const artifact: ContractArtifact = randomContractArtifact();
 
 const client = createDefaultClient();
 try {
@@ -98,14 +99,20 @@ try {
 ## Uploading a Contract Instance
 
 ```typescript
-import { createDefaultClient } from '@aztec-artifacts/client';
-import { randomContractInstance, randomContractArtifact } from '@aztec/stdlib/testing';
+import { createDefaultClient, type InitializationData } from '@aztec-artifacts/client';
+import { randomContractInstanceWithAddress, randomContractArtifact } from '@aztec/stdlib/testing';
+import { encodeArguments, type ContractArtifact, type ContractInstanceWithAddress } from '@aztec/aztec.js';
 
-const myArtifact = randomContractArtifact();
-const myInstance = await randomContractInstance({ contractClassId: myArtifact.contractClassId });
+const myArtifact: ContractArtifact = randomContractArtifact();
+const myInstance: ContractInstanceWithAddress = await randomContractInstanceWithAddress({ contractClassId: myArtifact.contractClassId });
 
 const client = createDefaultClient();
 try {
+
+  // Upload just the contract instance (associated artifact must already exist)
+  await client.uploadContractInstance({ instance: myInstance });
+
+
   // Upload the instance & artifact together
   // The artifact is required if it doesn't already exist in the repository
   await client.uploadContractInstance({
@@ -113,18 +120,17 @@ try {
     artifact: myArtifact
   });
 
-  // Upload just the contract instance (associated artifact must already exist)
-  await client.uploadContractInstance({ instance: myInstance });
 
-  // Upload with initialization data
+   // Upload the instance with optional initialization data so that users can see the constructor args
+  const initializationData: InitializationData = {
+    constructorName: 'my_constructor', // Constructor function name
+    encodedArgs: encodeArguments(myFunctionAbi, [arg1, arg2]), // Constructor arguments abi-encoded as Fr[] using encodeArguments() from @aztec/aztec.js
+  }
   await client.uploadContractInstance({
     instance: myInstance,
-    initializationData: {
-      constructorName: 'my_constructor', // Constructor function name
-      encodedArgs: [frArg1, frArg2] // Constructor arguments encoded as Fr[]
-    },
-    artifact: myArtifact
+    artifact: myArtifact,
   });
+
 } catch (error) {
   console.error('Upload failed:', error);
 }
@@ -242,8 +248,7 @@ import {
   BadRequestError,
   ConflictError,
   ServerError,
-  ApiError,
-  SerializationError
+  ApiError
 } from '@aztec-artifacts/client';
 
 async function handleErrors() {
@@ -268,9 +273,6 @@ async function handleErrors() {
     } else if (error instanceof ApiError) {
       // Handle any other API errors
       console.error(`API error (${error.status}):`, error.message);
-    } else if (error instanceof SerializationError) {
-      // Handle serialization/deserialization errors
-      console.error('Data serialization error:', error.message);
     } else {
       // Handle unexpected errors
       console.error('Unexpected error:', error);
@@ -323,7 +325,7 @@ const client = new AztecArtifactsApiClient({
 
 ### Caching
 
-The standard `fetch` options can be passed to control client-side caching behavior.
+Standard `fetch` options can be passed to control client-side caching behavior.
 
 ```typescript
 // Use browser cache
