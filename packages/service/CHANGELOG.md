@@ -1,5 +1,13 @@
 # @aztec-artifacts/service
 
+## 0.1.1
+
+### Patch Changes
+
+- 7f2d798: logging update
+  - @aztec-artifacts/common@0.1.1
+  - @aztec-artifacts/schema@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

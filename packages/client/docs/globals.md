@@ -1,8 +1,8 @@
-[**@aztec-artifacts/client v0.1.0**](README.md)
+[**@aztec-artifacts/client v0.1.1**](README.md)
 
 ***
 
-# @aztec-artifacts/client v0.1.0
+# @aztec-artifacts/client v0.1.1
 
 ## Classes
 

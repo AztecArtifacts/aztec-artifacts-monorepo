@@ -1,4 +1,4 @@
-**@aztec-artifacts/client v0.1.0**
+**@aztec-artifacts/client v0.1.1**
 
 ***
 
