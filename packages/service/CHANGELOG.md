@@ -1,5 +1,13 @@
 # @aztec-artifacts/service
 
+## 0.1.3
+
+### Patch Changes
+
+- f14f758: Configurable body limit for api service
+  - @aztec-artifacts/common@0.1.3
+  - @aztec-artifacts/schema@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

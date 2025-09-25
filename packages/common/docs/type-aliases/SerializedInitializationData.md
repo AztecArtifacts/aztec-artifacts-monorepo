@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.2**](../README.md)
+[**@aztec-artifacts/common v0.1.3**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **SerializedInitializationData** = `object`
 
-Defined in: [packages/common/src/types.ts:14](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/319f9c2bfc464cded897116c492df05792d1db75/packages/common/src/types.ts#L14)
+Defined in: [packages/common/src/types.ts:14](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/common/src/types.ts#L14)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [packages/common/src/types.ts:14](https://github.com/AztecArtifacts/
 
 > **constructorName**: `string`
 
-Defined in: [packages/common/src/types.ts:15](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/319f9c2bfc464cded897116c492df05792d1db75/packages/common/src/types.ts#L15)
+Defined in: [packages/common/src/types.ts:15](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/common/src/types.ts#L15)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [packages/common/src/types.ts:15](https://github.com/AztecArtifacts/
 
 > `optional` **encodedArgs**: [`Hex`](Hex.md)[]
 
-Defined in: [packages/common/src/types.ts:16](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/319f9c2bfc464cded897116c492df05792d1db75/packages/common/src/types.ts#L16)
+Defined in: [packages/common/src/types.ts:16](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/common/src/types.ts#L16)
