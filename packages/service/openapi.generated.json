@@ -857,7 +857,9 @@
                     "additionalProperties": false
                   },
                   "artifact": {
-                    "type": "string"
+                    "description": "Serialized ContractArtifact as hex string",
+                    "type": "string",
+                    "pattern": "^0x[a-fA-F0-9]+$"
                   }
                 },
                 "required": [
@@ -999,7 +1001,8 @@
                 "properties": {
                   "artifact": {
                     "description": "Serialized ContractArtifact as hex string.  Use contractArtifactToBuffer, then hex encode",
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^0x[a-fA-F0-9]+$"
                   }
                 },
                 "required": [

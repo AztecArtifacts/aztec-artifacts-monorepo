@@ -9,11 +9,10 @@
     "ignoreUnknown": false,
     "includes": [
       "**/*.ts",
-      "!**/l1/**/*",
-      "!**/packages/aztec-artifacts/src/artifacts/**/*.ts",
-      "!**/packages/l1-artifacts-*/src/contracts/**/*.ts",
       "!**/dist/**/*",
-      "!**/node_modules/**/*"
+      "!**/node_modules/**/*",
+      "!packages/client/src/types.ts",
+      "!packages/service/openapi.generated.json"
     ]
   },
   "formatter": {
