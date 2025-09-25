@@ -12,3 +12,4 @@ export * from './errors.js';
 // Export all types from raw client
 export * from './raw-client.js';
 export type { components, paths } from './types.js';
+export * from './utils.js';
