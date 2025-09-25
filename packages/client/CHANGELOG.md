@@ -1,5 +1,12 @@
 # @aztec-artifacts/client
 
+## 0.1.2
+
+### Patch Changes
+
+- 319f9c2: export getFunctionAbi from client package
+  - @aztec-artifacts/common@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

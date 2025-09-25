@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.1**](../README.md)
+[**@aztec-artifacts/common v0.1.2**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **deserializeContractArtifactPayload**(`serialized`): [`DeserializedContractArtifact`](../interfaces/DeserializedContractArtifact.md)
 
-Defined in: [packages/common/src/artifact.ts:28](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/7f2d798c102e3fe349e073a7a19d4750cd73ea6c/packages/common/src/artifact.ts#L28)
+Defined in: [packages/common/src/artifact.ts:28](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/319f9c2bfc464cded897116c492df05792d1db75/packages/common/src/artifact.ts#L28)
 
 Deserializes a serialized contract artifact from its API representation into Aztec types.
 Converts string representations back into native Aztec types (Fr, ContractArtifact).
