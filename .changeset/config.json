@@ -4,9 +4,9 @@
   "commit": false,
   "fixed": [
     [
-      "@aztec-artifacts/api-client",
-      "@aztec-artifacts/api-service",
-      "@aztec-artifacts/api-common"
+      "@aztec-artifacts/client",
+      "@aztec-artifacts/service",
+      "@aztec-artifacts/common"
     ]
   ],
   "linked": [],

@@ -50,7 +50,7 @@ jobs:
       - name: Get Version
         id: versions
         run: |
-          echo "version=v$(jq -r '.version' packages/api-common/package.json)" >> "$GITHUB_OUTPUT"
+          echo "version=v$(jq -r '.version' packages/schema/package.json)" >> "$GITHUB_OUTPUT"
 
       - name: Log in to GitHub Container Registry
         if: env.PUSH_IMAGES == 'true'
@@ -71,7 +71,7 @@ jobs:
           file: Dockerfile
           push: ${{ env.PUSH_IMAGES == 'true' }}
           build-args: |
-            SERVICE=@aztec-artifacts/api-common
+            SERVICE=@aztec-artifacts/schema
           tags: |
             ${{ env.REGISTRY }}/${{ env.ORG }}/migrations:latest
             ${{ env.REGISTRY }}/${{ env.ORG }}/migrations:${{ steps.versions.outputs.version }}
@@ -86,7 +86,7 @@ jobs:
           file: docker/common/Dockerfile
           push: ${{ env.PUSH_IMAGES == 'true' }}
           build-args: |
-            SERVICE=@aztec-artifacts/api-service
+            SERVICE=@aztec-artifacts/service
           tags: |
             ${{ env.REGISTRY }}/${{ env.ORG }}/api-service:latest
             ${{ env.REGISTRY }}/${{ env.ORG }}/api-service:${{ steps.versions.outputs.version }}
