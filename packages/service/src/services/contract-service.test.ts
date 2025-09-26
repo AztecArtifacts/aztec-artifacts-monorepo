@@ -8,7 +8,15 @@ import {
 } from '@aztec-artifacts/schema';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { UploadContractInstance } from '../schemas/contracts.js';
+import type { BasicLogger } from '../utils/logging.js';
 import { ContractInstanceError, ContractService } from './contract-service.js';
+
+const mockLogger: BasicLogger = {
+  debug: vi.fn(),
+  info: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
+};
 
 describe('ContractService.createContractInstance', () => {
   afterEach(() => {
@@ -54,7 +62,7 @@ describe('ContractService.createContractInstance', () => {
     const insertMock = vi.fn().mockReturnValue({ values: valuesMock });
 
     const mockDb = { insert: insertMock } as unknown as DbClient;
-    const service = new ContractService(mockDb);
+    const service = new ContractService(mockDb, mockLogger);
 
     vi.spyOn(service, 'getContractInstance').mockResolvedValue(null);
     vi.spyOn(service, 'getContractArtifact').mockResolvedValue(null);
@@ -93,7 +101,7 @@ describe('ContractService.createContractInstance', () => {
 
   it('throws when missing artifact data', async () => {
     const mockDb = { insert: vi.fn() } as unknown as DbClient;
-    const service = new ContractService(mockDb);
+    const service = new ContractService(mockDb, mockLogger);
     vi.spyOn(service, 'getContractInstance').mockResolvedValue(null);
 
     const contractClassId = Fr.random();
@@ -132,7 +140,7 @@ describe('ContractService.createContractInstance', () => {
     };
 
     const mockDb = {} as unknown as DbClient;
-    const service = new ContractService(mockDb);
+    const service = new ContractService(mockDb, mockLogger);
 
     // Mock the entire createContractArtifact method to focus on the integration
     const createContractArtifactSpy = vi.spyOn(service, 'createContractArtifact').mockResolvedValue(mockDbArtifact);

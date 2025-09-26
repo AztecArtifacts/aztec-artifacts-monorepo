@@ -9,7 +9,7 @@ on:
         type: boolean
         default: true
       images:
-        description: Comma-separated list of images to build (use 'all' to build everything)
+        description: Comma-separated list of images to build (migrations, api-service, inspector) or 'all'
         required: false
         type: string
         default: all
@@ -20,7 +20,7 @@ on:
         required: false
         default: 'false'
       images:
-        description: Comma-separated list of images to build (migrations, api-service) or 'all'
+        description: Comma-separated list of images to build (migrations, api-service, inspector) or 'all'
         required: false
         default: all
 
@@ -90,5 +90,20 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.ORG }}/api-service:latest
             ${{ env.REGISTRY }}/${{ env.ORG }}/api-service:${{ steps.versions.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push inspector image
+        if: env.IMAGES == 'all' || contains(env.IMAGES, 'inspector')
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: ${{ env.PUSH_IMAGES == 'true' }}
+          build-args: |
+            SERVICE=@aztec-artifacts/inspector
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.ORG }}/inspector:latest
+            ${{ env.REGISTRY }}/${{ env.ORG }}/inspector:${{ steps.versions.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

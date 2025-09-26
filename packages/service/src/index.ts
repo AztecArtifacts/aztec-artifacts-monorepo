@@ -99,7 +99,7 @@ async function createServer() {
   }
   const db = createDbClient(databaseUrl);
   const tokenService = new TokenService(db, fastify.log);
-  const contractService = new ContractService(db);
+  const contractService = new ContractService(db, fastify.log);
 
   const apiPrefix = normalizePrefix(process.env.API_ROUTE_PREFIX);
   let getSwagger: (() => unknown) | undefined;

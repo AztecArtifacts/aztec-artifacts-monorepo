@@ -49,6 +49,22 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+  inspector:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE: '@aztec-artifacts/inspector'
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - '4173:4173'
+    environment:
+      INSPECTOR_BASE_URL: http://api:8080
+      PORT: 4173
+    restart: unless-stopped
+
 
 volumes:
   postgres_data:

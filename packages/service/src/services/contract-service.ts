@@ -22,6 +22,7 @@ import type {
   apiContractInstance,
   UploadContractInstance,
 } from '../schemas/contracts.js';
+import type { BasicLogger } from '../utils/logging.js';
 import { createDbMetricTags, recordDbMetrics, recordErrorMetrics } from '../utils/metrics.js';
 import { isToken } from '../utils/tokens.js';
 import {
@@ -89,7 +90,10 @@ export function convertDbArtifactToApi(dbArtifact: DbContractArtifact): apiContr
 }
 
 export class ContractService {
-  constructor(private db: DbClient) {}
+  constructor(
+    private db: DbClient,
+    private logger: BasicLogger,
+  ) {}
 
   async getContractInstance(address: AztecAddress | string): Promise<DbContractInstance | null> {
     return withSpan(
@@ -372,7 +376,7 @@ export class ContractService {
     const artifactHash = contractClass.artifactHash;
 
     // Detect if this artifact is a token contract
-    const isTokenContract = await isToken(artifact);
+    const isTokenContract = await isToken(artifact, this.logger);
 
     // Insert new artifact into database
     const result = await this.db

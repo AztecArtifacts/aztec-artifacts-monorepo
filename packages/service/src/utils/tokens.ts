@@ -1,5 +1,6 @@
 import { type ContractArtifact, getContractClassFromArtifact } from '@aztec/aztec.js';
 import { FunctionSelector } from '@aztec/stdlib/abi'; // Token standard ABI selectors
+import type { BasicLogger } from './logging.js';
 // reference: https://forum.aztec.network/t/request-for-comments-aip-20-aztec-token-standard/7737
 
 // Computed with:
@@ -50,30 +51,50 @@ export const tokenAbiOptionalNondispatchPublicFunctionSelectorsSet = new Set<str
   tokenAbiFunctionSelectors.symbol,
 ]);
 
-export async function isToken(artifact: ContractArtifact): Promise<boolean> {
+export async function isToken(artifact: ContractArtifact, logger: BasicLogger): Promise<boolean> {
   const functionSelectors = new Set<string>(
     await Promise.all(
       artifact.functions.map(async (f) => {
         const selector = await FunctionSelector.fromNameAndParameters(f.name, f.parameters);
-        return selector.toString();
+        const selectorStr = selector.toString();
+        logger.debug(`Function: ${f.name} -> Selector: ${selectorStr}`);
+        return selectorStr;
       }),
     ),
   );
 
-  if (!functionSelectors.isSupersetOf(tokenAbiNondispatchPublicFunctionSelectorsSet)) return false;
+  logger.debug(`Required token selectors: ${Array.from(tokenAbiFunctionSelectorsSet).join(', ')}`);
+  logger.debug(`Found function selectors: ${Array.from(functionSelectors).join(', ')}`);
+
+  if (!functionSelectors.isSupersetOf(tokenAbiFunctionSelectorsSet)) {
+    logger.debug('Missing required token function selectors');
+    return false;
+  }
 
   const nonDispatchFunctionSelectors = new Set<string>(
     await Promise.all(
       artifact.nonDispatchPublicFunctions.map(async (f) => {
         const selector = await FunctionSelector.fromNameAndParameters(f.name, f.parameters);
-        return selector.toString();
+        const selectorStr = selector.toString();
+        logger.debug(`Non-dispatch function: ${f.name} -> Selector: ${selectorStr}`);
+        return selectorStr;
       }),
     ),
   );
 
+  logger.debug(
+    `Required non-dispatch selectors: ${Array.from(tokenAbiNondispatchPublicFunctionSelectorsSet).join(', ')}`,
+  );
+  logger.debug(`Found non-dispatch selectors: ${Array.from(nonDispatchFunctionSelectors).join(', ')}`);
+
+  if (!nonDispatchFunctionSelectors.isSupersetOf(tokenAbiNondispatchPublicFunctionSelectorsSet)) {
+    logger.debug('Missing required non-dispatch function selectors');
+    return false;
+  }
+
   if (!nonDispatchFunctionSelectors.isSupersetOf(tokenAbiOptionalNondispatchPublicFunctionSelectorsSet)) {
     const contractClass = await getContractClassFromArtifact(artifact);
-    console.warn(
+    logger.warn(
       `Token artifact ${artifact.name} with contract class ID ${contractClass.id} is missing optional functions`,
     );
   }
