@@ -1,5 +1,13 @@
 # @aztec-artifacts/service
 
+## 0.1.4
+
+### Patch Changes
+
+- 09243ac: debug logging
+  - @aztec-artifacts/common@0.1.4
+  - @aztec-artifacts/schema@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

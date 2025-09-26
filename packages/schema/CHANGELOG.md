@@ -1,5 +1,11 @@
 # @aztec-artifacts/schema
 
+## 0.1.4
+
+### Patch Changes
+
+- @aztec-artifacts/common@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

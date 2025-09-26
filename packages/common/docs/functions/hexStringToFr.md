@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.3**](../README.md)
+[**@aztec-artifacts/common v0.1.4**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **hexStringToFr**(`hex`): `Fr`
 
-Defined in: [packages/common/src/convert.ts:50](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/common/src/convert.ts#L50)
+Defined in: [packages/common/src/convert.ts:50](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/common/src/convert.ts#L50)
 
 Converts a hex string to an Fr field element.
 
