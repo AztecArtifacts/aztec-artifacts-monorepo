@@ -1,5 +1,12 @@
 # @aztec-artifacts/schema
 
+## 0.1.5
+
+### Patch Changes
+
+- 417432c: Fix custom jsonb types
+  - @aztec-artifacts/common@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes

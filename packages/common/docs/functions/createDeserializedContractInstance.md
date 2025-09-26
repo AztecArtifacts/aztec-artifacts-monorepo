@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.4**](../README.md)
+[**@aztec-artifacts/common v0.1.5**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **createDeserializedContractInstance**(`input`): [`DeserializedContractInstance`](../interfaces/DeserializedContractInstance.md)
 
-Defined in: [packages/common/src/contract-instance.ts:79](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/common/src/contract-instance.ts#L79)
+Defined in: [packages/common/src/contract-instance.ts:79](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/common/src/contract-instance.ts#L79)
 
 Creates a new deserialized contract instance with proper default values.
 Provides default values for optional contract class IDs when not specified.

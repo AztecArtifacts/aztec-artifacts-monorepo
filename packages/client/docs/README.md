@@ -1,4 +1,4 @@
-**@aztec-artifacts/client v0.1.4**
+**@aztec-artifacts/client v0.1.5**
 
 ***
 
@@ -32,6 +32,40 @@ const customClient = new AztecArtifactsApiClient({
   }
 });
 ```
+
+## Logging
+
+The client includes lightweight logging hooks so you can see what it is doing without committing to a specific logging framework.
+
+- By default, the library uses a console-backed logger at `info` level, emitting one line per HTTP request and upload.
+- Override the default by setting `LOG_LEVEL=debug|info|warn|error|silent` before instantiating the client.
+- Call `createConsoleLogger('debug')` for verbose diagnostics or `'silent'` to turn logging off entirely.
+- Pass any object that implements `debug`, `info`, `warn`, and `error` (e.g. Pino, Winston, console) via the `logger` option to integrate with an existing logging pipeline.
+
+```typescript
+import { AztecArtifactsApiClient, createConsoleLogger } from '@aztec-artifacts/client';
+
+const client = new AztecArtifactsApiClient({
+  baseUrl: 'https://api.aztec-artifacts.org/v1',
+  logger: createConsoleLogger('debug'),
+});
+```
+
+### Using a structured logger (e.g. Pino)
+
+```typescript
+import pino from 'pino';
+import { AztecArtifactsApiClient } from '@aztec-artifacts/client';
+
+const logger = pino({ level: 'info' });
+
+const client = new AztecArtifactsApiClient({
+  baseUrl: 'https://api.aztec-artifacts.org/v1',
+  logger,
+});
+```
+
+Each log call sends a structured object with a `msg` field followed by a plain string, which works for console, Pino, Winston, and other popular libraries. Logging errors are swallowed so they never interfere with client calls.
 
 ## Fetching Contracts and Artifacts
 

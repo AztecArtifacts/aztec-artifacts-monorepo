@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.4**](../README.md)
+[**@aztec-artifacts/client v0.1.5**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: NotFoundError
 
-Defined in: [packages/client/src/errors.ts:25](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/client/src/errors.ts#L25)
+Defined in: [packages/client/src/errors.ts:25](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/client/src/errors.ts#L25)
 
 Error thrown when a resource is not found (404).
 
@@ -24,7 +24,7 @@ Details about the missing resource.
 
 > **new NotFoundError**(`message`): `NotFoundError`
 
-Defined in: [packages/client/src/errors.ts:26](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/client/src/errors.ts#L26)
+Defined in: [packages/client/src/errors.ts:26](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/client/src/errors.ts#L26)
 
 #### Parameters
 
@@ -94,7 +94,7 @@ Defined in: node\_modules/.pnpm/typescript@5.9.2/node\_modules/typescript/lib/li
 
 > `readonly` **status**: `number`
 
-Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/client/src/errors.ts#L9)
+Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/client/src/errors.ts#L9)
 
 #### Inherited from
 
@@ -106,7 +106,7 @@ Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/
 
 > `readonly` **statusText**: `string`
 
-Defined in: [packages/client/src/errors.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/client/src/errors.ts#L10)
+Defined in: [packages/client/src/errors.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/client/src/errors.ts#L10)
 
 #### Inherited from
 
