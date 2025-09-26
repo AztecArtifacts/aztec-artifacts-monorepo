@@ -1,5 +1,12 @@
 # @aztec-artifacts/client
 
+## 0.1.6
+
+### Patch Changes
+
+- dbbcdcd: add logging & ability to pass in logger
+  - @aztec-artifacts/common@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes

@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.5**](../README.md)
+[**@aztec-artifacts/client v0.1.6**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: ServerError
 
-Defined in: [packages/client/src/errors.ts:56](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/client/src/errors.ts#L56)
+Defined in: [packages/client/src/errors.ts:56](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/errors.ts#L56)
 
 Error thrown for server errors (500+).
 
@@ -20,7 +20,7 @@ Error thrown for server errors (500+).
 
 > **new ServerError**(`status`, `statusText`, `message`): `ServerError`
 
-Defined in: [packages/client/src/errors.ts:12](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/client/src/errors.ts#L12)
+Defined in: [packages/client/src/errors.ts:12](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/errors.ts#L12)
 
 #### Parameters
 
@@ -98,7 +98,7 @@ Defined in: node\_modules/.pnpm/typescript@5.9.2/node\_modules/typescript/lib/li
 
 > `readonly` **status**: `number`
 
-Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/client/src/errors.ts#L9)
+Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/errors.ts#L9)
 
 #### Inherited from
 
@@ -110,7 +110,7 @@ Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/
 
 > `readonly` **statusText**: `string`
 
-Defined in: [packages/client/src/errors.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/client/src/errors.ts#L10)
+Defined in: [packages/client/src/errors.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/errors.ts#L10)
 
 #### Inherited from
 

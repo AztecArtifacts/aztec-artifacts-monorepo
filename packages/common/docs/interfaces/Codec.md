@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.5**](../README.md)
+[**@aztec-artifacts/common v0.1.6**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: Codec\<T, S\>
 
-Defined in: [packages/common/src/codec.ts:19](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/common/src/codec.ts#L19)
+Defined in: [packages/common/src/codec.ts:19](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/common/src/codec.ts#L19)
 
 A generic interface for encoding and decoding data types between their in-memory representation
 and a serialized format.
@@ -31,7 +31,7 @@ The serialized type (e.g., Hex).
 
 > **decode**(`value`): `T`
 
-Defined in: [packages/common/src/codec.ts:32](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/common/src/codec.ts#L32)
+Defined in: [packages/common/src/codec.ts:32](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/common/src/codec.ts#L32)
 
 Decodes a value from its serialized format to its in-memory representation.
 
@@ -55,7 +55,7 @@ The decoded value.
 
 > **encode**(`value`): `S`
 
-Defined in: [packages/common/src/codec.ts:25](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/common/src/codec.ts#L25)
+Defined in: [packages/common/src/codec.ts:25](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/common/src/codec.ts#L25)
 
 Encodes a value from its in-memory representation to its serialized format.
 
