@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.3**](../README.md)
+[**@aztec-artifacts/client v0.1.4**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: ApiError
 
-Defined in: [packages/client/src/errors.ts:8](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/client/src/errors.ts#L8)
+Defined in: [packages/client/src/errors.ts:8](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/client/src/errors.ts#L8)
 
 Base error class for API-related errors.
 
@@ -40,7 +40,7 @@ Detailed error message, typically from the API response body.
 
 > **new ApiError**(`status`, `statusText`, `message`): `ApiError`
 
-Defined in: [packages/client/src/errors.ts:12](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/client/src/errors.ts#L12)
+Defined in: [packages/client/src/errors.ts:12](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/client/src/errors.ts#L12)
 
 #### Parameters
 
@@ -118,7 +118,7 @@ Defined in: node\_modules/.pnpm/typescript@5.9.2/node\_modules/typescript/lib/li
 
 > `readonly` **status**: `number`
 
-Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/client/src/errors.ts#L9)
+Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/client/src/errors.ts#L9)
 
 ***
 
@@ -126,7 +126,7 @@ Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/
 
 > `readonly` **statusText**: `string`
 
-Defined in: [packages/client/src/errors.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/client/src/errors.ts#L10)
+Defined in: [packages/client/src/errors.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/client/src/errors.ts#L10)
 
 ***
 

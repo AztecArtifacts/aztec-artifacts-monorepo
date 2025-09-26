@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.3**](../README.md)
+[**@aztec-artifacts/client v0.1.4**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **apiResponseToArtifact**(`response`): `object`
 
-Defined in: [packages/client/src/converters.ts:109](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/f14f75804cdd859ec50410b548006cffc9a8ce5b/packages/client/src/converters.ts#L109)
+Defined in: [packages/client/src/converters.ts:109](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/client/src/converters.ts#L109)
 
 Converts an API artifact response to an Aztec `ContractArtifact` while preserving metadata.
 
