@@ -1,5 +1,14 @@
 # @aztec-artifacts/service
 
+## 0.1.6
+
+### Patch Changes
+
+- dbbcdcd: Debug logging
+- Updated dependencies [dbbcdcd]
+  - @aztec-artifacts/schema@0.1.6
+  - @aztec-artifacts/common@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes

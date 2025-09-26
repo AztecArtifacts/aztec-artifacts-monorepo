@@ -1,6 +1,6 @@
 {
   "name": "@aztec-artifacts/common",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Lightweight Aztec codec and serialization helpers shared across API clients and services",
   "private": false,
   "type": "module",

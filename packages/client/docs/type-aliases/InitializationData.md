@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.5**](../README.md)
+[**@aztec-artifacts/client v0.1.6**](../README.md)
 
 ***
 

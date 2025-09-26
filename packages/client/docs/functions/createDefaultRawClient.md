@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.5**](../README.md)
+[**@aztec-artifacts/client v0.1.6**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **createDefaultRawClient**(`config?`): [`RawApiClient`](../classes/RawApiClient.md)
 
-Defined in: [packages/client/src/raw-client.ts:79](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/client/src/raw-client.ts#L79)
+Defined in: [packages/client/src/raw-client.ts:79](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L79)
 
 Creates a `RawApiClient` preconfigured with the default service URL.
 
