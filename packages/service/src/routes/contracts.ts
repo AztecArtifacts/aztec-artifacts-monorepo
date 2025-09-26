@@ -125,43 +125,192 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
       const startTime = performance.now();
       const route = '/contracts/:address';
 
+      // Debug: Log incoming request details
+      fastify.log.debug(
+        {
+          method: 'GET',
+          route,
+          params: request.params,
+          query: request.query,
+          headers: request.headers,
+          url: request.url,
+          raw: {
+            params: JSON.stringify(request.params),
+            query: JSON.stringify(request.query),
+          },
+        },
+        'Incoming request to /contracts/:address',
+      );
+
       try {
+        // Debug: Log before parsing params
+        fastify.log.debug(
+          {
+            rawParams: request.params,
+            paramType: typeof request.params,
+            paramKeys: Object.keys(request.params || {}),
+          },
+          'About to parse address params',
+        );
+
         const { address } = contractAddressParamsSchema.parse(request.params);
+
+        // Debug: Log parsed address
+        fastify.log.debug(
+          {
+            parsedAddress: address,
+            addressLength: address?.length,
+            addressType: typeof address,
+          },
+          'Successfully parsed address param',
+        );
+
+        // Debug: Log before parsing query params
+        fastify.log.debug(
+          {
+            rawQuery: request.query,
+            queryType: typeof request.query,
+            queryKeys: Object.keys(request.query || {}),
+          },
+          'About to parse query params',
+        );
+
         const { includeArtifact } = contractQueryParamsSchema.parse(request.query);
+
+        // Debug: Log parsed query params
+        fastify.log.debug(
+          {
+            includeArtifact,
+            includeArtifactType: typeof includeArtifact,
+          },
+          'Successfully parsed query params',
+        );
+
+        // Debug: Log before database call
+        fastify.log.debug(
+          {
+            address,
+            operation: 'getContractInstance',
+          },
+          'Calling contractService.getContractInstance',
+        );
 
         const dbInstance = await contractService.getContractInstance(address);
 
+        // Debug: Log database response
+        fastify.log.debug(
+          {
+            dbInstanceFound: !!dbInstance,
+            dbInstanceKeys: dbInstance ? Object.keys(dbInstance) : null,
+            dbInstanceAddress: dbInstance?.address,
+            dbInstanceId: dbInstance?.id,
+          },
+          'Database query completed',
+        );
+
         if (!dbInstance) {
           const duration = performance.now() - startTime;
+          fastify.log.debug(
+            {
+              address,
+              duration,
+              statusCode: 404,
+            },
+            'Contract instance not found in database',
+          );
           recordRouteMetrics({ method: 'GET', route, statusCode: 404, duration });
           return sendError(reply, 404, 'Contract instance not found');
         }
 
         let artifact = null;
         if (includeArtifact) {
+          // Debug: Log before artifact fetch
+          fastify.log.debug(
+            {
+              dbInstanceId: dbInstance.id,
+              operation: 'getContractArtifactByInstance',
+            },
+            'Fetching artifact for instance',
+          );
+
           artifact = await contractService.getContractArtifactByInstance(dbInstance);
+
+          // Debug: Log artifact fetch result
+          fastify.log.debug(
+            {
+              artifactFound: !!artifact,
+              artifactKeys: artifact ? Object.keys(artifact) : null,
+            },
+            'Artifact fetch completed',
+          );
         }
 
+        // Debug: Log before conversion
+        fastify.log.debug(
+          {
+            dbInstanceId: dbInstance.id,
+            includeArtifact,
+            hasArtifact: !!artifact,
+          },
+          'Converting DB instance to API format',
+        );
+
         const instance = convertDbContractInstanceToApi(dbInstance, includeArtifact, artifact || undefined);
+
+        // Debug: Log successful response
+        fastify.log.debug(
+          {
+            responseKeys: Object.keys(instance),
+            responseAddress: instance.address,
+            duration: performance.now() - startTime,
+          },
+          'Successfully processed contract instance request',
+        );
 
         // Contract instances are immutable once deployed
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 200, duration });
         return sendJsonResponse(reply, instance, CacheControl.IMMUTABLE);
       } catch (error) {
+        // Enhanced error logging with proper type handling
+        const errorDetails = {
+          errorType: error?.constructor?.name,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : undefined,
+          errorString: String(error),
+          isZodError: error instanceof ZodError,
+          zodIssues: error instanceof ZodError ? error.issues : undefined,
+          requestParams: request.params,
+          requestQuery: request.query,
+          requestUrl: request.url,
+        };
+
         if (error instanceof ZodError) {
+          fastify.log.debug(
+            {
+              ...errorDetails,
+              zodIssues: error.issues,
+              zodFlattened: error.flatten(),
+            },
+            'Zod validation error in /contracts/:address',
+          );
+
           const duration = performance.now() - startTime;
           recordRouteMetrics({ method: 'GET', route, statusCode: 400, duration });
           return sendError(reply, 400, 'Invalid address format');
         }
 
         if (error instanceof Error && error.message.includes('Invalid address format')) {
+          fastify.log.debug(errorDetails, 'Invalid address format error');
+
           const duration = performance.now() - startTime;
           recordRouteMetrics({ method: 'GET', route, statusCode: 400, duration });
           return sendError(reply, 400, 'Invalid address format');
         }
 
-        fastify.log.error({ error }, 'Failed to query contract instance');
+        // Log full error details for debugging
+        fastify.log.error(errorDetails, 'Failed to query contract instance - full error details');
+
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 500, duration, errorMetric: 'route_handler_error' });
         return sendError(reply, 500, 'Database error');

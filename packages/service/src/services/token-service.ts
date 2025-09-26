@@ -231,5 +231,4 @@ export class TokenService {
       },
     );
   }
-
 }

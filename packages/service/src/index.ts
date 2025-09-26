@@ -24,9 +24,7 @@ function resolveBodyLimitBytes(rawValue: string | undefined): number {
 
   const parsed = Number.parseInt(rawValue, 10);
   if (Number.isNaN(parsed) || parsed <= 0) {
-    console.warn(
-      `Invalid BODY_LIMIT_MB value "${rawValue}". Falling back to default ${DEFAULT_BODY_LIMIT_MB}MB.`,
-    );
+    console.warn(`Invalid BODY_LIMIT_MB value "${rawValue}". Falling back to default ${DEFAULT_BODY_LIMIT_MB}MB.`);
     return DEFAULT_BODY_LIMIT_MB * BYTES_PER_MEGABYTE;
   }
 
