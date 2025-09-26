@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.4**](../README.md)
+[**@aztec-artifacts/client v0.1.5**](../README.md)
 
 ***
 
@@ -8,6 +8,6 @@
 
 > **TokensResponse** = [`paths`](../interfaces/paths.md)\[`"/tokens"`\]\[`"get"`\]\[`"responses"`\]\[`"200"`\]\[`"content"`\]\[`"application/json"`\]
 
-Defined in: [packages/client/src/raw-client.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/09243ac3d2ea1e7f4337eb88bcbd33142b8243d2/packages/client/src/raw-client.ts#L9)
+Defined in: [packages/client/src/raw-client.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/417432ce1b59173b0e3bda5a305c620082db2477/packages/client/src/raw-client.ts#L10)
 
 Response payload returned by the `/tokens` endpoint.

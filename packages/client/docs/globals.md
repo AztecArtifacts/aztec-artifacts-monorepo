@@ -1,8 +1,8 @@
-[**@aztec-artifacts/client v0.1.4**](README.md)
+[**@aztec-artifacts/client v0.1.5**](README.md)
 
 ***
 
-# @aztec-artifacts/client v0.1.4
+# @aztec-artifacts/client v0.1.5
 
 ## Classes
 
@@ -20,6 +20,7 @@
 - [ApiClientOptions](interfaces/ApiClientOptions.md)
 - [ClientConfig](interfaces/ClientConfig.md)
 - [components](interfaces/components.md)
+- [Logger](interfaces/Logger.md)
 - [PaginationParams](interfaces/PaginationParams.md)
 - [paths](interfaces/paths.md)
 
@@ -32,6 +33,7 @@
 - [ContractAddressesResponse](type-aliases/ContractAddressesResponse.md)
 - [ErrorResponse](type-aliases/ErrorResponse.md)
 - [InitializationData](type-aliases/InitializationData.md)
+- [LogLevel](type-aliases/LogLevel.md)
 - [TokensResponse](type-aliases/TokensResponse.md)
 
 ## Variables
@@ -44,6 +46,10 @@
 - [apiResponseToContract](functions/apiResponseToContract.md)
 - [artifactToApiRequest](functions/artifactToApiRequest.md)
 - [contractToApiRequest](functions/contractToApiRequest.md)
+- [createConsoleLogger](functions/createConsoleLogger.md)
 - [createDefaultClient](functions/createDefaultClient.md)
 - [createDefaultRawClient](functions/createDefaultRawClient.md)
+- [emitLog](functions/emitLog.md)
+- [getEnvLogLevel](functions/getEnvLogLevel.md)
 - [getFunctionAbi](functions/getFunctionAbi.md)
+- [parseLogLevel](functions/parseLogLevel.md)
