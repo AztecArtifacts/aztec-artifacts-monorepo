@@ -54,9 +54,7 @@ export const contractArtifactJsonb = customType<{ data: ContractArtifact; driver
     return 'jsonb';
   },
   fromDriver(value: unknown): ContractArtifact {
-    if (typeof value === 'string') {
-      return jsonParseWithSchema(value, ContractArtifactSchema);
-    }
+    // JSONB always returns objects, validate directly
     return ContractArtifactSchema.parse(value);
   },
   toDriver(value: ContractArtifact): string {
@@ -71,12 +69,8 @@ export const publicKeysJsonb = customType<{ data: PublicKeys; driverData: string
   dataType() {
     return 'jsonb';
   },
-  fromDriver(value: string): PublicKeys {
-    // If value is a string, parse it as JSON using Aztec's parser
-    if (typeof value === 'string') {
-      return jsonParseWithSchema(value, PublicKeys.schema);
-    }
-    // If already an object, validate it directly
+  fromDriver(value: unknown): PublicKeys {
+    // JSONB always returns objects, validate directly
     return PublicKeys.schema.parse(value);
   },
   toDriver(value: PublicKeys): string {
@@ -91,8 +85,9 @@ export const initializationDataJsonb = customType<{ data: InitializationData; dr
   dataType() {
     return 'jsonb';
   },
-  fromDriver(value: string): InitializationData {
-    const parsed: SerializedInitializationData = JSON.parse(value);
+  fromDriver(value: unknown): InitializationData {
+    // JSONB always returns objects
+    const parsed = value as SerializedInitializationData;
 
     // Convert encodedArgs from hex strings back to Fr objects
     if (parsed?.encodedArgs) {

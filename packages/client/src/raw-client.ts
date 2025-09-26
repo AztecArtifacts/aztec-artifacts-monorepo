@@ -2,6 +2,7 @@ import type { Hex, SerializedContractInstance, SerializedInitializationData } fr
 import { BASE_URL } from './constants.js';
 import { BadRequestError, ConflictError, NotFoundError, ServerError, UnexpectedStatusError } from './errors.js';
 import type { paths } from './types.js';
+import { createConsoleLogger, emitLog, type Logger } from './utils.js';
 
 /**
  * Response payload returned by the `/tokens` endpoint.
@@ -49,6 +50,7 @@ export interface ClientConfig {
   baseUrl: string;
   headers?: Record<string, string>;
   fetch?: typeof fetch;
+  logger?: Logger;
 }
 
 /**
@@ -86,6 +88,7 @@ export class RawApiClient {
   private readonly baseUrl: string;
   private readonly headers: Record<string, string>;
   private readonly fetchFn: typeof fetch;
+  private readonly logger: Logger;
 
   /**
    * Creates a new raw API client instance.
@@ -99,10 +102,22 @@ export class RawApiClient {
       ...config.headers,
     };
     this.fetchFn = config.fetch || fetch;
+    this.logger = config.logger ?? createConsoleLogger();
   }
 
   private async request<T>(path: string, options?: RequestInit & { cache?: RequestCache }): Promise<T> {
     const url = `${this.baseUrl}${path}`;
+    const method = (options?.method ?? 'GET').toString().toUpperCase();
+    const requestMeta = {
+      scope: 'raw',
+      method,
+      path,
+      cache: options?.cache,
+    } satisfies Record<string, unknown>;
+
+    emitLog(this.logger, 'debug', 'request.start', requestMeta);
+
+    const start = Date.now();
     const response = await this.fetchFn.call(globalThis, url, {
       ...options,
       cache: options?.cache,
@@ -113,6 +128,7 @@ export class RawApiClient {
     });
 
     if (!response.ok) {
+      const durationMs = Date.now() - start;
       let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
       try {
         const errorData = (await response.json()) as ErrorResponse;
@@ -122,6 +138,14 @@ export class RawApiClient {
       } catch {
         // Ignore JSON parse errors
       }
+
+      emitLog(this.logger, 'error', 'request.error', {
+        ...requestMeta,
+        status: response.status,
+        statusText: response.statusText,
+        durationMs,
+        error: errorMessage,
+      });
 
       // Throw specific error types based on status code
       switch (response.status) {
@@ -140,6 +164,14 @@ export class RawApiClient {
           throw new UnexpectedStatusError(response.status, response.statusText, errorMessage);
       }
     }
+
+    const durationMs = Date.now() - start;
+    emitLog(this.logger, 'info', 'request.success', {
+      ...requestMeta,
+      status: response.status,
+      statusText: response.statusText,
+      durationMs,
+    });
 
     return response.json() as Promise<T>;
   }
@@ -258,6 +290,14 @@ export class RawApiClient {
 
     while (hasMore) {
       const response = await fetcher({ limit, cursor }, options);
+
+      emitLog(this.logger, 'debug', 'pagination.page', {
+        scope: 'raw',
+        limit,
+        cursor,
+        received: response.data.length,
+        hasMore: response.pagination.hasMore,
+      });
 
       for (const item of response.data) {
         yield item as T['data'][number];

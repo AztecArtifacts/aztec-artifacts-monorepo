@@ -309,7 +309,7 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
         }
 
         // Log full error details for debugging
-        fastify.log.error(errorDetails, 'Failed to query contract instance - full error details');
+        fastify.log.error(errorDetails, 'Failed to query contract instance');
 
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 500, duration, errorMetric: 'route_handler_error' });
@@ -338,10 +338,66 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
       const startTime = performance.now();
       const route = '/contracts/addresses';
 
+      // Debug: Log incoming request details
+      fastify.log.debug(
+        {
+          method: 'GET',
+          route,
+          query: request.query,
+          url: request.url,
+          raw: {
+            query: JSON.stringify(request.query),
+          },
+        },
+        'Incoming request to /contracts/addresses',
+      );
+
       try {
+        // Debug: Log before parsing query params
+        fastify.log.debug(
+          {
+            rawQuery: request.query,
+            queryType: typeof request.query,
+            queryKeys: Object.keys(request.query || {}),
+          },
+          'About to parse pagination params',
+        );
+
         const { limit, cursor } = paginationParamsSchema.parse(request.query);
 
+        // Debug: Log parsed pagination params
+        fastify.log.debug(
+          {
+            parsedLimit: limit,
+            parsedCursor: cursor,
+            limitType: typeof limit,
+            cursorType: typeof cursor,
+          },
+          'Successfully parsed pagination params',
+        );
+
+        // Debug: Log before database call
+        fastify.log.debug(
+          {
+            cursor,
+            limit,
+            operation: 'getContractAddresses',
+          },
+          'Calling contractService.getContractAddresses',
+        );
+
         const result = await contractService.getContractAddresses(cursor, limit);
+
+        // Debug: Log database response
+        fastify.log.debug(
+          {
+            itemCount: result.items.length,
+            hasMore: result.hasMore,
+            firstItemId: result.items[0]?.id,
+            lastItemId: result.items[result.items.length - 1]?.id,
+          },
+          'Database query completed',
+        );
 
         // Create items with IDs for pagination
         const itemsWithIds = result.items.map((item) => ({
@@ -361,12 +417,35 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
           },
         };
 
+        // Debug: Log successful response
+        fastify.log.debug(
+          {
+            addressCount: addresses.length,
+            paginationLimit: response.pagination.limit,
+            paginationCursor: response.pagination.cursor,
+            paginationNextCursor: response.pagination.nextCursor,
+            paginationHasMore: response.pagination.hasMore,
+            duration: performance.now() - startTime,
+          },
+          'Successfully processed contract addresses request',
+        );
+
         // Contract addresses are immutable, cache for a reasonable time
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 200, duration });
         return sendJsonResponse(reply, response, CacheControl.PUBLIC_5MIN);
       } catch (error) {
-        fastify.log.error({ error }, 'Failed to query contract addresses');
+        // Enhanced error logging
+        const errorDetails = {
+          errorType: error?.constructor?.name,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : undefined,
+          errorString: String(error),
+          requestQuery: request.query,
+          requestUrl: request.url,
+        };
+
+        fastify.log.error(errorDetails, 'Failed to query contract addresses');
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 500, duration, errorMetric: 'route_handler_error' });
         return sendError(reply, 500, 'Database error');
@@ -396,8 +475,41 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
       const startTime = performance.now();
       const route = '/artifacts/:identifier';
 
+      // Debug: Log incoming request details
+      fastify.log.debug(
+        {
+          method: 'GET',
+          route,
+          params: request.params,
+          url: request.url,
+          raw: {
+            params: JSON.stringify(request.params),
+          },
+        },
+        'Incoming request to /artifacts/:identifier',
+      );
+
+      // Debug: Log before parsing params
+      fastify.log.debug(
+        {
+          rawParams: request.params,
+          paramType: typeof request.params,
+          paramKeys: Object.keys(request.params || {}),
+        },
+        'About to parse artifact identifier params',
+      );
+
       const identifierResult = contractArtifactParamsSchema.safeParse(request.params);
       if (!identifierResult.success) {
+        // Debug: Log validation failure
+        fastify.log.debug(
+          {
+            validationSuccess: false,
+            validationErrors: identifierResult.error?.issues,
+            rawParams: request.params,
+          },
+          'Artifact identifier validation failed',
+        );
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 400, duration });
         return sendError(reply, 400, 'Invalid identifier format - must be a 66 character hex string');
@@ -405,23 +517,90 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
 
       const { identifier } = identifierResult.data;
 
+      // Debug: Log parsed identifier
+      fastify.log.debug(
+        {
+          parsedIdentifier: identifier,
+          identifierLength: identifier?.length,
+          identifierType: typeof identifier,
+        },
+        'Successfully parsed artifact identifier',
+      );
+
       try {
+        // Debug: Log before database call
+        fastify.log.debug(
+          {
+            identifier,
+            operation: 'getContractArtifact',
+          },
+          'Calling contractService.getContractArtifact',
+        );
+
         const dbArtifact = await contractService.getContractArtifact(identifier);
+
+        // Debug: Log database response
+        fastify.log.debug(
+          {
+            dbArtifactFound: !!dbArtifact,
+            dbArtifactKeys: dbArtifact ? Object.keys(dbArtifact) : null,
+            dbArtifactId: dbArtifact?.id,
+            dbArtifactClassId: dbArtifact?.contractClassId,
+          },
+          'Database query completed',
+        );
 
         if (!dbArtifact) {
           const duration = performance.now() - startTime;
+          fastify.log.debug(
+            {
+              identifier,
+              duration,
+              statusCode: 404,
+            },
+            'Contract artifact not found in database',
+          );
           recordRouteMetrics({ method: 'GET', route, statusCode: 404, duration });
           return sendError(reply, 404, 'Contract artifact not found');
         }
 
+        // Debug: Log before conversion
+        fastify.log.debug(
+          {
+            dbArtifactId: dbArtifact.id,
+            operation: 'convertDbArtifactToApi',
+          },
+          'Converting DB artifact to API format',
+        );
+
         const artifact = convertDbArtifactToApi(dbArtifact);
+
+        // Debug: Log successful response
+        fastify.log.debug(
+          {
+            responseKeys: Object.keys(artifact),
+            responseContractClassId: artifact.contractClassId,
+            duration: performance.now() - startTime,
+          },
+          'Successfully processed artifact request',
+        );
 
         // Contract artifacts are immutable
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 200, duration });
         return sendJsonResponse(reply, artifact, CacheControl.IMMUTABLE);
       } catch (error) {
-        fastify.log.error({ error }, 'Failed to query contract artifact');
+        // Enhanced error logging
+        const errorDetails = {
+          errorType: error?.constructor?.name,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : undefined,
+          errorString: String(error),
+          requestParams: request.params,
+          requestUrl: request.url,
+        };
+
+        fastify.log.error(errorDetails, 'Failed to query contract artifact');
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 500, duration, errorMetric: 'route_handler_error' });
         return sendError(reply, 500, 'Database error');
@@ -456,15 +635,69 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
       const startTime = performance.now();
       const route = '/contracts/by-class/:contractClassId/addresses';
 
+      // Debug: Log incoming request details
+      fastify.log.debug(
+        {
+          method: 'GET',
+          route,
+          params: request.params,
+          query: request.query,
+          url: request.url,
+          raw: {
+            params: JSON.stringify(request.params),
+            query: JSON.stringify(request.query),
+          },
+        },
+        'Incoming request to /contracts/by-class/:contractClassId/addresses',
+      );
+
+      // Debug: Log before parsing params
+      fastify.log.debug(
+        {
+          rawParams: request.params,
+          paramType: typeof request.params,
+          paramKeys: Object.keys(request.params || {}),
+        },
+        'About to parse contract class ID params',
+      );
+
       const contractClassResult = contractClassIdParamsSchema.safeParse(request.params);
       if (!contractClassResult.success) {
+        // Debug: Log validation failure
+        fastify.log.debug(
+          {
+            validationSuccess: false,
+            validationErrors: contractClassResult.error?.issues,
+            rawParams: request.params,
+          },
+          'Contract class ID validation failed',
+        );
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 400, duration });
         return sendError(reply, 400, 'Invalid contract class ID format - must be a 66 character hex string');
       }
 
+      // Debug: Log before parsing query params
+      fastify.log.debug(
+        {
+          rawQuery: request.query,
+          queryType: typeof request.query,
+          queryKeys: Object.keys(request.query || {}),
+        },
+        'About to parse query params',
+      );
+
       const queryResult = contractClassInstancesQueryParamsSchema.safeParse(request.query);
       if (!queryResult.success) {
+        // Debug: Log query validation failure
+        fastify.log.debug(
+          {
+            validationSuccess: false,
+            validationErrors: queryResult.error?.issues,
+            rawQuery: request.query,
+          },
+          'Query params validation failed',
+        );
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 400, duration });
         return sendError(reply, 400, 'Invalid match parameter');
@@ -477,8 +710,43 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
       // Parse pagination params
       const { limit, cursor } = paginationParamsSchema.parse(request.query);
 
+      // Debug: Log parsed params
+      fastify.log.debug(
+        {
+          parsedContractClassId: contractClassId,
+          parsedMatch: match,
+          matchScope,
+          parsedLimit: limit,
+          parsedCursor: cursor,
+        },
+        'Successfully parsed all params',
+      );
+
       try {
+        // Debug: Log before database call
+        fastify.log.debug(
+          {
+            contractClassId,
+            matchScope,
+            cursor,
+            limit,
+            operation: 'getContractInstancesByClassId',
+          },
+          'Calling contractService.getContractInstancesByClassId',
+        );
+
         const result = await contractService.getContractInstancesByClassId(contractClassId, matchScope, cursor, limit);
+
+        // Debug: Log database response
+        fastify.log.debug(
+          {
+            itemCount: result.items.length,
+            hasMore: result.hasMore,
+            firstItemId: result.items[0]?.id,
+            lastItemId: result.items[result.items.length - 1]?.id,
+          },
+          'Database query completed',
+        );
 
         // Create items with IDs for pagination
         const itemsWithIds = result.items.map((item) => ({
@@ -498,12 +766,36 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
           },
         };
 
+        // Debug: Log successful response
+        fastify.log.debug(
+          {
+            addressCount: addresses.length,
+            paginationLimit: response.pagination.limit,
+            paginationCursor: response.pagination.cursor,
+            paginationNextCursor: response.pagination.nextCursor,
+            paginationHasMore: response.pagination.hasMore,
+            duration: performance.now() - startTime,
+          },
+          'Successfully processed contract instances by class request',
+        );
+
         // Contract instances are immutable, cache for a reasonable time
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 200, duration });
         return sendJsonResponse(reply, response, CacheControl.PUBLIC_5MIN);
       } catch (error) {
-        fastify.log.error({ error }, 'Failed to query contract instances by class ID');
+        // Enhanced error logging
+        const errorDetails = {
+          errorType: error?.constructor?.name,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : undefined,
+          errorString: String(error),
+          requestParams: request.params,
+          requestQuery: request.query,
+          requestUrl: request.url,
+        };
+
+        fastify.log.error(errorDetails, 'Failed to query contract instances by class ID');
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'GET', route, statusCode: 500, duration, errorMetric: 'route_handler_error' });
         return sendError(reply, 500, 'Database error');
@@ -534,9 +826,65 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
       const startTime = performance.now();
       const route = '/contracts';
 
+      // Debug: Log incoming request details
+      fastify.log.debug(
+        {
+          method: 'POST',
+          route,
+          bodyKeys: request.body ? Object.keys(request.body) : [],
+          url: request.url,
+          contentType: request.headers['content-type'],
+        },
+        'Incoming POST request to /contracts',
+      );
+
       try {
+        // Debug: Log before parsing body
+        fastify.log.debug(
+          {
+            bodyType: typeof request.body,
+            bodyKeys: request.body ? Object.keys(request.body) : [],
+            hasInstance: !!(request.body as Record<string, unknown>)?.instance,
+            hasArtifact: !!(request.body as Record<string, unknown>)?.artifact,
+          },
+          'About to parse contract instance payload',
+        );
+
         const payload = uploadContractInstanceSchema.parse(request.body);
+
+        // Debug: Log parsed payload
+        fastify.log.debug(
+          {
+            instanceKeys: payload.instance ? Object.keys(payload.instance) : [],
+            hasArtifact: !!payload.artifact,
+            instanceAddress: payload.instance?.address,
+            instanceClassId: payload.instance?.currentContractClassId,
+          },
+          'Successfully parsed contract instance payload',
+        );
+
+        // Debug: Log before database call
+        fastify.log.debug(
+          {
+            operation: 'createContractInstance',
+            hasInstance: !!payload.instance,
+            hasArtifact: !!payload.artifact,
+          },
+          'Calling contractService.createContractInstance',
+        );
+
         const { instance: dbInstance, created } = await contractService.createContractInstance(payload);
+
+        // Debug: Log database response
+        fastify.log.debug(
+          {
+            created,
+            dbInstanceId: dbInstance.id,
+            dbInstanceAddress: dbInstance.address,
+            dbInstanceClassId: dbInstance.currentContractClassId,
+          },
+          'Contract instance creation completed',
+        );
 
         const response = {
           address: dbInstance.address,
@@ -544,12 +892,45 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
         };
 
         const statusCode = created ? 201 : 200;
+
+        // Debug: Log successful response
+        fastify.log.debug(
+          {
+            statusCode,
+            responseAddress: response.address,
+            responseClassId: response.currentContractClassId,
+            duration: performance.now() - startTime,
+          },
+          'Successfully processed contract instance creation',
+        );
+
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'POST', route, statusCode, duration });
 
         return reply.status(statusCode).header('Cache-Control', CacheControl.NO_CACHE).send(response);
       } catch (error) {
+        // Enhanced error logging
+        const errorDetails = {
+          errorType: error?.constructor?.name,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : undefined,
+          errorString: String(error),
+          isZodError: error instanceof ZodError,
+          zodIssues: error instanceof ZodError ? error.issues : undefined,
+          requestBody: request.body,
+          requestUrl: request.url,
+        };
+
         if (error instanceof ZodError) {
+          fastify.log.debug(
+            {
+              ...errorDetails,
+              zodIssues: error.issues,
+              zodFlattened: error.flatten(),
+            },
+            'Zod validation error in POST /contracts',
+          );
+
           const duration = performance.now() - startTime;
           recordRouteMetrics({ method: 'POST', route, statusCode: 400, duration });
           return sendError(reply, 400, 'Invalid contract instance payload');
@@ -557,6 +938,15 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
 
         const resolved = resolveContractInstanceError(error);
         if (resolved) {
+          fastify.log.debug(
+            {
+              ...errorDetails,
+              resolvedStatusCode: resolved.statusCode,
+              resolvedMessage: resolved.message,
+            },
+            'Contract instance error resolved',
+          );
+
           const duration = performance.now() - startTime;
           recordRouteMetrics({
             method: 'POST',
@@ -568,7 +958,7 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
           return sendError(reply, resolved.statusCode, resolved.message);
         }
 
-        fastify.log.error({ error }, 'Failed to create contract instance');
+        fastify.log.error(errorDetails, 'Failed to create contract instance');
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'POST', route, statusCode: 500, duration, errorMetric: 'route_handler_error' });
         return sendError(reply, 500, 'Database error');
@@ -598,23 +988,105 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
       const startTime = performance.now();
       const route = '/artifacts';
 
+      // Debug: Log incoming request details
+      fastify.log.debug(
+        {
+          method: 'POST',
+          route,
+          bodyKeys: request.body ? Object.keys(request.body) : [],
+          url: request.url,
+          contentType: request.headers['content-type'],
+        },
+        'Incoming POST request to /artifacts',
+      );
+
       try {
+        // Debug: Log before parsing body
+        fastify.log.debug(
+          {
+            bodyType: typeof request.body,
+            bodyKeys: request.body ? Object.keys(request.body) : [],
+            hasArtifact: !!(request.body as Record<string, unknown>)?.artifact,
+          },
+          'About to parse contract artifact payload',
+        );
+
         const { artifact } = uploadContractArtifactSchema.parse(request.body);
+
+        // Debug: Log parsed payload
+        fastify.log.debug(
+          {
+            artifactLength: artifact?.length,
+            artifactType: typeof artifact,
+            artifactPrefix: artifact?.substring(0, 10),
+          },
+          'Successfully parsed contract artifact payload',
+        );
+
+        // Debug: Log before database call
+        fastify.log.debug(
+          {
+            operation: 'createContractArtifact',
+            artifactLength: artifact?.length,
+          },
+          'Calling contractService.createContractArtifact',
+        );
 
         // Validate and create the contract artifact
         const dbArtifact = await contractService.createContractArtifact(artifact as Hex);
+
+        // Debug: Log database response
+        fastify.log.debug(
+          {
+            dbArtifactId: dbArtifact.id,
+            dbArtifactClassId: dbArtifact.contractClassId,
+            dbArtifactHash: dbArtifact.artifactHash,
+          },
+          'Contract artifact creation completed',
+        );
 
         // Return only the contract class ID
         const response = {
           contractClassId: dbArtifact.contractClassId,
         };
 
+        // Debug: Log successful response
+        fastify.log.debug(
+          {
+            statusCode: 201,
+            responseClassId: response.contractClassId,
+            duration: performance.now() - startTime,
+          },
+          'Successfully processed contract artifact creation',
+        );
+
         // Return 201 for created resource
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'POST', route, statusCode: 201, duration });
         return reply.status(201).send(response);
       } catch (error) {
+        // Enhanced error logging
+        const errorDetails = {
+          errorType: error?.constructor?.name,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : undefined,
+          errorString: String(error),
+          isZodError: error instanceof ZodError,
+          zodIssues: error instanceof ZodError ? error.issues : undefined,
+          requestBody: request.body,
+          requestUrl: request.url,
+        };
+
         if (error instanceof ZodError) {
+          fastify.log.debug(
+            {
+              ...errorDetails,
+              zodIssues: error.issues,
+              zodFlattened: error.flatten(),
+            },
+            'Zod validation error in POST /artifacts',
+          );
+
           const duration = performance.now() - startTime;
           recordRouteMetrics({ method: 'POST', route, statusCode: 400, duration });
           return sendError(reply, 400, 'Invalid contract artifact payload');
@@ -622,6 +1094,15 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
 
         const resolved = resolveArtifactCreationError(error);
         if (resolved) {
+          fastify.log.debug(
+            {
+              ...errorDetails,
+              resolvedStatusCode: resolved.statusCode,
+              resolvedMessage: resolved.message,
+            },
+            'Artifact creation error resolved',
+          );
+
           const duration = performance.now() - startTime;
           recordRouteMetrics({
             method: 'POST',
@@ -633,7 +1114,7 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
           return sendError(reply, resolved.statusCode, resolved.message);
         }
 
-        fastify.log.error({ error }, 'Failed to create contract artifact');
+        fastify.log.error(errorDetails, 'Failed to create contract artifact');
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'POST', route, statusCode: 500, duration, errorMetric: 'route_handler_error' });
         return sendError(reply, 500, 'Database error');

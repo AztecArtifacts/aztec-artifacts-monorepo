@@ -12,6 +12,7 @@ import {
   RawApiClient,
   type TokensResponse,
 } from './raw-client.js';
+import { createConsoleLogger, emitLog, type Logger } from './utils.js';
 /**
  * Creates an `AztecArtifactsApiClient` preconfigured with the default service URL.
  *
@@ -27,6 +28,7 @@ export function createDefaultClient(config?: Omit<ClientConfig, 'baseUrl'>) {
  */
 export class AztecArtifactsApiClient {
   private readonly rawClient: RawApiClient;
+  private readonly logger: Logger;
 
   /**
    * Creates a new API client instance.
@@ -34,7 +36,9 @@ export class AztecArtifactsApiClient {
    * @param config - Connection details such as the base URL and default headers.
    */
   constructor(config: ClientConfig) {
-    this.rawClient = new RawApiClient(config);
+    const logger = config.logger ?? createConsoleLogger();
+    this.logger = logger;
+    this.rawClient = new RawApiClient({ ...config, logger });
     // Bind getAllPages method to preserve context
     this.getAllPages = this.rawClient.getAllPages.bind(this.rawClient);
   }
@@ -85,8 +89,15 @@ export class AztecArtifactsApiClient {
     includeArtifact?: boolean,
     options?: { cache?: RequestCache },
   ): Promise<{ instance: ContractInstanceWithAddress; artifact?: ContractArtifact }> {
+    emitLog(this.logger, 'debug', 'client.getContract.start', { scope: 'client', address, includeArtifact });
     const rawResponse = await this.rawClient.getContractRaw(address, includeArtifact, options);
     const { instance, artifact } = apiResponseToContract(rawResponse);
+    emitLog(this.logger, 'debug', 'client.getContract.success', {
+      scope: 'client',
+      address,
+      includeArtifact,
+      hasArtifact: Boolean(artifact),
+    });
     return { instance, artifact };
   }
 
@@ -98,8 +109,13 @@ export class AztecArtifactsApiClient {
    * @returns The decoded contract artifact.
    */
   async getArtifact(identifier: string, options?: { cache?: RequestCache }): Promise<ContractArtifact> {
+    emitLog(this.logger, 'debug', 'client.getArtifact.start', { scope: 'client', identifier });
     const rawResponse = await this.rawClient.getArtifactRaw(identifier, options);
     const { artifact } = apiResponseToArtifact(rawResponse);
+    emitLog(this.logger, 'debug', 'client.getArtifact.success', {
+      scope: 'client',
+      identifier,
+    });
     return artifact;
   }
 
@@ -114,6 +130,10 @@ export class AztecArtifactsApiClient {
     artifact: ContractArtifact,
     options?: { cache?: RequestCache },
   ): Promise<{ contractClassId: string }> {
+    emitLog(this.logger, 'info', 'client.uploadContractArtifact.start', {
+      scope: 'client',
+      artifactProvided: true,
+    });
     return this.rawClient.uploadContractArtifactRaw(contractArtifactCodec.encode(artifact), options);
   }
 
@@ -141,7 +161,12 @@ export class AztecArtifactsApiClient {
   ): Promise<{ address: string; currentContractClassId: string }> {
     const serializedInstance = serializeContractInstance(instance, initializationData);
 
-    //todo
+    emitLog(this.logger, 'info', 'client.uploadContractInstance.start', {
+      scope: 'client',
+      contractAddress: String(instance.address),
+      hasInitializationData: Boolean(initializationData),
+      hasArtifact: Boolean(artifact),
+    });
 
     return this.rawClient.uploadContractInstanceRaw(
       {
@@ -206,6 +231,11 @@ export class AztecArtifactsApiClient {
     query?: { match?: 'current' | 'original' | 'any' },
     options?: ApiClientOptions,
   ): Promise<string[]> {
+    emitLog(this.logger, 'debug', 'client.getAllContractAddressesByClassId.start', {
+      scope: 'client',
+      contractClassId,
+      match: query?.match,
+    });
     return this.rawClient.getAllContractAddressesByClassId(contractClassId, query, options);
   }
 
