@@ -1,15 +1,32 @@
 import { AztecAddress, Fr, PublicKeys } from '@aztec/aztec.js';
+import { FunctionSelector } from '@aztec/stdlib/abi';
+import { getContractClassFromArtifact } from '@aztec/stdlib/contract';
 import { randomContractArtifact, randomContractInstanceWithAddress } from '@aztec/stdlib/testing';
+import { contractArtifactCodec } from '@aztec-artifacts/common';
 import {
+  contractArtifacts,
   contractInstances,
   type DbClient,
   type DbContractArtifact,
   type DbContractInstance,
+  functionSelectors,
 } from '@aztec-artifacts/schema';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { UploadContractInstance } from '../schemas/contracts.js';
 import type { BasicLogger } from '../utils/logging.js';
+import { getSelectorsAndSignatureFromArtifact } from '../utils/selectors.js';
+import { isToken } from '../utils/tokens.js';
 import { ContractInstanceError, ContractService } from './contract-service.js';
+
+vi.mock('@aztec/stdlib/contract', () => ({
+  getContractClassFromArtifact: vi.fn(),
+}));
+vi.mock('../utils/tokens.js', () => ({
+  isToken: vi.fn(),
+}));
+vi.mock('../utils/selectors.js', () => ({
+  getSelectorsAndSignatureFromArtifact: vi.fn(),
+}));
 
 const mockLogger: BasicLogger = {
   debug: vi.fn(),
@@ -123,36 +140,78 @@ describe('ContractService.createContractInstance', () => {
 
     await expect(service.createContractInstance(payload)).rejects.toThrow(ContractInstanceError.MissingArtifactData);
   });
+});
 
-  it('detects token contracts during artifact creation', async () => {
-    const mockArtifact = randomContractArtifact();
+describe('ContractService.createContractArtifact', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('stores artifacts, detects tokens, and persists unique function selectors', async () => {
+    const artifact = randomContractArtifact();
+    const serializedArtifact = contractArtifactCodec.encode(artifact);
     const classId = Fr.random();
     const artifactHash = Fr.random();
+    const selectorEntry = {
+      selector: FunctionSelector.fromString('0xaabbccdd'),
+      signature: 'transfer(field,field)',
+    };
 
     const mockDbArtifact: DbContractArtifact = {
       id: 1,
       isToken: true,
       contractClassId: classId,
       artifactHash,
-      artifact: mockArtifact,
+      artifact,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
 
-    const mockDb = {} as unknown as DbClient;
+    const contractArtifactsReturningMock = vi.fn().mockResolvedValue([mockDbArtifact]);
+    const contractArtifactsValuesMock = vi.fn().mockReturnValue({ returning: contractArtifactsReturningMock });
+    const functionSelectorsOnConflictMock = vi.fn().mockResolvedValue(undefined);
+    const functionSelectorsValuesMock = vi.fn().mockReturnValue({
+      onConflictDoNothing: functionSelectorsOnConflictMock,
+    });
+
+    const insertMock = vi.fn((table) => {
+      if (table === contractArtifacts) {
+        return { values: contractArtifactsValuesMock };
+      }
+      if (table === functionSelectors) {
+        return { values: functionSelectorsValuesMock };
+      }
+      throw new Error('Unexpected table');
+    });
+
+    const mockDb = { insert: insertMock } as unknown as DbClient;
     const service = new ContractService(mockDb, mockLogger);
 
-    // Mock the entire createContractArtifact method to focus on the integration
-    const createContractArtifactSpy = vi.spyOn(service, 'createContractArtifact').mockResolvedValue(mockDbArtifact);
+    vi.spyOn(service, 'getContractArtifact').mockResolvedValue(null);
+    vi.mocked(getContractClassFromArtifact).mockResolvedValue({
+      id: classId,
+      artifactHash,
+    } as unknown as Awaited<ReturnType<typeof getContractClassFromArtifact>>);
+    vi.mocked(isToken).mockResolvedValue(true);
+    vi.mocked(getSelectorsAndSignatureFromArtifact).mockResolvedValue([selectorEntry]);
 
-    // Test that the method can be called and returns the expected result
-    const result = await service.createContractArtifact('0x1234567890abcdef');
+    const result = await service.createContractArtifact(serializedArtifact);
 
-    expect(createContractArtifactSpy).toHaveBeenCalledWith('0x1234567890abcdef');
-    expect(result.isToken).toBe(true);
-    expect(result.id).toBe(1);
-    expect(result.contractClassId).toBe(classId);
-    expect(result.artifactHash).toBe(artifactHash);
-    expect(result.artifact).toBe(mockArtifact);
+    expect(result).toEqual(mockDbArtifact);
+    expect(contractArtifactsValuesMock).toHaveBeenCalledWith({
+      contractClassId: classId,
+      artifactHash,
+      artifact,
+      isToken: true,
+    });
+    expect(functionSelectorsValuesMock).toHaveBeenCalledWith([
+      {
+        selector: selectorEntry.selector.toString().toLowerCase(),
+        signature: selectorEntry.signature,
+      },
+    ]);
+    expect(functionSelectorsOnConflictMock).toHaveBeenCalledWith({
+      target: [functionSelectors.selector, functionSelectors.signature],
+    });
   });
 });

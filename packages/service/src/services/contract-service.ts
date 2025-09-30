@@ -1,4 +1,4 @@
-import { AztecAddress, Fr, type PublicKeys } from '@aztec/aztec.js';
+import { AztecAddress, type ContractArtifact, Fr, type PublicKeys } from '@aztec/aztec.js';
 import { getContractClassFromArtifact } from '@aztec/stdlib/contract';
 import {
   aztecAddressCodec,
@@ -14,6 +14,7 @@ import {
   type DbClient,
   type DbContractArtifact,
   type DbContractInstance,
+  functionSelectors,
 } from '@aztec-artifacts/schema';
 import { and, asc, eq, gt, or } from 'drizzle-orm';
 import type {
@@ -24,6 +25,7 @@ import type {
 } from '../schemas/contracts.js';
 import type { BasicLogger } from '../utils/logging.js';
 import { createDbMetricTags, recordDbMetrics, recordErrorMetrics } from '../utils/metrics.js';
+import { getSelectorsAndSignatureFromArtifact } from '../utils/selectors.js';
 import { isToken } from '../utils/tokens.js';
 import {
   addSpanAttributes,
@@ -393,10 +395,29 @@ export class ContractService {
       throw new Error('Failed to create contract artifact');
     }
 
+    await this.persistFunctionSelectors(artifact);
+
     return result[0];
   }
 
   async testConnection(): Promise<DbContractInstance[]> {
     return this.db.select().from(contractInstances).limit(1);
+  }
+
+  private async persistFunctionSelectors(artifact: ContractArtifact): Promise<void> {
+    const selectors = await getSelectorsAndSignatureFromArtifact(artifact);
+    if (!selectors.length) {
+      return;
+    }
+
+    const rows = selectors.map(({ selector, signature }) => ({
+      selector: selector.toString().toLowerCase(),
+      signature,
+    }));
+
+    await this.db
+      .insert(functionSelectors)
+      .values(rows)
+      .onConflictDoNothing({ target: [functionSelectors.selector, functionSelectors.signature] });
   }
 }
