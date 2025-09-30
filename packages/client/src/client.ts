@@ -10,6 +10,7 @@ import {
   type ContractAddressesResponse,
   type PaginationParams,
   RawApiClient,
+  type SelectorResponse,
   type TokensResponse,
 } from './raw-client.js';
 import { createConsoleLogger, emitLog, type Logger } from './utils.js';
@@ -237,6 +238,27 @@ export class AztecArtifactsApiClient {
       match: query?.match,
     });
     return this.rawClient.getAllContractAddressesByClassId(contractClassId, query, options);
+  }
+
+  /**
+   * Retrieves all function signatures that have been observed for a given selector.
+   *
+   * @param selector - Function selector as a hex string (e.g., "0x12345678").
+   * @param options - Request options such as fetch cache behaviour.
+   * @returns The selector and all observed function signatures for that selector.
+   */
+  async getSignaturesBySelector(selector: string, options?: { cache?: RequestCache }): Promise<SelectorResponse> {
+    emitLog(this.logger, 'debug', 'client.getSignaturesBySelector.start', {
+      scope: 'client',
+      selector,
+    });
+    const response = await this.rawClient.getSignaturesBySelector(selector, options);
+    emitLog(this.logger, 'debug', 'client.getSignaturesBySelector.success', {
+      scope: 'client',
+      selector,
+      signaturesCount: response.signatures.length,
+    });
+    return response;
   }
 
   // Delegate to raw client's getAllPages implementation

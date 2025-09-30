@@ -102,6 +102,13 @@ export {
   uploadContractInstanceResponseSchema,
   uploadContractInstanceSchema,
 } from './contracts.js';
+// Selector schemas exports
+export {
+  type FunctionSelectorParams,
+  type FunctionSelectorResponse,
+  functionSelectorParamsSchema,
+  functionSelectorResponseSchema,
+} from './selectors.js';
 
 // Export types
 export type HealthResponse = z.infer<typeof healthResponseSchema>;

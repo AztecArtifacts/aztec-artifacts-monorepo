@@ -39,6 +39,11 @@ export type ContractAddressesByClassResponse =
   paths['/contracts/by-class/{contractClassId}/addresses']['get']['responses']['200']['content']['application/json'];
 
 /**
+ * Response payload returned by the `/selectors/{selector}` endpoint.
+ */
+export type SelectorResponse = paths['/selectors/{selector}']['get']['responses']['200']['content']['application/json'];
+
+/**
  * Standard error envelope returned by the API on failure.
  */
 export type ErrorResponse = { error: string };
@@ -361,6 +366,17 @@ export class RawApiClient {
       addresses.push(address);
     }
     return addresses;
+  }
+
+  /**
+   * Retrieves all function signatures that have been observed for a given selector.
+   *
+   * @param selector - Function selector as a hex string (e.g., "0x12345678").
+   * @param options - Request options such as fetch cache behaviour.
+   * @returns The selector and all observed function signatures for that selector.
+   */
+  async getSignaturesBySelector(selector: string, options?: { cache?: RequestCache }): Promise<SelectorResponse> {
+    return this.request<SelectorResponse>(`/selectors/${selector}`, options);
   }
 
   /**

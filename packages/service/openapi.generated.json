@@ -1095,6 +1095,93 @@
           }
         }
       }
+    },
+    "/selectors/{selector}": {
+      "get": {
+        "summary": "Get signatures for a selector",
+        "tags": [
+          "Selectors"
+        ],
+        "description": "Return every function signature that has been observed for a selector",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{8}$"
+            },
+            "in": "path",
+            "name": "selector",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "selector": {
+                      "type": "string",
+                      "pattern": "^0x[a-fA-F0-9]{8}$"
+                    },
+                    "signatures": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "selector",
+                    "signatures"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "servers": [
@@ -1111,6 +1198,10 @@
     {
       "name": "Contracts",
       "description": "Contract operations"
+    },
+    {
+      "name": "Selectors",
+      "description": "Function selector lookups"
     }
   ]
 }
