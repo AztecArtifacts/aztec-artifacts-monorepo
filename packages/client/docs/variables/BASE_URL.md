@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.6**](../README.md)
+[**@aztec-artifacts/client v0.1.7**](../README.md)
 
 ***
 
@@ -8,6 +8,6 @@
 
 > `const` **BASE\_URL**: `"https://api.aztec-artifacts.org/v1"` = `'https://api.aztec-artifacts.org/v1'`
 
-Defined in: [packages/client/src/constants.ts:4](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/constants.ts#L4)
+Defined in: [packages/client/src/constants.ts:4](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/constants.ts#L4)
 
 Default base URL for the Aztec Artifacts REST API.

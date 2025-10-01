@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.6**](../README.md)
+[**@aztec-artifacts/common v0.1.7**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: SerializationError
 
-Defined in: [packages/common/src/errors.ts:4](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/common/src/errors.ts#L4)
+Defined in: [packages/common/src/errors.ts:4](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/common/src/errors.ts#L4)
 
 Error thrown when serialization of Aztec objects fails.
 
@@ -20,7 +20,7 @@ Error thrown when serialization of Aztec objects fails.
 
 > **new SerializationError**(`message`, `cause?`): `SerializationError`
 
-Defined in: [packages/common/src/errors.ts:7](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/common/src/errors.ts#L7)
+Defined in: [packages/common/src/errors.ts:7](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/common/src/errors.ts#L7)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [packages/common/src/errors.ts:7](https://github.com/AztecArtifacts/
 
 > `readonly` `optional` **cause**: `Error`
 
-Defined in: [packages/common/src/errors.ts:5](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/common/src/errors.ts#L5)
+Defined in: [packages/common/src/errors.ts:5](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/common/src/errors.ts#L5)
 
 #### Overrides
 
@@ -58,7 +58,7 @@ Defined in: [packages/common/src/errors.ts:5](https://github.com/AztecArtifacts/
 
 > **message**: `string`
 
-Defined in: node\_modules/.pnpm/typescript@5.9.2/node\_modules/typescript/lib/lib.es5.d.ts:1077
+Defined in: node\_modules/.pnpm/typescript@5.9.3/node\_modules/typescript/lib/lib.es5.d.ts:1077
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ Defined in: node\_modules/.pnpm/typescript@5.9.2/node\_modules/typescript/lib/li
 
 > **name**: `string`
 
-Defined in: node\_modules/.pnpm/typescript@5.9.2/node\_modules/typescript/lib/lib.es5.d.ts:1076
+Defined in: node\_modules/.pnpm/typescript@5.9.3/node\_modules/typescript/lib/lib.es5.d.ts:1076
 
 #### Inherited from
 
@@ -82,7 +82,7 @@ Defined in: node\_modules/.pnpm/typescript@5.9.2/node\_modules/typescript/lib/li
 
 > `optional` **stack**: `string`
 
-Defined in: node\_modules/.pnpm/typescript@5.9.2/node\_modules/typescript/lib/lib.es5.d.ts:1078
+Defined in: node\_modules/.pnpm/typescript@5.9.3/node\_modules/typescript/lib/lib.es5.d.ts:1078
 
 #### Inherited from
 

@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.6**](../README.md)
+[**@aztec-artifacts/client v0.1.7**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **contractToApiRequest**(`instance`, `initializationData?`, `artifact?`): `object`
 
-Defined in: [packages/client/src/converters.ts:157](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/converters.ts#L157)
+Defined in: [packages/client/src/converters.ts:157](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/converters.ts#L157)
 
 Serializes a contract instance with optional initialization data and artifact into the API request format.
 

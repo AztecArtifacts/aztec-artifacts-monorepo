@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.6**](../README.md)
+[**@aztec-artifacts/client v0.1.7**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: RawApiClient
 
-Defined in: [packages/client/src/raw-client.ts:87](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L87)
+Defined in: [packages/client/src/raw-client.ts:104](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L104)
 
 Raw API client that returns unprocessed API responses (hex strings, raw JSON).
 Use this when you need the raw data without Aztec type deserialization.
@@ -17,7 +17,7 @@ Use this when you need the raw data without Aztec type deserialization.
 
 > **new RawApiClient**(`config`): `RawApiClient`
 
-Defined in: [packages/client/src/raw-client.ts:98](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L98)
+Defined in: [packages/client/src/raw-client.ts:115](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L115)
 
 Creates a new raw API client instance.
 
@@ -39,7 +39,7 @@ Connection details such as base URL, headers, and fetch implementation.
 
 > **getAllContractAddresses**(`options?`): `Promise`\<`string`[]\>
 
-Defined in: [packages/client/src/raw-client.ts:335](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L335)
+Defined in: [packages/client/src/raw-client.ts:352](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L352)
 
 Fetches all contract addresses using automatic pagination.
 
@@ -63,7 +63,7 @@ Every contract address known to the API at the time of the request.
 
 > **getAllContractAddressesByClassId**(`contractClassId`, `query?`, `options?`): `Promise`\<`string`[]\>
 
-Defined in: [packages/client/src/raw-client.ts:351](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L351)
+Defined in: [packages/client/src/raw-client.ts:368](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L368)
 
 Fetches all contract addresses for a given class using automatic pagination.
 
@@ -101,7 +101,7 @@ Contract addresses whose class matches the provided ID.
 
 > **getAllPages**\<`T`\>(`fetcher`, `options?`): `AsyncGenerator`\<`T`\[`"data"`\]\[`number`\], `void`, `unknown`\>
 
-Defined in: [packages/client/src/raw-client.ts:283](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L283)
+Defined in: [packages/client/src/raw-client.ts:300](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L300)
 
 Helper generator that yields every item from a paginated endpoint.
 
@@ -139,7 +139,7 @@ An async generator producing each item from all pages in order.
 
 > **getAllTokens**(`options?`): `Promise`\<`object`[]\>
 
-Defined in: [packages/client/src/raw-client.ts:321](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L321)
+Defined in: [packages/client/src/raw-client.ts:338](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L338)
 
 Fetches all tokens using automatic pagination.
 
@@ -163,7 +163,7 @@ Every token known to the API at the time of the request.
 
 > **getArtifactRaw**(`identifier`, `options?`): `Promise`\<\{ `artifact`: `string`; `artifactHash`: `string`; `contractClassId`: `string`; `id?`: `number`; `isToken?`: `boolean`; \}\>
 
-Defined in: [packages/client/src/raw-client.ts:236](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L236)
+Defined in: [packages/client/src/raw-client.ts:253](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L253)
 
 Retrieves a contract artifact by contract class ID or artifact hash without deserialization.
 
@@ -191,11 +191,43 @@ The raw contract artifact as stored by the API.
 
 ***
 
+### getArtifactsForSelector()
+
+> **getArtifactsForSelector**(`selector`, `options?`): `Promise`\<\{ `contractClassIds`: `string`[]; `selector`: `string`; \}\>
+
+Defined in: [packages/client/src/raw-client.ts:415](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L415)
+
+Retrieves all contract artifacts (contractClassIds) that implement a function selector.
+
+#### Parameters
+
+##### selector
+
+`string`
+
+Function selector as a hex string (e.g., "0x12345678").
+
+##### options?
+
+Request options such as fetch cache behaviour.
+
+###### cache?
+
+`RequestCache`
+
+#### Returns
+
+`Promise`\<\{ `contractClassIds`: `string`[]; `selector`: `string`; \}\>
+
+The selector and all contract class IDs that implement it.
+
+***
+
 ### getContractAddresses()
 
 > **getContractAddresses**(`params?`, `options?`): `Promise`\<\{ `data`: `string`[]; `pagination`: \{ `cursor?`: `number`; `hasMore`: `boolean`; `limit`: `number`; `nextCursor?`: `number`; \}; \}\>
 
-Defined in: [packages/client/src/raw-client.ts:247](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L247)
+Defined in: [packages/client/src/raw-client.ts:264](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L264)
 
 Retrieves a paginated list of all contract addresses.
 
@@ -227,7 +259,7 @@ A page of contract addresses together with pagination metadata.
 
 > **getContractAddressesByClassId**(`contractClassId`, `query?`, `options?`): `Promise`\<\{ `data`: `string`[]; `pagination`: \{ `cursor?`: `number`; `hasMore`: `boolean`; `limit`: `number`; `nextCursor?`: `number`; \}; \}\>
 
-Defined in: [packages/client/src/raw-client.ts:263](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L263)
+Defined in: [packages/client/src/raw-client.ts:280](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L280)
 
 Retrieves contract addresses that match a specific contract class ID.
 
@@ -265,7 +297,7 @@ A page of contract addresses filtered by class ID.
 
 > **getContractRaw**(`address`, `includeArtifact?`, `options?`): `Promise`\<\{ `address`: `string`; `artifact?`: `string`; `currentContractClassId`: `string`; `deployer`: `string`; `id?`: `number`; `initializationData?`: `null` \| \{ `constructorName`: `string`; `encodedArgs?`: `string`[]; \}; `initializationHash`: `string`; `isToken?`: `boolean`; `originalContractClassId`: `string`; `publicKeys`: `string`; `salt`: `string`; `version`: `number`; \}\>
 
-Defined in: [packages/client/src/raw-client.ts:220](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L220)
+Defined in: [packages/client/src/raw-client.ts:237](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L237)
 
 Retrieves a contract instance by address without performing deserialization.
 
@@ -299,11 +331,75 @@ The raw contract instance payload provided by the API.
 
 ***
 
+### getSelectorsForArtifact()
+
+> **getSelectorsForArtifact**(`identifier`, `options?`): `Promise`\<\{ `contractClassId`: `string`; `selectors`: `object`[]; \}\>
+
+Defined in: [packages/client/src/raw-client.ts:401](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L401)
+
+Retrieves all function selectors and their signatures for a contract artifact.
+
+#### Parameters
+
+##### identifier
+
+`string`
+
+Contract class ID or artifact hash.
+
+##### options?
+
+Request options such as fetch cache behaviour.
+
+###### cache?
+
+`RequestCache`
+
+#### Returns
+
+`Promise`\<\{ `contractClassId`: `string`; `selectors`: `object`[]; \}\>
+
+All selectors and signatures associated with the artifact.
+
+***
+
+### getSignaturesBySelector()
+
+> **getSignaturesBySelector**(`selector`, `options?`): `Promise`\<\{ `selector`: `string`; `signatures`: `string`[]; \}\>
+
+Defined in: [packages/client/src/raw-client.ts:390](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L390)
+
+Retrieves all function signatures that have been observed for a given selector.
+
+#### Parameters
+
+##### selector
+
+`string`
+
+Function selector as a hex string (e.g., "0x12345678").
+
+##### options?
+
+Request options such as fetch cache behaviour.
+
+###### cache?
+
+`RequestCache`
+
+#### Returns
+
+`Promise`\<\{ `selector`: `string`; `signatures`: `string`[]; \}\>
+
+The selector and all observed function signatures for that selector.
+
+***
+
 ### getTokenByAddress()
 
 > **getTokenByAddress**(`address`, `options?`): `Promise`\<\{ `address`: `string`; `decimals`: `number`; `id?`: `number`; `name`: `string`; `symbol`: `string`; \}\>
 
-Defined in: [packages/client/src/raw-client.ts:208](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L208)
+Defined in: [packages/client/src/raw-client.ts:225](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L225)
 
 Retrieves metadata for a token by its address.
 
@@ -335,7 +431,7 @@ Token metadata as returned by the API.
 
 > **getTokens**(`params?`, `options?`): `Promise`\<\{ `data`: `object`[]; `pagination`: \{ `cursor?`: `number`; `hasMore`: `boolean`; `limit`: `number`; `nextCursor?`: `number`; \}; \}\>
 
-Defined in: [packages/client/src/raw-client.ts:196](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L196)
+Defined in: [packages/client/src/raw-client.ts:213](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L213)
 
 Retrieves a paginated list of all tokens.
 
@@ -367,7 +463,7 @@ A page of tokens together with pagination metadata.
 
 > **uploadContractArtifactRaw**(`artifact`, `options?`): `Promise`\<\{ `contractClassId`: `string`; \}\>
 
-Defined in: [packages/client/src/raw-client.ts:374](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L374)
+Defined in: [packages/client/src/raw-client.ts:430](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L430)
 
 Uploads a contract artifact to the API without deserialization.
 
@@ -403,7 +499,7 @@ Error if upload fails or the artifact payload is invalid.
 
 > **uploadContractInstanceRaw**(`params`, `options?`): `Promise`\<\{ `address`: `string`; `currentContractClassId`: `string`; \}\>
 
-Defined in: [packages/client/src/raw-client.ts:396](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/dbbcdcdf35bfd80dbb179974382829fceef9533c/packages/client/src/raw-client.ts#L396)
+Defined in: [packages/client/src/raw-client.ts:452](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L452)
 
 Uploads a contract instance with optional initialization data and artifact without deserialization.
 
