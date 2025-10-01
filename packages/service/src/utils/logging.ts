@@ -52,6 +52,7 @@ export const DatabaseTable = {
   TOKENS: 'tokens',
   CONTRACT_INSTANCES: 'contract_instances',
   CONTRACT_ARTIFACTS: 'contract_artifacts',
+  FUNCTION_SELECTORS: 'function_selectors',
 } as const;
 
 /**

@@ -1,0 +1,28 @@
+{
+  "name": "@aztec-artifacts/example",
+  "version": "0.0.0",
+  "description": "Example usage of uploading contract artifacts",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "clean": "rm -rf ./dist ./node_modules"
+  },
+  "dependencies": {
+    "@aztec-artifacts/client": "workspace:^",
+    "@turnstile-portal/aztec-artifacts": "^0.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "Apache-2.0"
+}

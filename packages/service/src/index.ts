@@ -9,8 +9,10 @@ import { createLoggerConfig } from './config/logger.js';
 import { initializeTelemetry, shutdownTelemetry } from './config/telemetry.js';
 import { registerContractRoutes } from './routes/contracts.js';
 import { registerHealthRoutes } from './routes/health.js';
+import { registerSelectorRoutes } from './routes/selectors.js';
 import { registerTokenRoutes } from './routes/tokens.js';
 import { ContractService } from './services/contract-service.js';
+import { SelectorService } from './services/selector-service.js';
 import { TokenService } from './services/token-service.js';
 import { createMetrics } from './utils/metrics.js';
 
@@ -100,6 +102,7 @@ async function createServer() {
   const db = createDbClient(databaseUrl);
   const tokenService = new TokenService(db, fastify.log);
   const contractService = new ContractService(db, fastify.log);
+  const selectorService = new SelectorService(db, fastify.log);
 
   const apiPrefix = normalizePrefix(process.env.API_ROUTE_PREFIX);
   let getSwagger: (() => unknown) | undefined;
@@ -124,6 +127,7 @@ async function createServer() {
           tags: [
             { name: 'Tokens', description: 'Token operations' },
             { name: 'Contracts', description: 'Contract operations' },
+            { name: 'Selectors', description: 'Function selector lookups' },
           ],
           components: {
             securitySchemes: {},
@@ -144,6 +148,7 @@ async function createServer() {
 
       await registerTokenRoutes(app, tokenService);
       await registerContractRoutes(app, contractService);
+      await registerSelectorRoutes(app, selectorService);
 
       getSwagger = () => app.swagger();
     },

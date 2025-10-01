@@ -39,6 +39,23 @@ export type ContractAddressesByClassResponse =
   paths['/contracts/by-class/{contractClassId}/addresses']['get']['responses']['200']['content']['application/json'];
 
 /**
+ * Response payload returned by the `/selectors/{selector}` endpoint.
+ */
+export type SelectorResponse = paths['/selectors/{selector}']['get']['responses']['200']['content']['application/json'];
+
+/**
+ * Response payload returned by the `/artifacts/{identifier}/selectors` endpoint.
+ */
+export type ArtifactSelectorsResponse =
+  paths['/artifacts/{identifier}/selectors']['get']['responses']['200']['content']['application/json'];
+
+/**
+ * Response payload returned by the `/selectors/{selector}/artifacts` endpoint.
+ */
+export type SelectorArtifactsResponse =
+  paths['/selectors/{selector}/artifacts']['get']['responses']['200']['content']['application/json'];
+
+/**
  * Standard error envelope returned by the API on failure.
  */
 export type ErrorResponse = { error: string };
@@ -361,6 +378,45 @@ export class RawApiClient {
       addresses.push(address);
     }
     return addresses;
+  }
+
+  /**
+   * Retrieves all function signatures that have been observed for a given selector.
+   *
+   * @param selector - Function selector as a hex string (e.g., "0x12345678").
+   * @param options - Request options such as fetch cache behaviour.
+   * @returns The selector and all observed function signatures for that selector.
+   */
+  async getSignaturesBySelector(selector: string, options?: { cache?: RequestCache }): Promise<SelectorResponse> {
+    return this.request<SelectorResponse>(`/selectors/${selector}`, options);
+  }
+
+  /**
+   * Retrieves all function selectors and their signatures for a contract artifact.
+   *
+   * @param identifier - Contract class ID or artifact hash.
+   * @param options - Request options such as fetch cache behaviour.
+   * @returns All selectors and signatures associated with the artifact.
+   */
+  async getSelectorsForArtifact(
+    identifier: string,
+    options?: { cache?: RequestCache },
+  ): Promise<ArtifactSelectorsResponse> {
+    return this.request<ArtifactSelectorsResponse>(`/artifacts/${identifier}/selectors`, options);
+  }
+
+  /**
+   * Retrieves all contract artifacts (contractClassIds) that implement a function selector.
+   *
+   * @param selector - Function selector as a hex string (e.g., "0x12345678").
+   * @param options - Request options such as fetch cache behaviour.
+   * @returns The selector and all contract class IDs that implement it.
+   */
+  async getArtifactsForSelector(
+    selector: string,
+    options?: { cache?: RequestCache },
+  ): Promise<SelectorArtifactsResponse> {
+    return this.request<SelectorArtifactsResponse>(`/selectors/${selector}/artifacts`, options);
   }
 
   /**

@@ -1,4 +1,4 @@
-import { AztecAddress, Fr, type PublicKeys } from '@aztec/aztec.js';
+import { AztecAddress, type ContractArtifact, Fr, type PublicKeys } from '@aztec/aztec.js';
 import { getContractClassFromArtifact } from '@aztec/stdlib/contract';
 import {
   aztecAddressCodec,
@@ -9,11 +9,13 @@ import {
   publicKeysCodec,
 } from '@aztec-artifacts/common';
 import {
+  artifactSelectors,
   contractArtifacts,
   contractInstances,
   type DbClient,
   type DbContractArtifact,
   type DbContractInstance,
+  functionSelectors,
 } from '@aztec-artifacts/schema';
 import { and, asc, eq, gt, or } from 'drizzle-orm';
 import type {
@@ -24,6 +26,7 @@ import type {
 } from '../schemas/contracts.js';
 import type { BasicLogger } from '../utils/logging.js';
 import { createDbMetricTags, recordDbMetrics, recordErrorMetrics } from '../utils/metrics.js';
+import { getSelectorsAndSignatureFromArtifact } from '../utils/selectors.js';
 import { isToken } from '../utils/tokens.js';
 import {
   addSpanAttributes,
@@ -393,10 +396,105 @@ export class ContractService {
       throw new Error('Failed to create contract artifact');
     }
 
+    await this.persistFunctionSelectors(artifact, contractClassId);
+
     return result[0];
   }
 
   async testConnection(): Promise<DbContractInstance[]> {
     return this.db.select().from(contractInstances).limit(1);
+  }
+
+  async getSelectorsForArtifact(identifier: Fr | string): Promise<Array<{ selector: string; signature: string }>> {
+    return withSpan(
+      {
+        name: 'ContractService.getSelectorsForArtifact',
+        attributes: createServiceSpanAttributes('getSelectorsForArtifact', 'artifact_selectors'),
+      },
+      async (span) => {
+        const startTime = performance.now();
+        const frIdentifier = typeof identifier === 'string' ? Fr.fromString(identifier) : identifier;
+
+        addSpanAttributes({
+          'contract.class_id': frIdentifier.toString(),
+        });
+
+        try {
+          const result = await withSpan(
+            {
+              name: 'db.query.artifact_selectors.join_function_selectors',
+              attributes: createDbSpanAttributes(
+                'select',
+                'artifact_selectors',
+                'SELECT fs.selector, fs.signature FROM artifact_selectors AS JOIN function_selectors fs WHERE contractClassId = ?',
+              ),
+            },
+            async () => {
+              return this.db
+                .select({
+                  selector: functionSelectors.selector,
+                  signature: functionSelectors.signature,
+                })
+                .from(artifactSelectors)
+                .innerJoin(functionSelectors, eq(artifactSelectors.functionSelectorId, functionSelectors.id))
+                .where(eq(artifactSelectors.contractClassId, frIdentifier));
+            },
+          );
+
+          const duration = performance.now() - startTime;
+          recordDbMetrics(createDbMetricTags('select', 'artifact_selectors'), duration);
+
+          addSpanAttributes({
+            'api.found': result.length > 0 ? 'true' : 'false',
+            'api.selector_count': result.length.toString(),
+            'api.duration_ms': duration.toString(),
+          });
+
+          return result;
+        } catch (error) {
+          recordErrorMetrics('contract_service_error');
+          recordSpanError(error, span);
+          throw error;
+        }
+      },
+    );
+  }
+
+  private async persistFunctionSelectors(artifact: ContractArtifact, contractClassId: Fr): Promise<void> {
+    const selectors = await getSelectorsAndSignatureFromArtifact(artifact);
+    if (!selectors.length) {
+      return;
+    }
+
+    const rows = selectors.map(({ selector, signature }) => ({
+      selector: selector.toString().toLowerCase(),
+      signature,
+    }));
+
+    // Insert function selectors (will skip duplicates due to onConflictDoNothing)
+    await this.db
+      .insert(functionSelectors)
+      .values(rows)
+      .onConflictDoNothing({ target: [functionSelectors.selector, functionSelectors.signature] });
+
+    // Now fetch the IDs for all selectors we just inserted (or that already existed)
+    const selectorIds = await this.db
+      .select({ id: functionSelectors.id })
+      .from(functionSelectors)
+      .where(
+        or(
+          ...rows.map(({ selector, signature }) =>
+            and(eq(functionSelectors.selector, selector), eq(functionSelectors.signature, signature)),
+          ),
+        ),
+      );
+
+    // Create junction table entries linking this artifact to its selectors
+    const junctionRows = selectorIds.map(({ id }) => ({
+      contractClassId,
+      functionSelectorId: id,
+    }));
+
+    await this.db.insert(artifactSelectors).values(junctionRows).onConflictDoNothing(); // In case we're re-processing an existing artifact
   }
 }

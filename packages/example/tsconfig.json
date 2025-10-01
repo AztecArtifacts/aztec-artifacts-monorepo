@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "target": "esnext",
+    "lib": ["ESNext"],
+    "types": ["node"],
+    "paths": {
+      "@aztec-artifacts/client": ["../client/src/index.ts"],
+      "@aztec-artifacts/client/*": ["../client/src/*"]
+    }
+  },
+  "references": [
+    { "path": "../client" }
+  ],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

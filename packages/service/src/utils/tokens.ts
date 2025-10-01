@@ -1,5 +1,5 @@
 import { type ContractArtifact, getContractClassFromArtifact } from '@aztec/aztec.js';
-import { FunctionSelector } from '@aztec/stdlib/abi'; // Token standard ABI selectors
+import { FunctionSelector } from '@aztec/stdlib/abi';
 import type { BasicLogger } from './logging.js';
 // reference: https://forum.aztec.network/t/request-for-comments-aip-20-aztec-token-standard/7737
 

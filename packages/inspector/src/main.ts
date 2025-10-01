@@ -6,6 +6,7 @@ import {
   type ContractAddressesResponse,
   type PaginationParams,
   RawApiClient,
+  type SelectorResponse,
   type TokensResponse,
 } from '@aztec-artifacts/client';
 import { resolveDefaultBaseUrl } from './config';
@@ -24,6 +25,7 @@ type SerializablePayload =
   | { kind: 'addresses'; value: ContractAddressesResponse }
   | { kind: 'contract'; value: ApiContractInstance }
   | { kind: 'artifact'; value: ApiContractArtifact }
+  | { kind: 'selector'; value: SelectorResponse }
   | { kind: 'info'; value: Record<string, JsonValue> }
   | { kind: 'error'; value: string };
 
@@ -86,6 +88,7 @@ const loadTokensButton = getRequiredElement<HTMLButtonElement>('load-tokens');
 const loadAddressesButton = getRequiredElement<HTMLButtonElement>('load-addresses');
 const loadContractButton = getRequiredElement<HTMLButtonElement>('load-contract');
 const loadArtifactButton = getRequiredElement<HTMLButtonElement>('load-artifact');
+const loadSelectorButton = getRequiredElement<HTMLButtonElement>('load-selector');
 const tokensLimitInput = getRequiredElement<HTMLInputElement>('tokens-limit');
 const tokensCursorInput = getRequiredElement<HTMLInputElement>('tokens-cursor');
 const addressesLimitInput = getRequiredElement<HTMLInputElement>('addresses-limit');
@@ -93,6 +96,7 @@ const addressesCursorInput = getRequiredElement<HTMLInputElement>('addresses-cur
 const contractAddressInput = getRequiredElement<HTMLInputElement>('contract-address');
 const includeArtifactSelect = getRequiredElement<HTMLSelectElement>('include-artifact');
 const artifactIdInput = getRequiredElement<HTMLInputElement>('artifact-id');
+const selectorInput = getRequiredElement<HTMLInputElement>('selector');
 const statusElement = getRequiredElement<HTMLSpanElement>('status');
 const outputElement = getRequiredElement<HTMLPreElement>('output');
 
@@ -267,5 +271,21 @@ loadArtifactButton.addEventListener('click', () => {
   void runAction(loadArtifactButton, 'Fetching artifact', async () => {
     const response = await currentClient.getArtifactRaw(identifier, getRequestOptions());
     return { kind: 'artifact', value: response } satisfies SerializablePayload;
+  });
+});
+
+loadSelectorButton.addEventListener('click', () => {
+  const selector = selectorInput.value.trim();
+  if (!selector) {
+    writeOutput({
+      kind: 'error',
+      value: 'Please provide a selector.',
+    });
+    updateStatus('Selector is required.');
+    return;
+  }
+  void runAction(loadSelectorButton, 'Fetching signatures', async () => {
+    const response = await currentClient.getSignaturesBySelector(selector, getRequestOptions());
+    return { kind: 'selector', value: response } satisfies SerializablePayload;
   });
 });
