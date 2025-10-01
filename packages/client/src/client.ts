@@ -5,11 +5,13 @@ import { apiResponseToArtifact, apiResponseToContract } from './converters.js';
 import {
   type ApiClientOptions,
   type ApiToken,
+  type ArtifactSelectorsResponse,
   type ClientConfig,
   type ContractAddressesByClassResponse,
   type ContractAddressesResponse,
   type PaginationParams,
   RawApiClient,
+  type SelectorArtifactsResponse,
   type SelectorResponse,
   type TokensResponse,
 } from './raw-client.js';
@@ -257,6 +259,55 @@ export class AztecArtifactsApiClient {
       scope: 'client',
       selector,
       signaturesCount: response.signatures.length,
+    });
+    return response;
+  }
+
+  /**
+   * Retrieves all function selectors and their signatures for a contract artifact.
+   *
+   * @param identifier - Contract class ID or artifact hash.
+   * @param options - Request options such as fetch cache behaviour.
+   * @returns All selectors and signatures associated with the artifact.
+   */
+  async getSelectorsForArtifact(
+    identifier: string,
+    options?: { cache?: RequestCache },
+  ): Promise<ArtifactSelectorsResponse> {
+    emitLog(this.logger, 'debug', 'client.getSelectorsForArtifact.start', {
+      scope: 'client',
+      identifier,
+    });
+    const response = await this.rawClient.getSelectorsForArtifact(identifier, options);
+    emitLog(this.logger, 'debug', 'client.getSelectorsForArtifact.success', {
+      scope: 'client',
+      identifier,
+      contractClassId: response.contractClassId,
+      selectorCount: response.selectors.length,
+    });
+    return response;
+  }
+
+  /**
+   * Retrieves all contract artifacts (contractClassIds) that implement a function selector.
+   *
+   * @param selector - Function selector as a hex string (e.g., "0x12345678").
+   * @param options - Request options such as fetch cache behaviour.
+   * @returns The selector and all contract class IDs that implement it.
+   */
+  async getArtifactsForSelector(
+    selector: string,
+    options?: { cache?: RequestCache },
+  ): Promise<SelectorArtifactsResponse> {
+    emitLog(this.logger, 'debug', 'client.getArtifactsForSelector.start', {
+      scope: 'client',
+      selector,
+    });
+    const response = await this.rawClient.getArtifactsForSelector(selector, options);
+    emitLog(this.logger, 'debug', 'client.getArtifactsForSelector.success', {
+      scope: 'client',
+      selector,
+      artifactCount: response.contractClassIds.length,
     });
     return response;
   }

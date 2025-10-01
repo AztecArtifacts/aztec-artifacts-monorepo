@@ -1,9 +1,76 @@
 {
-  "id": "1f6cef40-29a3-4b08-a20f-95e8205c2059",
+  "id": "e47d8dc1-7fe4-4695-b291-212dd7f7d9e5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.artifact_selectors": {
+      "name": "artifact_selectors",
+      "schema": "",
+      "columns": {
+        "contractClassId": {
+          "name": "contractClassId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "function_selector_id": {
+          "name": "function_selector_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "artifact_selectors_contractClassId_contract_artifacts_contractClassId_fk": {
+          "name": "artifact_selectors_contractClassId_contract_artifacts_contractClassId_fk",
+          "tableFrom": "artifact_selectors",
+          "tableTo": "contract_artifacts",
+          "columnsFrom": [
+            "contractClassId"
+          ],
+          "columnsTo": [
+            "contractClassId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "artifact_selectors_function_selector_id_function_selectors_id_fk": {
+          "name": "artifact_selectors_function_selector_id_function_selectors_id_fk",
+          "tableFrom": "artifact_selectors",
+          "tableTo": "function_selectors",
+          "columnsFrom": [
+            "function_selector_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "artifact_selectors_contractClassId_function_selector_id_pk": {
+          "name": "artifact_selectors_contractClassId_function_selector_id_pk",
+          "columns": [
+            "contractClassId",
+            "function_selector_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.contract_artifacts": {
       "name": "contract_artifacts",
       "schema": "",
@@ -195,6 +262,73 @@
           ]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.function_selectors": {
+      "name": "function_selectors",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "selector": {
+          "name": "selector",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "signature": {
+          "name": "signature",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "function_selectors_selector_signature_idx": {
+          "name": "function_selectors_selector_signature_idx",
+          "columns": [
+            {
+              "expression": "selector",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "signature",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

@@ -4,6 +4,7 @@ import { getContractClassFromArtifact } from '@aztec/stdlib/contract';
 import { randomContractArtifact, randomContractInstanceWithAddress } from '@aztec/stdlib/testing';
 import { contractArtifactCodec } from '@aztec-artifacts/common';
 import {
+  artifactSelectors,
   contractArtifacts,
   contractInstances,
   type DbClient,
@@ -173,6 +174,10 @@ describe('ContractService.createContractArtifact', () => {
     const functionSelectorsValuesMock = vi.fn().mockReturnValue({
       onConflictDoNothing: functionSelectorsOnConflictMock,
     });
+    const artifactSelectorsOnConflictMock = vi.fn().mockResolvedValue(undefined);
+    const artifactSelectorsValuesMock = vi.fn().mockReturnValue({
+      onConflictDoNothing: artifactSelectorsOnConflictMock,
+    });
 
     const insertMock = vi.fn((table) => {
       if (table === contractArtifacts) {
@@ -181,10 +186,21 @@ describe('ContractService.createContractArtifact', () => {
       if (table === functionSelectors) {
         return { values: functionSelectorsValuesMock };
       }
+      if (table === artifactSelectors) {
+        return { values: artifactSelectorsValuesMock };
+      }
       throw new Error('Unexpected table');
     });
 
-    const mockDb = { insert: insertMock } as unknown as DbClient;
+    // Mock the select query that fetches selector IDs
+    const selectWhereMock = vi.fn().mockResolvedValue([{ id: 123 }]);
+    const selectFromMock = vi.fn().mockReturnValue({ where: selectWhereMock });
+    const selectMock = vi.fn().mockReturnValue({ from: selectFromMock });
+
+    const mockDb = {
+      insert: insertMock,
+      select: selectMock,
+    } as unknown as DbClient;
     const service = new ContractService(mockDb, mockLogger);
 
     vi.spyOn(service, 'getContractArtifact').mockResolvedValue(null);
@@ -213,5 +229,77 @@ describe('ContractService.createContractArtifact', () => {
     expect(functionSelectorsOnConflictMock).toHaveBeenCalledWith({
       target: [functionSelectors.selector, functionSelectors.signature],
     });
+    // Verify junction table was populated
+    expect(artifactSelectorsValuesMock).toHaveBeenCalledWith([
+      {
+        contractClassId: classId,
+        functionSelectorId: 123,
+      },
+    ]);
+    expect(artifactSelectorsOnConflictMock).toHaveBeenCalled();
+  });
+});
+
+describe('ContractService.getSelectorsForArtifact', () => {
+  const mockLogger: BasicLogger = {
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    debug: vi.fn(),
+  };
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('returns selectors for an artifact', async () => {
+    const classId = Fr.random();
+    const selector1 = '0x12345678';
+    const signature1 = 'transfer(field,field)';
+    const selector2 = '0xabcdef12';
+    const signature2 = 'approve(field,uint256)';
+
+    const mockResult = [
+      { selector: selector1, signature: signature1 },
+      { selector: selector2, signature: signature2 },
+    ];
+
+    // Mock the database query
+    const whereMock = vi.fn().mockResolvedValue(mockResult);
+    const innerJoinMock = vi.fn().mockReturnValue({ where: whereMock });
+    const fromMock = vi.fn().mockReturnValue({ innerJoin: innerJoinMock });
+    const selectMock = vi.fn().mockReturnValue({ from: fromMock });
+
+    const mockDb = {
+      select: selectMock,
+    } as unknown as DbClient;
+
+    const service = new ContractService(mockDb, mockLogger);
+    const result = await service.getSelectorsForArtifact(classId);
+
+    expect(result).toEqual(mockResult);
+    expect(selectMock).toHaveBeenCalledWith({
+      selector: expect.anything(),
+      signature: expect.anything(),
+    });
+  });
+
+  it('returns empty array when artifact has no selectors', async () => {
+    const classId = Fr.random();
+
+    // Mock the database query to return empty array
+    const whereMock = vi.fn().mockResolvedValue([]);
+    const innerJoinMock = vi.fn().mockReturnValue({ where: whereMock });
+    const fromMock = vi.fn().mockReturnValue({ innerJoin: innerJoinMock });
+    const selectMock = vi.fn().mockReturnValue({ from: fromMock });
+
+    const mockDb = {
+      select: selectMock,
+    } as unknown as DbClient;
+
+    const service = new ContractService(mockDb, mockLogger);
+    const result = await service.getSelectorsForArtifact(classId);
+
+    expect(result).toEqual([]);
   });
 });

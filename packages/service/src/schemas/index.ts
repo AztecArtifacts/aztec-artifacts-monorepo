@@ -104,10 +104,14 @@ export {
 } from './contracts.js';
 // Selector schemas exports
 export {
+  type ArtifactSelectorsResponse,
+  artifactSelectorsResponseSchema,
   type FunctionSelectorParams,
   type FunctionSelectorResponse,
   functionSelectorParamsSchema,
   functionSelectorResponseSchema,
+  type SelectorArtifactsResponse,
+  selectorArtifactsResponseSchema,
 } from './selectors.js';
 
 // Export types

@@ -1096,6 +1096,125 @@
         }
       }
     },
+    "/artifacts/{identifier}/selectors": {
+      "get": {
+        "summary": "Get selectors for an artifact",
+        "tags": [
+          "Contracts"
+        ],
+        "description": "Get all function selectors and their signatures for a contract artifact",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{64}$"
+            },
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "description": "ContractClass ID or Artifact Hash as hex string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "contractClassId": {
+                      "type": "string"
+                    },
+                    "selectors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "selector": {
+                            "type": "string"
+                          },
+                          "signature": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "selector",
+                          "signature"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "contractClassId",
+                    "selectors"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/selectors/{selector}": {
       "get": {
         "summary": "Get signatures for a selector",
@@ -1136,6 +1255,93 @@
                   "required": [
                     "selector",
                     "signatures"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/selectors/{selector}/artifacts": {
+      "get": {
+        "summary": "Get artifacts for a selector",
+        "tags": [
+          "Selectors"
+        ],
+        "description": "Return every contract artifact (contractClassId) that implements this function selector",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{8}$"
+            },
+            "in": "path",
+            "name": "selector",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "selector": {
+                      "type": "string",
+                      "pattern": "^0x[a-fA-F0-9]{8}$"
+                    },
+                    "contractClassIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "selector",
+                    "contractClassIds"
                   ],
                   "additionalProperties": false
                 }

@@ -2,6 +2,7 @@ import type { Hex } from '@aztec-artifacts/common';
 import type { FastifyInstance } from 'fastify';
 import { ZodError } from 'zod';
 import {
+  artifactSelectorsResponseSchema,
   type ContractClassInstanceMatch,
   contractAddressParamsSchema,
   contractArtifactParamsSchema,
@@ -1117,6 +1118,111 @@ export async function registerContractRoutes(fastify: FastifyInstance, contractS
         fastify.log.error(errorDetails, 'Failed to create contract artifact');
         const duration = performance.now() - startTime;
         recordRouteMetrics({ method: 'POST', route, statusCode: 500, duration, errorMetric: 'route_handler_error' });
+        return sendError(reply, 500, 'Database error');
+      }
+    },
+  );
+
+  fastify.get<{
+    Params: { identifier: string };
+  }>(
+    '/artifacts/:identifier/selectors',
+    {
+      schema: {
+        tags: ['Contracts'],
+        summary: 'Get selectors for an artifact',
+        description: 'Get all function selectors and their signatures for a contract artifact',
+        params: zodToJsonSchema(contractArtifactParamsSchema),
+        response: {
+          200: zodToJsonSchema(artifactSelectorsResponseSchema),
+          400: zodToJsonSchema(errorResponseSchema),
+          404: zodToJsonSchema(errorResponseSchema),
+          500: zodToJsonSchema(errorResponseSchema),
+        },
+      },
+    },
+    async (request, reply) => {
+      const startTime = performance.now();
+      const route = '/artifacts/:identifier/selectors';
+
+      fastify.log.debug(
+        {
+          method: 'GET',
+          route,
+          params: request.params,
+          url: request.url,
+        },
+        'Incoming request to /artifacts/:identifier/selectors',
+      );
+
+      const identifierResult = contractArtifactParamsSchema.safeParse(request.params);
+      if (!identifierResult.success) {
+        fastify.log.debug(
+          {
+            validationSuccess: false,
+            validationErrors: identifierResult.error?.issues,
+            rawParams: request.params,
+          },
+          'Artifact identifier validation failed',
+        );
+        const duration = performance.now() - startTime;
+        recordRouteMetrics({ method: 'GET', route, statusCode: 400, duration });
+        return sendError(reply, 400, 'Invalid identifier format - must be a 66 character hex string');
+      }
+
+      const { identifier } = identifierResult.data;
+
+      try {
+        // First check if the artifact exists
+        const dbArtifact = await contractService.getContractArtifact(identifier);
+
+        if (!dbArtifact) {
+          const duration = performance.now() - startTime;
+          fastify.log.debug(
+            {
+              identifier,
+              duration,
+              statusCode: 404,
+            },
+            'Contract artifact not found in database',
+          );
+          recordRouteMetrics({ method: 'GET', route, statusCode: 404, duration });
+          return sendError(reply, 404, 'Contract artifact not found');
+        }
+
+        // Get selectors for this artifact
+        const selectors = await contractService.getSelectorsForArtifact(identifier);
+
+        const response = {
+          contractClassId: dbArtifact.contractClassId.toString(),
+          selectors,
+        };
+
+        fastify.log.debug(
+          {
+            contractClassId: response.contractClassId,
+            selectorCount: selectors.length,
+            duration: performance.now() - startTime,
+          },
+          'Successfully processed artifact selectors request',
+        );
+
+        // Selectors for an artifact are immutable
+        const duration = performance.now() - startTime;
+        recordRouteMetrics({ method: 'GET', route, statusCode: 200, duration });
+        return sendJsonResponse(reply, response, CacheControl.IMMUTABLE);
+      } catch (error) {
+        const errorDetails = {
+          errorType: error?.constructor?.name,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : undefined,
+          requestParams: request.params,
+          requestUrl: request.url,
+        };
+
+        fastify.log.error(errorDetails, 'Failed to query artifact selectors');
+        const duration = performance.now() - startTime;
+        recordRouteMetrics({ method: 'GET', route, statusCode: 500, duration, errorMetric: 'route_handler_error' });
         return sendError(reply, 500, 'Database error');
       }
     },
