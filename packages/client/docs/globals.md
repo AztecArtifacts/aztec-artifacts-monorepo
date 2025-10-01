@@ -1,8 +1,8 @@
-[**@aztec-artifacts/client v0.1.6**](README.md)
+[**@aztec-artifacts/client v0.1.7**](README.md)
 
 ***
 
-# @aztec-artifacts/client v0.1.6
+# @aztec-artifacts/client v0.1.7
 
 ## Classes
 
@@ -29,11 +29,14 @@
 - [ApiContractArtifact](type-aliases/ApiContractArtifact.md)
 - [ApiContractInstance](type-aliases/ApiContractInstance.md)
 - [ApiToken](type-aliases/ApiToken.md)
+- [ArtifactSelectorsResponse](type-aliases/ArtifactSelectorsResponse.md)
 - [ContractAddressesByClassResponse](type-aliases/ContractAddressesByClassResponse.md)
 - [ContractAddressesResponse](type-aliases/ContractAddressesResponse.md)
 - [ErrorResponse](type-aliases/ErrorResponse.md)
 - [InitializationData](type-aliases/InitializationData.md)
 - [LogLevel](type-aliases/LogLevel.md)
+- [SelectorArtifactsResponse](type-aliases/SelectorArtifactsResponse.md)
+- [SelectorResponse](type-aliases/SelectorResponse.md)
 - [TokensResponse](type-aliases/TokensResponse.md)
 
 ## Variables
