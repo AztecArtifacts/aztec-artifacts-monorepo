@@ -199,7 +199,6 @@
         font-weight: 500;
       }
     </style>
-    <script src="/runtime-config.js"></script>
   </head>
   <body>
     <main>
@@ -316,14 +315,18 @@
             <div class="row">
               <label>
                 Limit
-                <input id="selectors-limit" type="number" min="1" placeholder="25" />
+                <input id="selectors-limit" type="number" min="1" value="10" placeholder="10" />
               </label>
               <label>
                 Cursor
                 <input id="selectors-cursor" type="number" min="0" placeholder="" />
               </label>
             </div>
-            <button id="browse-selectors">Browse selectors</button>
+            <div class="controls">
+              <button id="selectors-prev" disabled>← Previous</button>
+              <button id="browse-selectors">Browse selectors</button>
+              <button id="selectors-next" disabled>Next →</button>
+            </div>
           </fieldset>
 
           <fieldset>

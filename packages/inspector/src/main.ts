@@ -92,6 +92,8 @@ const loadContractButton = getRequiredElement<HTMLButtonElement>('load-contract'
 const loadArtifactButton = getRequiredElement<HTMLButtonElement>('load-artifact');
 const loadSelectorButton = getRequiredElement<HTMLButtonElement>('load-selector');
 const browseSelectorsButton = getRequiredElement<HTMLButtonElement>('browse-selectors');
+const selectorsPrevButton = getRequiredElement<HTMLButtonElement>('selectors-prev');
+const selectorsNextButton = getRequiredElement<HTMLButtonElement>('selectors-next');
 const tokensLimitInput = getRequiredElement<HTMLInputElement>('tokens-limit');
 const tokensCursorInput = getRequiredElement<HTMLInputElement>('tokens-cursor');
 const addressesLimitInput = getRequiredElement<HTMLInputElement>('addresses-limit');
@@ -113,6 +115,17 @@ cacheModeSelect.value = storedSettings.cacheMode;
 let currentClient = new RawApiClient({ baseUrl: storedSettings.baseUrl });
 let currentCacheMode: RequestCache | undefined =
   storedSettings.cacheMode === 'default' ? undefined : storedSettings.cacheMode;
+
+// Pagination state for selectors
+let selectorsPaginationState: {
+  currentCursor?: number;
+  previousCursors: number[];
+  nextCursor?: number;
+  hasMore: boolean;
+} = {
+  previousCursors: [],
+  hasMore: false,
+};
 
 updateStatus(`Connected to ${storedSettings.baseUrl} (cache: ${storedSettings.cacheMode})`);
 
@@ -180,6 +193,14 @@ function writeOutput(data: SerializablePayload) {
   if (data.kind === 'selectors' && 'data' in data.value && 'pagination' in data.value) {
     const selectors = data.value;
 
+    // Update pagination state and navigation buttons
+    selectorsPaginationState.nextCursor = selectors.pagination.nextCursor;
+    selectorsPaginationState.hasMore = selectors.pagination.hasMore;
+
+    // Enable/disable navigation buttons
+    selectorsPrevButton.disabled = selectorsPaginationState.previousCursors.length === 0;
+    selectorsNextButton.disabled = !selectorsPaginationState.hasMore;
+
     // Group signatures by selector
     const selectorMap = new Map<string, string[]>();
     for (const item of selectors.data) {
@@ -220,9 +241,9 @@ function writeOutput(data: SerializablePayload) {
       </table>
       <div class="pagination-info">
         <span>Showing ${selectorMap.size} unique selectors (${selectors.data.length} total entries)</span>
-        <span>Cursor: ${selectors.pagination.cursor}</span>
-        ${selectors.pagination.nextCursor !== undefined ? `<span>Next: ${selectors.pagination.nextCursor}</span>` : ''}
-        <span>Has more: ${selectors.pagination.hasMore}</span>
+        <span>Page cursor: ${selectors.pagination.cursor}</span>
+        ${selectors.pagination.nextCursor !== undefined ? `<span>Next cursor: ${selectors.pagination.nextCursor}</span>` : ''}
+        <span>Has more pages: ${selectors.pagination.hasMore}</span>
       </div>
     </div>`;
 
@@ -377,18 +398,43 @@ loadSelectorButton.addEventListener('click', () => {
 browseSelectorsButton.addEventListener('click', () => {
   void runAction(browseSelectorsButton, 'Fetching selectors', async () => {
     const params: PaginationParams = {};
-    const limit = parseNumber(selectorsLimitInput);
+    const limit = parseNumber(selectorsLimitInput) || 10; // Default to 10
     const cursor = parseNumber(selectorsCursorInput);
-    if (limit !== undefined) {
-      params.limit = limit;
-    }
+
+    params.limit = limit;
     if (cursor !== undefined) {
       params.cursor = cursor;
+      // Store the current cursor before fetching
+      selectorsPaginationState.currentCursor = cursor;
+    } else {
+      // Reset pagination state when browsing without cursor
+      selectorsPaginationState.previousCursors = [];
+      selectorsPaginationState.currentCursor = undefined;
     }
-    const response = await currentClient.getSelectors(
-      Object.keys(params).length ? params : undefined,
-      getRequestOptions(),
-    );
+
+    const response = await currentClient.getSelectors(params, getRequestOptions());
     return { kind: 'selectors', value: response } satisfies SerializablePayload;
   });
+});
+
+// Previous page handler
+selectorsPrevButton.addEventListener('click', () => {
+  if (selectorsPaginationState.previousCursors.length > 0) {
+    // Pop the last cursor from history
+    const prevCursor = selectorsPaginationState.previousCursors.pop();
+    selectorsCursorInput.value = prevCursor !== undefined ? String(prevCursor) : '';
+    browseSelectorsButton.click();
+  }
+});
+
+// Next page handler
+selectorsNextButton.addEventListener('click', () => {
+  if (selectorsPaginationState.hasMore && selectorsPaginationState.nextCursor !== undefined) {
+    // Push current cursor to history if it exists
+    if (selectorsPaginationState.currentCursor !== undefined) {
+      selectorsPaginationState.previousCursors.push(selectorsPaginationState.currentCursor);
+    }
+    selectorsCursorInput.value = String(selectorsPaginationState.nextCursor);
+    browseSelectorsButton.click();
+  }
 });

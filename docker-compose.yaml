@@ -69,14 +69,12 @@ services:
       dockerfile: Dockerfile
       args:
         SERVICE: '@aztec-artifacts/inspector'
+        VITE_INSPECTOR_BASE_URL: http://localhost:8080
     depends_on:
       api:
         condition: service_healthy
     ports:
       - '4173:4173'
-    environment:
-      INSPECTOR_BASE_URL: http://localhost:8080
-      PORT: 4173
     restart: unless-stopped
 
   example:

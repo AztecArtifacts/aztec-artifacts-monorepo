@@ -54,7 +54,8 @@ export async function registerSelectorRoutes(fastify: FastifyInstance, selectorS
         const dbSelectors = await selectorService.getAllSelectors(cursor, limit + 1);
 
         // Convert to API format, including the 0x prefix for selectors
-        const apiSelectors = dbSelectors.slice(0, limit).map((selector) => ({
+        // Important: Map ALL items (including the +1) so createPaginatedResponse can determine hasMore
+        const apiSelectors = dbSelectors.map((selector) => ({
           id: selector.id,
           selector: selector.selector.startsWith('0x') ? selector.selector : `0x${selector.selector}`,
           signature: selector.signature,

@@ -5,7 +5,7 @@ import { ARTIFACTS } from './artifacts/index.js';
 
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
 
-async function seedArtifacts() {
+export async function seedArtifacts() {
   console.log(`🌱 Seeding artifacts to ${API_BASE_URL}...`);
 
   const client = new AztecArtifactsApiClient({ baseUrl: API_BASE_URL });
@@ -58,10 +58,3 @@ async function seedArtifacts() {
   }
 }
 
-// Run the seeding if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  seedArtifacts().catch((error) => {
-    console.error('Fatal error during seeding:', error);
-    process.exit(1);
-  });
-}
