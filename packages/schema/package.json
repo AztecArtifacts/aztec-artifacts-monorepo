@@ -1,6 +1,6 @@
 {
   "name": "@aztec-artifacts/schema",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "private": true,
   "description": "Database schema and Drizzle utilities for Aztec Artifacts API",
   "main": "dist/index.js",

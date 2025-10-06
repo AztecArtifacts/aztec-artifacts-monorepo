@@ -1,6 +1,6 @@
 {
   "name": "@aztec-artifacts/client",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Type-safe API client for Aztec Artifacts API",
   "repository": {
     "type": "git",

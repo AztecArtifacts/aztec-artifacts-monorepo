@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.9**](../README.md)
+[**@aztec-artifacts/common v0.1.10**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: DeserializedContractInstance
 
-Defined in: [packages/common/src/types.ts:50](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L50)
+Defined in: [packages/common/src/types.ts:50](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L50)
 
 Deserialized contract instance representation using Aztec types.
 
@@ -16,7 +16,7 @@ Deserialized contract instance representation using Aztec types.
 
 > **address**: `AztecAddress`
 
-Defined in: [packages/common/src/types.ts:52](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L52)
+Defined in: [packages/common/src/types.ts:52](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L52)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [packages/common/src/types.ts:52](https://github.com/AztecArtifacts/
 
 > `optional` **artifact**: `ContractArtifact`
 
-Defined in: [packages/common/src/types.ts:61](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L61)
+Defined in: [packages/common/src/types.ts:61](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L61)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [packages/common/src/types.ts:61](https://github.com/AztecArtifacts/
 
 > **currentContractClassId**: `Fr`
 
-Defined in: [packages/common/src/types.ts:56](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L56)
+Defined in: [packages/common/src/types.ts:56](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L56)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [packages/common/src/types.ts:56](https://github.com/AztecArtifacts/
 
 > **deployer**: `AztecAddress`
 
-Defined in: [packages/common/src/types.ts:55](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L55)
+Defined in: [packages/common/src/types.ts:55](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L55)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [packages/common/src/types.ts:55](https://github.com/AztecArtifacts/
 
 > `optional` **id**: `number`
 
-Defined in: [packages/common/src/types.ts:51](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L51)
+Defined in: [packages/common/src/types.ts:51](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L51)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [packages/common/src/types.ts:51](https://github.com/AztecArtifacts/
 
 > `optional` **initializationData**: [`InitializationData`](../type-aliases/InitializationData.md)
 
-Defined in: [packages/common/src/types.ts:60](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L60)
+Defined in: [packages/common/src/types.ts:60](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L60)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [packages/common/src/types.ts:60](https://github.com/AztecArtifacts/
 
 > **initializationHash**: `Fr`
 
-Defined in: [packages/common/src/types.ts:58](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L58)
+Defined in: [packages/common/src/types.ts:58](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L58)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [packages/common/src/types.ts:58](https://github.com/AztecArtifacts/
 
 > `optional` **isToken**: `boolean`
 
-Defined in: [packages/common/src/types.ts:62](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L62)
+Defined in: [packages/common/src/types.ts:62](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L62)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [packages/common/src/types.ts:62](https://github.com/AztecArtifacts/
 
 > **originalContractClassId**: `Fr`
 
-Defined in: [packages/common/src/types.ts:57](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L57)
+Defined in: [packages/common/src/types.ts:57](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L57)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [packages/common/src/types.ts:57](https://github.com/AztecArtifacts/
 
 > **publicKeys**: `PublicKeys`
 
-Defined in: [packages/common/src/types.ts:59](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L59)
+Defined in: [packages/common/src/types.ts:59](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L59)
 
 ***
 
@@ -96,7 +96,7 @@ Defined in: [packages/common/src/types.ts:59](https://github.com/AztecArtifacts/
 
 > **salt**: `Fr`
 
-Defined in: [packages/common/src/types.ts:54](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L54)
+Defined in: [packages/common/src/types.ts:54](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L54)
 
 ***
 
@@ -104,4 +104,4 @@ Defined in: [packages/common/src/types.ts:54](https://github.com/AztecArtifacts/
 
 > **version**: `number`
 
-Defined in: [packages/common/src/types.ts:53](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/common/src/types.ts#L53)
+Defined in: [packages/common/src/types.ts:53](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/common/src/types.ts#L53)
