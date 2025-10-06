@@ -1,5 +1,13 @@
 # @aztec-artifacts/service
 
+## 0.1.10
+
+### Patch Changes
+
+- Updated dependencies [4aed2b8]
+  - @aztec-artifacts/schema@0.1.10
+  - @aztec-artifacts/common@0.1.10
+
 ## 0.1.9
 
 ### Patch Changes

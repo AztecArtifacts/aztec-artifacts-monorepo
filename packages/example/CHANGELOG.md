@@ -1,5 +1,11 @@
 # @aztec-artifacts/example
 
+## 0.1.10
+
+### Patch Changes
+
+- @aztec-artifacts/client@0.1.10
+
 ## 0.1.9
 
 ### Patch Changes
