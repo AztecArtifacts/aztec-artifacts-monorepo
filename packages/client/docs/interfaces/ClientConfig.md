@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.7**](../README.md)
+[**@aztec-artifacts/client v0.1.8**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: ClientConfig
 
-Defined in: [packages/client/src/raw-client.ts:66](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L66)
+Defined in: [packages/client/src/raw-client.ts:71](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/raw-client.ts#L71)
 
 Configuration for constructing a raw API client.
 
@@ -16,7 +16,7 @@ Configuration for constructing a raw API client.
 
 > **baseUrl**: `string`
 
-Defined in: [packages/client/src/raw-client.ts:67](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L67)
+Defined in: [packages/client/src/raw-client.ts:72](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/raw-client.ts#L72)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [packages/client/src/raw-client.ts:67](https://github.com/AztecArtif
 
 > `optional` **fetch**: \{(`input`, `init?`): `Promise`\<`Response`\>; (`input`, `init?`): `Promise`\<`Response`\>; \}
 
-Defined in: [packages/client/src/raw-client.ts:69](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L69)
+Defined in: [packages/client/src/raw-client.ts:74](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/raw-client.ts#L74)
 
 #### Call Signature
 
@@ -72,7 +72,7 @@ Defined in: [packages/client/src/raw-client.ts:69](https://github.com/AztecArtif
 
 > `optional` **headers**: `Record`\<`string`, `string`\>
 
-Defined in: [packages/client/src/raw-client.ts:68](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L68)
+Defined in: [packages/client/src/raw-client.ts:73](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/raw-client.ts#L73)
 
 ***
 
@@ -80,4 +80,4 @@ Defined in: [packages/client/src/raw-client.ts:68](https://github.com/AztecArtif
 
 > `optional` **logger**: [`Logger`](Logger.md)
 
-Defined in: [packages/client/src/raw-client.ts:70](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L70)
+Defined in: [packages/client/src/raw-client.ts:75](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/raw-client.ts#L75)

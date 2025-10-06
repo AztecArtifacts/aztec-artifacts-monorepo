@@ -1,5 +1,12 @@
 # @aztec-artifacts/client
 
+## 0.1.8
+
+### Patch Changes
+
+- 0d66bcf: improved selector support & preseeding aztec contracts
+  - @aztec-artifacts/common@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes

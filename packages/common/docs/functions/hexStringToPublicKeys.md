@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.7**](../README.md)
+[**@aztec-artifacts/common v0.1.8**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **hexStringToPublicKeys**(`hex`): `PublicKeys`
 
-Defined in: [packages/common/src/convert.ts:79](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/common/src/convert.ts#L79)
+Defined in: [packages/common/src/convert.ts:79](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/common/src/convert.ts#L79)
 
 Converts a hex string to PublicKeys.
 Accepts either JSON stringified representation or raw hex string format.

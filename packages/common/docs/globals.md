@@ -1,8 +1,8 @@
-[**@aztec-artifacts/common v0.1.7**](README.md)
+[**@aztec-artifacts/common v0.1.8**](README.md)
 
 ***
 
-# @aztec-artifacts/common v0.1.7
+# @aztec-artifacts/common v0.1.8
 
 ## Classes
 
