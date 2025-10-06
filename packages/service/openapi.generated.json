@@ -1215,6 +1215,138 @@
         }
       }
     },
+    "/selectors": {
+      "get": {
+        "summary": "List all selectors",
+        "tags": [
+          "Selectors"
+        ],
+        "description": "Get a paginated list of all function selectors",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "description": "Maximum number of items to return (1-1000)"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "description": "Cursor for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "selector": {
+                            "type": "string",
+                            "pattern": "^0x[a-fA-F0-9]{8}$"
+                          },
+                          "signature": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "selector",
+                          "signature"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "cursor": {
+                          "type": "number"
+                        },
+                        "nextCursor": {
+                          "type": "number"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "hasMore": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "cursor",
+                        "limit",
+                        "hasMore"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/selectors/{selector}": {
       "get": {
         "summary": "Get signatures for a selector",

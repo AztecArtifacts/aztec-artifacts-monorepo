@@ -56,6 +56,11 @@ export type SelectorArtifactsResponse =
   paths['/selectors/{selector}/artifacts']['get']['responses']['200']['content']['application/json'];
 
 /**
+ * Response payload returned by the `/selectors` endpoint.
+ */
+export type SelectorsResponse = paths['/selectors']['get']['responses']['200']['content']['application/json'];
+
+/**
  * Standard error envelope returned by the API on failure.
  */
 export type ErrorResponse = { error: string };
@@ -378,6 +383,42 @@ export class RawApiClient {
       addresses.push(address);
     }
     return addresses;
+  }
+
+  /**
+   * Retrieves a paginated list of selectors.
+   *
+   * @param params - Pagination parameters controlling limit and cursor.
+   * @param options - Request options such as fetch cache behaviour.
+   * @returns A page of selectors together with pagination metadata.
+   */
+  async getSelectors(params?: PaginationParams, options?: { cache?: RequestCache }): Promise<SelectorsResponse> {
+    const queryParams = new URLSearchParams();
+    if (params?.limit !== undefined) {
+      queryParams.set('limit', params.limit.toString());
+    }
+    if (params?.cursor !== undefined) {
+      queryParams.set('cursor', params.cursor.toString());
+    }
+    const query = queryParams.toString();
+    const url = query ? `/selectors?${query}` : '/selectors';
+    return this.request<SelectorsResponse>(url, options);
+  }
+
+  /**
+   * Fetches all selectors using automatic pagination.
+   *
+   * @param options - Options including limit, cursor, and cache settings.
+   * @returns Every selector known to the API at the time of the request.
+   */
+  async getAllSelectors(
+    options?: ApiClientOptions,
+  ): Promise<Array<{ id?: number; selector: string; signature: string }>> {
+    const selectors: Array<{ id?: number; selector: string; signature: string }> = [];
+    for await (const selector of this.getAllPages((params, options) => this.getSelectors(params, options), options)) {
+      selectors.push(selector);
+    }
+    return selectors;
   }
 
   /**

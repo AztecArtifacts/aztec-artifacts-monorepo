@@ -13,6 +13,7 @@ import {
   RawApiClient,
   type SelectorArtifactsResponse,
   type SelectorResponse,
+  type SelectorsResponse,
   type TokensResponse,
 } from './raw-client.js';
 import { createConsoleLogger, emitLog, type Logger } from './utils.js';
@@ -240,6 +241,50 @@ export class AztecArtifactsApiClient {
       match: query?.match,
     });
     return this.rawClient.getAllContractAddressesByClassId(contractClassId, query, options);
+  }
+
+  /**
+   * Retrieves a paginated list of selectors.
+   *
+   * @param params - Pagination parameters controlling limit and cursor.
+   * @param options - Request options such as fetch cache behaviour.
+   * @returns A page of selectors together with pagination metadata.
+   */
+  async getSelectors(params?: PaginationParams, options?: { cache?: RequestCache }): Promise<SelectorsResponse> {
+    emitLog(this.logger, 'debug', 'client.getSelectors.start', {
+      scope: 'client',
+      limit: params?.limit,
+      cursor: params?.cursor,
+    });
+    const response = await this.rawClient.getSelectors(params, options);
+    emitLog(this.logger, 'debug', 'client.getSelectors.success', {
+      scope: 'client',
+      selectorCount: response.data.length,
+      hasMore: response.pagination.hasMore,
+    });
+    return response;
+  }
+
+  /**
+   * Fetches all selectors using automatic pagination.
+   *
+   * @param options - Options including limit, cursor, and cache settings.
+   * @returns Every selector known to the API at the time of the request.
+   */
+  async getAllSelectors(
+    options?: ApiClientOptions,
+  ): Promise<Array<{ id?: number; selector: string; signature: string }>> {
+    emitLog(this.logger, 'debug', 'client.getAllSelectors.start', {
+      scope: 'client',
+      limit: options?.limit,
+      cursor: options?.cursor,
+    });
+    const selectors = await this.rawClient.getAllSelectors(options);
+    emitLog(this.logger, 'debug', 'client.getAllSelectors.success', {
+      scope: 'client',
+      selectorCount: selectors.length,
+    });
+    return selectors;
   }
 
   /**

@@ -7,6 +7,7 @@ import {
   type PaginationParams,
   RawApiClient,
   type SelectorResponse,
+  type SelectorsResponse,
   type TokensResponse,
 } from '@aztec-artifacts/client';
 import { resolveDefaultBaseUrl } from './config';
@@ -26,6 +27,7 @@ type SerializablePayload =
   | { kind: 'contract'; value: ApiContractInstance }
   | { kind: 'artifact'; value: ApiContractArtifact }
   | { kind: 'selector'; value: SelectorResponse }
+  | { kind: 'selectors'; value: SelectorsResponse }
   | { kind: 'info'; value: Record<string, JsonValue> }
   | { kind: 'error'; value: string };
 
@@ -89,6 +91,7 @@ const loadAddressesButton = getRequiredElement<HTMLButtonElement>('load-addresse
 const loadContractButton = getRequiredElement<HTMLButtonElement>('load-contract');
 const loadArtifactButton = getRequiredElement<HTMLButtonElement>('load-artifact');
 const loadSelectorButton = getRequiredElement<HTMLButtonElement>('load-selector');
+const browseSelectorsButton = getRequiredElement<HTMLButtonElement>('browse-selectors');
 const tokensLimitInput = getRequiredElement<HTMLInputElement>('tokens-limit');
 const tokensCursorInput = getRequiredElement<HTMLInputElement>('tokens-cursor');
 const addressesLimitInput = getRequiredElement<HTMLInputElement>('addresses-limit');
@@ -97,6 +100,8 @@ const contractAddressInput = getRequiredElement<HTMLInputElement>('contract-addr
 const includeArtifactSelect = getRequiredElement<HTMLSelectElement>('include-artifact');
 const artifactIdInput = getRequiredElement<HTMLInputElement>('artifact-id');
 const selectorInput = getRequiredElement<HTMLInputElement>('selector');
+const selectorsLimitInput = getRequiredElement<HTMLInputElement>('selectors-limit');
+const selectorsCursorInput = getRequiredElement<HTMLInputElement>('selectors-cursor');
 const statusElement = getRequiredElement<HTMLSpanElement>('status');
 const outputElement = getRequiredElement<HTMLPreElement>('output');
 
@@ -110,6 +115,30 @@ let currentCacheMode: RequestCache | undefined =
   storedSettings.cacheMode === 'default' ? undefined : storedSettings.cacheMode;
 
 updateStatus(`Connected to ${storedSettings.baseUrl} (cache: ${storedSettings.cacheMode})`);
+
+// Tab navigation
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabContents = document.querySelectorAll('.tab-content');
+
+tabButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const targetTab = button.getAttribute('data-tab');
+
+    // Update button states
+    tabButtons.forEach((btn) => {
+      btn.classList.remove('active');
+    });
+    button.classList.add('active');
+
+    // Update content visibility
+    tabContents.forEach((content) => {
+      content.classList.remove('active');
+      if (content.id === `${targetTab}-tab`) {
+        content.classList.add('active');
+      }
+    });
+  });
+});
 
 applySettingsButton.addEventListener('click', (event) => {
   event.preventDefault();
@@ -146,12 +175,67 @@ function updateStatus(message: string) {
 
 function writeOutput(data: SerializablePayload) {
   const now = new Date().toISOString();
-  const payload: Record<string, JsonValue> = {
-    timestamp: now,
-    kind: data.kind,
-    payload: serializeJson(data.value),
-  };
-  outputElement.textContent = JSON.stringify(payload, null, 2);
+
+  // Special handling for selectors list - render as HTML table
+  if (data.kind === 'selectors' && 'data' in data.value && 'pagination' in data.value) {
+    const selectors = data.value;
+
+    // Group signatures by selector
+    const selectorMap = new Map<string, string[]>();
+    for (const item of selectors.data) {
+      const existing = selectorMap.get(item.selector) || [];
+      existing.push(item.signature);
+      selectorMap.set(item.selector, existing);
+    }
+
+    // Create table HTML
+    let html = `<div style="font-family: inherit; color: inherit;">
+      <div style="margin-bottom: 1rem; font-weight: 600;">Selectors Response - ${now}</div>
+      <table style="width: 100%;">
+        <thead>
+          <tr>
+            <th>Selector</th>
+            <th>Function Signatures</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+    // Render each selector with all its signatures
+    for (const [selector, signatures] of selectorMap.entries()) {
+      const sigList =
+        signatures.length > 0
+          ? `<ul style="margin: 0; padding-left: 1.5rem;">
+          ${signatures.map((sig) => `<li>${sig}</li>`).join('\n')}
+        </ul>`
+          : '<em>No signatures</em>';
+
+      html += `
+        <tr>
+          <td style="font-family: 'Courier New', monospace;">${selector}</td>
+          <td>${sigList}</td>
+        </tr>`;
+    }
+
+    html += `</tbody>
+      </table>
+      <div class="pagination-info">
+        <span>Showing ${selectorMap.size} unique selectors (${selectors.data.length} total entries)</span>
+        <span>Cursor: ${selectors.pagination.cursor}</span>
+        ${selectors.pagination.nextCursor !== undefined ? `<span>Next: ${selectors.pagination.nextCursor}</span>` : ''}
+        <span>Has more: ${selectors.pagination.hasMore}</span>
+      </div>
+    </div>`;
+
+    outputElement.innerHTML = html;
+  } else {
+    // Default JSON output for other response types
+    const payload: Record<string, JsonValue> = {
+      timestamp: now,
+      kind: data.kind,
+      payload: serializeJson(data.value),
+    };
+    outputElement.textContent = JSON.stringify(payload, null, 2);
+  }
 }
 
 function serializeJson(value: unknown): JsonValue {
@@ -287,5 +371,24 @@ loadSelectorButton.addEventListener('click', () => {
   void runAction(loadSelectorButton, 'Fetching signatures', async () => {
     const response = await currentClient.getSignaturesBySelector(selector, getRequestOptions());
     return { kind: 'selector', value: response } satisfies SerializablePayload;
+  });
+});
+
+browseSelectorsButton.addEventListener('click', () => {
+  void runAction(browseSelectorsButton, 'Fetching selectors', async () => {
+    const params: PaginationParams = {};
+    const limit = parseNumber(selectorsLimitInput);
+    const cursor = parseNumber(selectorsCursorInput);
+    if (limit !== undefined) {
+      params.limit = limit;
+    }
+    if (cursor !== undefined) {
+      params.cursor = cursor;
+    }
+    const response = await currentClient.getSelectors(
+      Object.keys(params).length ? params : undefined,
+      getRequestOptions(),
+    );
+    return { kind: 'selectors', value: response } satisfies SerializablePayload;
   });
 });

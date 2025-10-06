@@ -110,8 +110,12 @@ export {
   type FunctionSelectorResponse,
   functionSelectorParamsSchema,
   functionSelectorResponseSchema,
+  type PaginatedSelectorResponse,
+  paginatedSelectorResponseSchema,
   type SelectorArtifactsResponse,
+  type SelectorListItem,
   selectorArtifactsResponseSchema,
+  selectorListItemSchema,
 } from './selectors.js';
 
 // Export types

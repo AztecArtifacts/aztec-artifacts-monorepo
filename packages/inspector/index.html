@@ -107,6 +107,97 @@
           padding: 1rem;
         }
       }
+
+      /* Tab navigation */
+      .tabs-nav {
+        display: flex;
+        gap: 0.5rem;
+        border-bottom: 2px solid color-mix(in srgb, currentColor 20%, transparent);
+        margin-bottom: 1rem;
+      }
+
+      .tab-button {
+        background: transparent;
+        border: none;
+        border-bottom: 3px solid transparent;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        border-radius: 6px 6px 0 0;
+      }
+
+      .tab-button:hover {
+        background: color-mix(in srgb, currentColor 5%, transparent);
+      }
+
+      .tab-button.active {
+        border-bottom-color: color-mix(in srgb, currentColor 60%, transparent);
+        background: color-mix(in srgb, currentColor 10%, transparent);
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      /* Table styling for selectors */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+
+      table th,
+      table td {
+        padding: 0.75rem;
+        text-align: left;
+        border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+      }
+
+      table th {
+        background: color-mix(in srgb, currentColor 10%, transparent);
+        font-weight: 600;
+      }
+
+      table tbody tr:nth-child(even) {
+        background: color-mix(in srgb, currentColor 5%, transparent);
+      }
+
+      table td:first-child {
+        font-family: 'Courier New', monospace;
+        font-weight: 500;
+      }
+
+      table ul {
+        margin: 0;
+        padding-left: 1.5rem;
+        list-style-type: disc;
+      }
+
+      table li {
+        margin: 0.25rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+      }
+
+      .pagination-info {
+        padding: 0.75rem;
+        background: color-mix(in srgb, currentColor 5%, transparent);
+        border-radius: 6px;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+      }
+
+      .pagination-info span {
+        margin: 0 1rem 0 0;
+        font-weight: 500;
+      }
     </style>
     <script src="/runtime-config.js"></script>
   </head>
@@ -147,75 +238,105 @@
       </section>
 
       <section class="actions">
-        <fieldset>
-          <legend>Tokens</legend>
-          <div class="row">
-            <label>
-              Limit
-              <input id="tokens-limit" type="number" min="1" placeholder="25" />
-            </label>
-            <label>
-              Cursor
-              <input id="tokens-cursor" type="number" min="0" placeholder="" />
-            </label>
-          </div>
-          <button id="load-tokens">Fetch tokens</button>
-        </fieldset>
+        <nav class="tabs-nav">
+          <button class="tab-button active" data-tab="tokens">Tokens</button>
+          <button class="tab-button" data-tab="contracts">Contracts</button>
+          <button class="tab-button" data-tab="artifacts">Artifacts</button>
+          <button class="tab-button" data-tab="selectors">Selectors</button>
+        </nav>
 
-        <fieldset>
-          <legend>Contract addresses</legend>
-          <div class="row">
-            <label>
-              Limit
-              <input id="addresses-limit" type="number" min="1" placeholder="25" />
-            </label>
-            <label>
-              Cursor
-              <input id="addresses-cursor" type="number" min="0" placeholder="" />
-            </label>
-          </div>
-          <button id="load-addresses">Fetch contract addresses</button>
-        </fieldset>
+        <div id="tokens-tab" class="tab-content active">
+          <fieldset>
+            <legend>Browse Tokens</legend>
+            <div class="row">
+              <label>
+                Limit
+                <input id="tokens-limit" type="number" min="1" placeholder="25" />
+              </label>
+              <label>
+                Cursor
+                <input id="tokens-cursor" type="number" min="0" placeholder="" />
+              </label>
+            </div>
+            <button id="load-tokens">Fetch tokens</button>
+          </fieldset>
+        </div>
 
-        <fieldset>
-          <legend>Contracts</legend>
-          <div class="row">
-            <label>
-              Contract address
-              <input id="contract-address" placeholder="0x..." autocomplete="off" spellcheck="false" />
-            </label>
-            <label>
-              Include artifact
-              <select id="include-artifact">
-                <option value="false">No</option>
-                <option value="true">Yes</option>
-              </select>
-            </label>
-          </div>
-          <button id="load-contract">Fetch contract</button>
-        </fieldset>
+        <div id="contracts-tab" class="tab-content">
+          <fieldset>
+            <legend>Browse Contract Addresses</legend>
+            <div class="row">
+              <label>
+                Limit
+                <input id="addresses-limit" type="number" min="1" placeholder="25" />
+              </label>
+              <label>
+                Cursor
+                <input id="addresses-cursor" type="number" min="0" placeholder="" />
+              </label>
+            </div>
+            <button id="load-addresses">Fetch contract addresses</button>
+          </fieldset>
 
-        <fieldset>
-          <legend>Artifacts</legend>
-          <div class="row">
-            <label>
-              Artifact or class ID
-              <input id="artifact-id" placeholder="0x..." autocomplete="off" spellcheck="false" />
-            </label>
-          </div>
-          <button id="load-artifact">Fetch artifact</button>
-        </fieldset>
+          <fieldset>
+            <legend>Lookup Contract</legend>
+            <div class="row">
+              <label>
+                Contract address
+                <input id="contract-address" placeholder="0x..." autocomplete="off" spellcheck="false" />
+              </label>
+              <label>
+                Include artifact
+                <select id="include-artifact">
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
+                </select>
+              </label>
+            </div>
+            <button id="load-contract">Fetch contract</button>
+          </fieldset>
+        </div>
 
-        <fieldset>
-          <legend>Selectors</legend>
-          <div class="row">
-            <label>
-              Selector
-              <input id="selector" placeholder="0x..." autocomplete="off" spellcheck="false" />
-            </label>
-          </div>
-          <button id="load-selector">Fetch signatures</button>
-        </fieldset>
+        <div id="artifacts-tab" class="tab-content">
+          <fieldset>
+            <legend>Lookup Artifact</legend>
+            <div class="row">
+              <label>
+                Artifact or class ID
+                <input id="artifact-id" placeholder="0x..." autocomplete="off" spellcheck="false" />
+              </label>
+            </div>
+            <button id="load-artifact">Fetch artifact</button>
+          </fieldset>
+        </div>
+
+        <div id="selectors-tab" class="tab-content">
+          <fieldset>
+            <legend>Browse All Selectors</legend>
+            <div class="row">
+              <label>
+                Limit
+                <input id="selectors-limit" type="number" min="1" placeholder="25" />
+              </label>
+              <label>
+                Cursor
+                <input id="selectors-cursor" type="number" min="0" placeholder="" />
+              </label>
+            </div>
+            <button id="browse-selectors">Browse selectors</button>
+          </fieldset>
+
+          <fieldset>
+            <legend>Lookup Selector</legend>
+            <div class="row">
+              <label>
+                Selector
+                <input id="selector" placeholder="0x12345678" autocomplete="off" spellcheck="false" />
+              </label>
+            </div>
+            <button id="load-selector">Fetch signatures</button>
+          </fieldset>
+        </div>
       </section>
 
       <section>

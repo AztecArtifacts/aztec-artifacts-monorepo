@@ -1,5 +1,5 @@
 import { artifactSelectors, type DbClient, functionSelectors } from '@aztec-artifacts/schema';
-import { eq, inArray } from 'drizzle-orm';
+import { eq, gt, inArray } from 'drizzle-orm';
 import { type BasicLogger, DatabaseTable, logDatabaseQuery, logServiceOperation } from '../utils/logging.js';
 import { createDbMetricTags, recordDbMetrics, recordErrorMetrics } from '../utils/metrics.js';
 import {
@@ -85,6 +85,96 @@ export class SelectorService {
                 error: message,
               },
               'Failed to fetch selector signatures',
+            );
+          }
+
+          throw error;
+        }
+      },
+    );
+  }
+
+  async getAllSelectors(
+    cursor: number,
+    limit: number,
+  ): Promise<Array<{ id: number; selector: string; signature: string }>> {
+    return withSpan(
+      {
+        name: 'SelectorService.getAllSelectors',
+        attributes: createServiceSpanAttributes('getAllSelectors', 'function_selectors'),
+      },
+      async (span) => {
+        addSpanAttributes({
+          'pagination.cursor': cursor.toString(),
+          'pagination.limit': limit.toString(),
+        });
+        const startTime = performance.now();
+
+        try {
+          if (this.logger) {
+            logDatabaseQuery(this.logger, 'select', DatabaseTable.FUNCTION_SELECTORS, {
+              cursor,
+              limit,
+            });
+          }
+
+          const rows = await withSpan(
+            {
+              name: 'db.query.function_selectors.select_all_paginated',
+              attributes: createDbSpanAttributes(
+                'select',
+                'function_selectors',
+                'SELECT id, selector, signature FROM function_selectors WHERE id > ? ORDER BY id LIMIT ?',
+              ),
+            },
+            () =>
+              this.db
+                .select({
+                  id: functionSelectors.id,
+                  selector: functionSelectors.selector,
+                  signature: functionSelectors.signature,
+                })
+                .from(functionSelectors)
+                .where(gt(functionSelectors.id, cursor))
+                .orderBy(functionSelectors.id)
+                .limit(limit + 1), // Get one extra to determine if there are more results
+          );
+
+          const duration = performance.now() - startTime;
+          recordDbMetrics(createDbMetricTags('select', 'function_selectors'), duration);
+
+          if (this.logger) {
+            logServiceOperation(
+              this.logger,
+              'SelectorService',
+              'getAllSelectors',
+              { cursor, limit },
+              { success: true, count: Math.min(rows.length, limit) },
+            );
+          }
+
+          addSpanAttributes({ 'selector.count': Math.min(rows.length, limit).toString() });
+          return rows.slice(0, limit); // Return only the requested limit
+        } catch (error) {
+          recordErrorMetrics('selector_service_error');
+          recordSpanError(error, span);
+
+          if (this.logger) {
+            const message = error instanceof Error ? error.message : String(error);
+            logServiceOperation(
+              this.logger,
+              'SelectorService',
+              'getAllSelectors',
+              { cursor, limit },
+              { success: false, error: message },
+            );
+            this.logger.error(
+              {
+                cursor,
+                limit,
+                error: message,
+              },
+              'Failed to fetch selectors',
             );
           }
 
