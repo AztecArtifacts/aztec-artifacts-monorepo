@@ -23,7 +23,7 @@ export function createPaginatedResponse<T>(
     data: resultItems,
     pagination: {
       limit,
-      ...(cursor > 0 && { cursor }),
+      cursor,
       ...(hasMore && lastItemId !== undefined && { nextCursor: lastItemId }),
       hasMore,
     },
