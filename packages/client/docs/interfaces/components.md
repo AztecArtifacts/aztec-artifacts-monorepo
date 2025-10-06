@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.8**](../README.md)
+[**@aztec-artifacts/client v0.1.9**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: components
 
-Defined in: [packages/client/src/types.ts:979](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/types.ts#L979)
+Defined in: [packages/client/src/types.ts:979](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/client/src/types.ts#L979)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [packages/client/src/types.ts:979](https://github.com/AztecArtifacts
 
 > **headers**: `never`
 
-Defined in: [packages/client/src/types.ts:984](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/types.ts#L984)
+Defined in: [packages/client/src/types.ts:984](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/client/src/types.ts#L984)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [packages/client/src/types.ts:984](https://github.com/AztecArtifacts
 
 > **parameters**: `never`
 
-Defined in: [packages/client/src/types.ts:982](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/types.ts#L982)
+Defined in: [packages/client/src/types.ts:982](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/client/src/types.ts#L982)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [packages/client/src/types.ts:982](https://github.com/AztecArtifacts
 
 > **pathItems**: `never`
 
-Defined in: [packages/client/src/types.ts:985](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/types.ts#L985)
+Defined in: [packages/client/src/types.ts:985](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/client/src/types.ts#L985)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [packages/client/src/types.ts:985](https://github.com/AztecArtifacts
 
 > **requestBodies**: `never`
 
-Defined in: [packages/client/src/types.ts:983](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/types.ts#L983)
+Defined in: [packages/client/src/types.ts:983](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/client/src/types.ts#L983)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [packages/client/src/types.ts:983](https://github.com/AztecArtifacts
 
 > **responses**: `never`
 
-Defined in: [packages/client/src/types.ts:981](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/types.ts#L981)
+Defined in: [packages/client/src/types.ts:981](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/client/src/types.ts#L981)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [packages/client/src/types.ts:981](https://github.com/AztecArtifacts
 
 > **schemas**: `never`
 
-Defined in: [packages/client/src/types.ts:980](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/types.ts#L980)
+Defined in: [packages/client/src/types.ts:980](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/ef31ffd2afa41161bfdd3fd3f3544970461d5d1f/packages/client/src/types.ts#L980)

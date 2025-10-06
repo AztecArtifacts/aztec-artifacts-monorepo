@@ -1,5 +1,13 @@
 # @aztec-artifacts/service
 
+## 0.1.9
+
+### Patch Changes
+
+- ef31ffd: fix pagination for selectors & improvements for inspector & seed packages
+  - @aztec-artifacts/common@0.1.9
+  - @aztec-artifacts/schema@0.1.9
+
 ## 0.1.8
 
 ### Patch Changes
