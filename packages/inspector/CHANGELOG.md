@@ -1,5 +1,12 @@
 # @aztec-artifacts/inspector
 
+## 0.1.9
+
+### Patch Changes
+
+- ef31ffd: fix pagination for selectors & improvements for inspector & seed packages
+  - @aztec-artifacts/client@0.1.9
+
 ## 0.1.8
 
 ### Patch Changes
