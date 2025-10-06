@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.7**](../README.md)
+[**@aztec-artifacts/client v0.1.8**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: ApiClientOptions
 
-Defined in: [packages/client/src/raw-client.ts:84](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L84)
+Defined in: [packages/client/src/raw-client.ts:89](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/raw-client.ts#L89)
 
 Options shared by helper utilities that hydrate paginated resources.
 
@@ -16,7 +16,7 @@ Options shared by helper utilities that hydrate paginated resources.
 
 > `optional` **cache**: `RequestCache`
 
-Defined in: [packages/client/src/raw-client.ts:87](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L87)
+Defined in: [packages/client/src/raw-client.ts:92](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/raw-client.ts#L92)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [packages/client/src/raw-client.ts:87](https://github.com/AztecArtif
 
 > `optional` **cursor**: `number`
 
-Defined in: [packages/client/src/raw-client.ts:86](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L86)
+Defined in: [packages/client/src/raw-client.ts:91](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/raw-client.ts#L91)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [packages/client/src/raw-client.ts:86](https://github.com/AztecArtif
 
 > `optional` **limit**: `number`
 
-Defined in: [packages/client/src/raw-client.ts:85](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/fff1e3f6d611b44fcd9c24810241183c22d606c4/packages/client/src/raw-client.ts#L85)
+Defined in: [packages/client/src/raw-client.ts:90](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/0d66bcf5b51495a3bdde57d8e87a237933148a62/packages/client/src/raw-client.ts#L90)

@@ -1,8 +1,8 @@
-[**@aztec-artifacts/client v0.1.7**](README.md)
+[**@aztec-artifacts/client v0.1.8**](README.md)
 
 ***
 
-# @aztec-artifacts/client v0.1.7
+# @aztec-artifacts/client v0.1.8
 
 ## Classes
 
@@ -37,6 +37,7 @@
 - [LogLevel](type-aliases/LogLevel.md)
 - [SelectorArtifactsResponse](type-aliases/SelectorArtifactsResponse.md)
 - [SelectorResponse](type-aliases/SelectorResponse.md)
+- [SelectorsResponse](type-aliases/SelectorsResponse.md)
 - [TokensResponse](type-aliases/TokensResponse.md)
 
 ## Variables
