@@ -57,4 +57,3 @@ export async function seedArtifacts() {
     process.exit(1);
   }
 }
-

@@ -313,6 +313,9 @@ importers:
         specifier: ^4.1.11
         version: 4.1.11
     devDependencies:
+      '@turnstile-portal/aztec-artifacts':
+        specifier: ^0.5.1
+        version: 0.5.1(typescript@5.9.3)(zod@4.1.11)
       '@types/pg':
         specifier: ^8.15.5
         version: 8.15.5
@@ -5726,6 +5729,18 @@ snapshots:
   '@turnstile-portal/aztec-artifacts@0.5.1(typescript@5.9.3)':
     dependencies:
       '@aztec/aztec.js': 2.0.3(typescript@5.9.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - encoding
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+
+  '@turnstile-portal/aztec-artifacts@0.5.1(typescript@5.9.3)(zod@4.1.11)':
+    dependencies:
+      '@aztec/aztec.js': 2.0.3(typescript@5.9.3)(zod@4.1.11)
     transitivePeerDependencies:
       - bufferutil
       - debug

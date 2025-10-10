@@ -26,7 +26,7 @@ export const tokenAbiFunctionSelectors = {
   // Optional non-dispatch public functions
   decimals: '0x6bff8f59',
   name: '0x5c5c9c42',
-  symbol: '0x62cc9647f',
+  symbol: '0x62cc9647',
 };
 
 export const tokenAbiFunctionSelectorsSet = new Set<string>([

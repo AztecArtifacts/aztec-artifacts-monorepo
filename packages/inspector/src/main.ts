@@ -117,7 +117,7 @@ let currentCacheMode: RequestCache | undefined =
   storedSettings.cacheMode === 'default' ? undefined : storedSettings.cacheMode;
 
 // Pagination state for selectors
-let selectorsPaginationState: {
+const selectorsPaginationState: {
   currentCursor?: number;
   previousCursors: number[];
   nextCursor?: number;
