@@ -1,4 +1,4 @@
-**@aztec-artifacts/common v0.1.10**
+**@aztec-artifacts/common v0.1.11**
 
 ***
 

@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.10**](../README.md)
+[**@aztec-artifacts/client v0.1.11**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **artifactToApiRequest**(`artifact`): `object`
 
-Defined in: [packages/client/src/converters.ts:187](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/client/src/converters.ts#L187)
+Defined in: [packages/client/src/converters.ts:187](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/converters.ts#L187)
 
 Serializes a contract artifact into the API request payload.
 

@@ -1,6 +1,6 @@
 {
   "name": "@aztec-artifacts/token-worker",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": true,
   "description": "Background worker for processing token metadata",
   "main": "dist/index.js",

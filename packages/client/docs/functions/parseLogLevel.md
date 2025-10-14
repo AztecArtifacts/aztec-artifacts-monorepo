@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.10**](../README.md)
+[**@aztec-artifacts/client v0.1.11**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **parseLogLevel**(`value`): `undefined` \| [`LogLevel`](../type-aliases/LogLevel.md)
 
-Defined in: [packages/client/src/utils.ts:81](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/client/src/utils.ts#L81)
+Defined in: [packages/client/src/utils.ts:81](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/utils.ts#L81)
 
 ## Parameters
 
