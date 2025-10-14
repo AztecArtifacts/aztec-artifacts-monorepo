@@ -1,5 +1,15 @@
 # @aztec-artifacts/service
 
+## 0.1.11
+
+### Patch Changes
+
+- da3a8a3: fix token detection
+- 1612ee4: Add token-worker service
+- Updated dependencies [1612ee4]
+  - @aztec-artifacts/schema@0.1.11
+  - @aztec-artifacts/common@0.1.11
+
 ## 0.1.10
 
 ### Patch Changes

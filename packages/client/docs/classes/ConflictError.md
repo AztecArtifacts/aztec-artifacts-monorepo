@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.10**](../README.md)
+[**@aztec-artifacts/client v0.1.11**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: ConflictError
 
-Defined in: [packages/client/src/errors.ts:47](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/client/src/errors.ts#L47)
+Defined in: [packages/client/src/errors.ts:47](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/errors.ts#L47)
 
 Error thrown when a resource already exists (409).
 
@@ -24,7 +24,7 @@ Explanation describing the conflicting resource.
 
 > **new ConflictError**(`message`): `ConflictError`
 
-Defined in: [packages/client/src/errors.ts:48](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/client/src/errors.ts#L48)
+Defined in: [packages/client/src/errors.ts:48](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/errors.ts#L48)
 
 #### Parameters
 
@@ -94,7 +94,7 @@ Defined in: node\_modules/.pnpm/typescript@5.9.3/node\_modules/typescript/lib/li
 
 > `readonly` **status**: `number`
 
-Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/client/src/errors.ts#L9)
+Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/errors.ts#L9)
 
 #### Inherited from
 
@@ -106,7 +106,7 @@ Defined in: [packages/client/src/errors.ts:9](https://github.com/AztecArtifacts/
 
 > `readonly` **statusText**: `string`
 
-Defined in: [packages/client/src/errors.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/4aed2b8153191d3cffbb11f350271ba328c64602/packages/client/src/errors.ts#L10)
+Defined in: [packages/client/src/errors.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/errors.ts#L10)
 
 #### Inherited from
 

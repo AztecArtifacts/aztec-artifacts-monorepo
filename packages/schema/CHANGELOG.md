@@ -1,5 +1,12 @@
 # @aztec-artifacts/schema
 
+## 0.1.11
+
+### Patch Changes
+
+- 1612ee4: Add token-worker service
+  - @aztec-artifacts/common@0.1.11
+
 ## 0.1.10
 
 ### Patch Changes
