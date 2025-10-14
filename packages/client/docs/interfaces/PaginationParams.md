@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.11**](../README.md)
+[**@aztec-artifacts/client v0.1.12**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: PaginationParams
 
-Defined in: [packages/client/src/raw-client.ts:81](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/raw-client.ts#L81)
+Defined in: [packages/client/src/raw-client.ts:81](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/client/src/raw-client.ts#L81)
 
 Cursor-based pagination parameters accepted by list endpoints.
 
@@ -16,7 +16,7 @@ Cursor-based pagination parameters accepted by list endpoints.
 
 > `optional` **cursor**: `number`
 
-Defined in: [packages/client/src/raw-client.ts:83](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/raw-client.ts#L83)
+Defined in: [packages/client/src/raw-client.ts:83](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/client/src/raw-client.ts#L83)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [packages/client/src/raw-client.ts:83](https://github.com/AztecArtif
 
 > `optional` **limit**: `number`
 
-Defined in: [packages/client/src/raw-client.ts:82](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/raw-client.ts#L82)
+Defined in: [packages/client/src/raw-client.ts:82](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/client/src/raw-client.ts#L82)

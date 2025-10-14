@@ -1,6 +1,6 @@
 {
   "name": "@aztec-artifacts/inspector",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Minimal web inspector for the Aztec Artifacts API",
   "private": true,
   "type": "module",

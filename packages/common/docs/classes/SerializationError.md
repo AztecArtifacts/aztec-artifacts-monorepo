@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.11**](../README.md)
+[**@aztec-artifacts/common v0.1.12**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: SerializationError
 
-Defined in: [packages/common/src/errors.ts:4](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/common/src/errors.ts#L4)
+Defined in: [packages/common/src/errors.ts:4](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/common/src/errors.ts#L4)
 
 Error thrown when serialization of Aztec objects fails.
 
@@ -20,7 +20,7 @@ Error thrown when serialization of Aztec objects fails.
 
 > **new SerializationError**(`message`, `cause?`): `SerializationError`
 
-Defined in: [packages/common/src/errors.ts:7](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/common/src/errors.ts#L7)
+Defined in: [packages/common/src/errors.ts:7](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/common/src/errors.ts#L7)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [packages/common/src/errors.ts:7](https://github.com/AztecArtifacts/
 
 > `readonly` `optional` **cause**: `Error`
 
-Defined in: [packages/common/src/errors.ts:5](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/common/src/errors.ts#L5)
+Defined in: [packages/common/src/errors.ts:5](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/common/src/errors.ts#L5)
 
 #### Overrides
 
