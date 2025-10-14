@@ -66,6 +66,25 @@ docker build --build-arg SERVICE=token-worker -t token-worker .
 docker run --env-file .env token-worker
 ```
 
+## Maintenance Scripts
+
+### Reset Jobs
+
+If you need to reset jobs that were incorrectly marked as 'unsupported' (e.g., after fixing a bug), you can use the reset-jobs script:
+
+```bash
+pnpm reset-jobs
+```
+
+This script will:
+- Find all jobs with 'unsupported' status
+- Reset them back to 'pending' status
+- Set their attempt count back to 0
+- Clear any error messages
+- Allow the worker to re-process them
+
+The script requires the same `DATABASE_URL` environment variable as the worker.
+
 ## Database Schema
 
 The worker uses two tables:

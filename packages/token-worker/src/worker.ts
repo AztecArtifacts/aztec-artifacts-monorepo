@@ -1,7 +1,7 @@
 import type { AztecNode } from '@aztec/aztec.js';
 import type { DbClient } from '@aztec-artifacts/schema/client';
 import { type DbTokenMetadataJob, tokenMetadataQueue } from '@aztec-artifacts/schema/schema';
-import { eq, inArray, sql } from 'drizzle-orm';
+import { inArray, sql } from 'drizzle-orm';
 import type { WorkerConfig } from './config.js';
 import { TokenMetadataService } from './services/token-metadata-service.js';
 import type { Logger } from './utils/logger.js';
@@ -122,16 +122,6 @@ export class Worker {
     await Promise.allSettled(
       jobs.map(async (job) => {
         try {
-          const effectiveAttempts =
-            job.previousStatus === 'processing' ? Math.max(0, job.originalAttempts - 1) : job.originalAttempts;
-
-          // Check if we should retry this job
-          if (!this.service.shouldRetryJob(effectiveAttempts, job.maxAttempts)) {
-            this.logger.warn({ jobId: job.id, attempts: effectiveAttempts }, 'Job exceeded max attempts');
-            await this.markJobUnsupported(job.id);
-            return;
-          }
-
           // Process the job (convert AztecAddress to string)
           await this.service.processTokenMetadata(job.id, job.address.toString());
         } catch (error) {
@@ -225,19 +215,6 @@ export class Worker {
         previousStatus: job.status,
       }));
     });
-  }
-
-  /**
-   * Mark a job as unsupported (exceeded max attempts)
-   */
-  private async markJobUnsupported(jobId: number): Promise<void> {
-    await this.db
-      .update(tokenMetadataQueue)
-      .set({
-        status: 'unsupported',
-        updatedAt: new Date(),
-      })
-      .where(eq(tokenMetadataQueue.id, jobId));
   }
 
   /**
