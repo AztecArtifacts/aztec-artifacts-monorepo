@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.11**](../README.md)
+[**@aztec-artifacts/common v0.1.12**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **serializeContractInstance**(`instance`, `initializationData?`): [`SerializedContractInstance`](../interfaces/SerializedContractInstance.md)
 
-Defined in: [packages/common/src/contract-instance.ts:16](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/common/src/contract-instance.ts#L16)
+Defined in: [packages/common/src/contract-instance.ts:16](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/common/src/contract-instance.ts#L16)
 
 Serializes a contract instance into the API representation.
 Converts Aztec types into string representations suitable for API transport.

@@ -1,4 +1,4 @@
-[**@aztec-artifacts/common v0.1.11**](../README.md)
+[**@aztec-artifacts/common v0.1.12**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **InitializationData** = `object`
 
-Defined in: [packages/common/src/types.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/common/src/types.ts#L9)
+Defined in: [packages/common/src/types.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/common/src/types.ts#L9)
 
 Data required for contract initialization during deployment.
 Contains optional constructor artifact and encoded arguments for contract setup.
@@ -19,7 +19,7 @@ Contains optional constructor artifact and encoded arguments for contract setup.
 
 > **constructorName**: `string`
 
-Defined in: [packages/common/src/types.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/common/src/types.ts#L10)
+Defined in: [packages/common/src/types.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/common/src/types.ts#L10)
 
 ***
 
@@ -27,4 +27,4 @@ Defined in: [packages/common/src/types.ts:10](https://github.com/AztecArtifacts/
 
 > `optional` **encodedArgs**: `Fr`[]
 
-Defined in: [packages/common/src/types.ts:11](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/common/src/types.ts#L11)
+Defined in: [packages/common/src/types.ts:11](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/common/src/types.ts#L11)

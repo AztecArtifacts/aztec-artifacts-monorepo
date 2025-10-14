@@ -1,4 +1,4 @@
-[**@aztec-artifacts/client v0.1.11**](../README.md)
+[**@aztec-artifacts/client v0.1.12**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: Logger
 
-Defined in: [packages/client/src/utils.ts:6](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/utils.ts#L6)
+Defined in: [packages/client/src/utils.ts:6](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/client/src/utils.ts#L6)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [packages/client/src/utils.ts:6](https://github.com/AztecArtifacts/a
 
 > `optional` **level**: [`LogLevel`](../type-aliases/LogLevel.md)
 
-Defined in: [packages/client/src/utils.ts:7](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/utils.ts#L7)
+Defined in: [packages/client/src/utils.ts:7](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/client/src/utils.ts#L7)
 
 ## Methods
 
@@ -22,7 +22,7 @@ Defined in: [packages/client/src/utils.ts:7](https://github.com/AztecArtifacts/a
 
 > `optional` **debug**(...`args`): `void`
 
-Defined in: [packages/client/src/utils.ts:8](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/utils.ts#L8)
+Defined in: [packages/client/src/utils.ts:8](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/client/src/utils.ts#L8)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [packages/client/src/utils.ts:8](https://github.com/AztecArtifacts/a
 
 > `optional` **error**(...`args`): `void`
 
-Defined in: [packages/client/src/utils.ts:11](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/utils.ts#L11)
+Defined in: [packages/client/src/utils.ts:11](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/client/src/utils.ts#L11)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [packages/client/src/utils.ts:11](https://github.com/AztecArtifacts/
 
 > `optional` **info**(...`args`): `void`
 
-Defined in: [packages/client/src/utils.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/utils.ts#L9)
+Defined in: [packages/client/src/utils.ts:9](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/client/src/utils.ts#L9)
 
 #### Parameters
 
@@ -76,7 +76,7 @@ Defined in: [packages/client/src/utils.ts:9](https://github.com/AztecArtifacts/a
 
 > `optional` **warn**(...`args`): `void`
 
-Defined in: [packages/client/src/utils.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/1612ee4ea1eca1f97a145ced0de2cf5baf73011e/packages/client/src/utils.ts#L10)
+Defined in: [packages/client/src/utils.ts:10](https://github.com/AztecArtifacts/aztec-artifacts-monorepo/blob/72c76eb715c9da93e4d433a37c7fb832d47d5145/packages/client/src/utils.ts#L10)
 
 #### Parameters
 
