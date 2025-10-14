@@ -4,6 +4,7 @@ packages:
 ignoredBuiltDependencies:
   - esbuild
   - leveldown
+  - lmdb
   - msgpackr-extract
   - protobufjs
 

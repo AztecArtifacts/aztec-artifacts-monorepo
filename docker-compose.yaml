@@ -43,12 +43,30 @@ services:
     environment:
       DATABASE_URL: postgres://aztec-artifacts:aztec-artifacts@postgres:5432/aztec-artifacts
       PORT: 8080
+      LOG_LEVEL: debug
     restart: unless-stopped
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:8080/health' ]
       interval: 10s
       timeout: 5s
       retries: 3
+
+  token-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE: '@aztec-artifacts/token-worker'
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://aztec-artifacts:aztec-artifacts@postgres:5432/aztec-artifacts
+      AZTEC_NODE_URL: https://sandbox.aztec.walletmesh.com/api/v1/public
+      LOG_LEVEL: debug
+    restart: unless-stopped
 
   seed:
     build:

@@ -8,6 +8,13 @@
       "when": 1759790620301,
       "tag": "0000_wise_butterfly",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1760137944767,
+      "tag": "0001_fancy_purifiers",
+      "breakpoints": true
     }
   ]
 }

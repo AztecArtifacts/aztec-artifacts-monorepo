@@ -1,0 +1,49 @@
+{
+  "name": "@aztec-artifacts/token-worker",
+  "version": "0.1.10",
+  "private": true,
+  "description": "Background worker for processing token metadata",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest --run",
+    "coverage": "vitest --run --coverage",
+    "check": "biome check --fix",
+    "format": "biome format --fix",
+    "lint": "biome lint --fix",
+    "clean": "rm -rf ./dist ./node_modules"
+  },
+  "files": [
+    "dist",
+    "src",
+    "tsconfig.json"
+  ],
+  "dependencies": {
+    "@aztec-artifacts/schema": "workspace:^",
+    "@aztec/aztec.js": "^2.0.3",
+    "@aztec/foundation": "^2.0.3",
+    "@aztec/noir-protocol-circuits-types": "^2.0.3",
+    "@aztec/protocol-contracts": "^2.0.3",
+    "@aztec/stdlib": "^2.0.3",
+    "drizzle-orm": "^0.44.5",
+    "pg": "^8.16.3",
+    "pino": "^9.11.0",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "@types/pg": "^8.15.5",
+    "tsx": "^4.20.5",
+    "typescript": "^5.0.0",
+    "vitest": "^3.2.4"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AztecArtifacts/aztec-artifacts-monorepo"
+  }
+}

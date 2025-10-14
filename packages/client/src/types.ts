@@ -802,7 +802,7 @@ export interface paths {
                                 signature: string;
                             }[];
                             pagination: {
-                                cursor: number;
+                                cursor?: number;
                                 nextCursor?: number;
                                 limit: number;
                                 hasMore: boolean;

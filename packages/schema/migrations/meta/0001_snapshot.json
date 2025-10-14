@@ -1,0 +1,513 @@
+{
+  "id": "0ac25d1f-2e45-4cc9-96e7-0b31ca2a5e2d",
+  "prevId": "1bbae3e3-6f47-49d6-867b-39bf06a9927d",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.artifact_selectors": {
+      "name": "artifact_selectors",
+      "schema": "",
+      "columns": {
+        "contractClassId": {
+          "name": "contractClassId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "function_selector_id": {
+          "name": "function_selector_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "artifact_selectors_contractClassId_contract_artifacts_contractClassId_fk": {
+          "name": "artifact_selectors_contractClassId_contract_artifacts_contractClassId_fk",
+          "tableFrom": "artifact_selectors",
+          "tableTo": "contract_artifacts",
+          "columnsFrom": [
+            "contractClassId"
+          ],
+          "columnsTo": [
+            "contractClassId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "artifact_selectors_function_selector_id_function_selectors_id_fk": {
+          "name": "artifact_selectors_function_selector_id_function_selectors_id_fk",
+          "tableFrom": "artifact_selectors",
+          "tableTo": "function_selectors",
+          "columnsFrom": [
+            "function_selector_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "artifact_selectors_contractClassId_function_selector_id_pk": {
+          "name": "artifact_selectors_contractClassId_function_selector_id_pk",
+          "columns": [
+            "contractClassId",
+            "function_selector_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.contract_artifacts": {
+      "name": "contract_artifacts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "isToken": {
+          "name": "isToken",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "artifactHash": {
+          "name": "artifactHash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "artifact": {
+          "name": "artifact",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contractClassId": {
+          "name": "contractClassId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "contract_artifacts_artifactHash_unique": {
+          "name": "contract_artifacts_artifactHash_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "artifactHash"
+          ]
+        },
+        "contract_artifacts_contractClassId_unique": {
+          "name": "contract_artifacts_contractClassId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "contractClassId"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.contract_instances": {
+      "name": "contract_instances",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "salt": {
+          "name": "salt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deployer": {
+          "name": "deployer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "currentContractClassId": {
+          "name": "currentContractClassId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "originalContractClassId": {
+          "name": "originalContractClassId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "initializationHash": {
+          "name": "initializationHash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "publicKeys": {
+          "name": "publicKeys",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "initializationData": {
+          "name": "initializationData",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "contract_instances_currentContractClassId_contract_artifacts_contractClassId_fk": {
+          "name": "contract_instances_currentContractClassId_contract_artifacts_contractClassId_fk",
+          "tableFrom": "contract_instances",
+          "tableTo": "contract_artifacts",
+          "columnsFrom": [
+            "currentContractClassId"
+          ],
+          "columnsTo": [
+            "contractClassId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "contract_instances_originalContractClassId_contract_artifacts_contractClassId_fk": {
+          "name": "contract_instances_originalContractClassId_contract_artifacts_contractClassId_fk",
+          "tableFrom": "contract_instances",
+          "tableTo": "contract_artifacts",
+          "columnsFrom": [
+            "originalContractClassId"
+          ],
+          "columnsTo": [
+            "contractClassId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "contract_instances_address_unique": {
+          "name": "contract_instances_address_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "address"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.function_selectors": {
+      "name": "function_selectors",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "selector": {
+          "name": "selector",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "signature": {
+          "name": "signature",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "function_selectors_selector_signature_idx": {
+          "name": "function_selectors_selector_signature_idx",
+          "columns": [
+            {
+              "expression": "selector",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "signature",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.token_metadata_queue": {
+      "name": "token_metadata_queue",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "attempts": {
+          "name": "attempts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "max_attempts": {
+          "name": "max_attempts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 3
+        },
+        "last_error": {
+          "name": "last_error",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "processed_at": {
+          "name": "processed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "token_metadata_queue_address_contract_instances_address_fk": {
+          "name": "token_metadata_queue_address_contract_instances_address_fk",
+          "tableFrom": "token_metadata_queue",
+          "tableTo": "contract_instances",
+          "columnsFrom": [
+            "address"
+          ],
+          "columnsTo": [
+            "address"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tokens": {
+      "name": "tokens",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "symbol": {
+          "name": "symbol",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "decimals": {
+          "name": "decimals",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tokens_address_contract_instances_address_fk": {
+          "name": "tokens_address_contract_instances_address_fk",
+          "tableFrom": "tokens",
+          "tableTo": "contract_instances",
+          "columnsFrom": [
+            "address"
+          ],
+          "columnsTo": [
+            "address"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "tokens_address_unique": {
+          "name": "tokens_address_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "address"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

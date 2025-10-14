@@ -16,6 +16,8 @@ import {
   type DbContractArtifact,
   type DbContractInstance,
   functionSelectors,
+  tokenMetadataQueue,
+  tokens,
 } from '@aztec-artifacts/schema';
 import { and, asc, eq, gt, or } from 'drizzle-orm';
 import type {
@@ -351,6 +353,29 @@ export class ContractService {
 
     if (!createdInstance) {
       throw new Error('Failed to create contract instance');
+    }
+
+    // If this is a token contract, queue a job for metadata processing
+    if (artifactForResponse?.isToken) {
+      try {
+        // First, create an entry in the tokens table
+        await this.db
+          .insert(tokens)
+          .values({
+            address: createdInstance.address,
+          })
+          .onConflictDoNothing();
+
+        // Then queue a job to fetch metadata asynchronously
+        await this.db.insert(tokenMetadataQueue).values({
+          address: createdInstance.address,
+        });
+
+        this.logger.info({ address: createdInstance.address.toString() }, 'Queued token metadata job for processing');
+      } catch (error) {
+        // Log error but don't fail the instance creation
+        this.logger.error({ error, address: createdInstance.address.toString() }, 'Failed to queue token metadata job');
+      }
     }
 
     return {
